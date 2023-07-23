@@ -1,5 +1,6 @@
 package com.cdogsnappy.snappystuff.Radio;
 
+import com.cdogsnappy.snappystuff.items.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -9,18 +10,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.SlotTypePreset;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber
 public class RadioHandler {
-
-    public static List<Player> loggedListeners = new ArrayList<Player>();
     public static List<Player> listeners = new ArrayList<Player>();
     public static List<CustomSoundEvent> music = new ArrayList<CustomSoundEvent>();
     public static List<CustomSoundEvent> casts = new ArrayList<CustomSoundEvent>();
@@ -45,6 +47,7 @@ public class RadioHandler {
         currentAudioTime++;
         if(currentAudioTime >= audioLength){
             audioPlaying = false;
+            currentAudioTime = 0;
         }
 
 
@@ -54,19 +57,16 @@ public class RadioHandler {
     @SubscribeEvent
     public void onPlayerLogOff(PlayerEvent.PlayerLoggedOutEvent event){
         Player p = event.getEntity();
-        if(listeners.contains(p)){
-            loggedListeners.add(p);
             listeners.remove(p);
             playingSounds.remove(p);
-        }
     }
 
     //Radio users should still be active on the radio when they relog
     @SubscribeEvent
     public void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event){
         Player p = event.getEntity();
-        if(loggedListeners.contains(p)){
-            loggedListeners.remove(p);
+        Optional<SlotResult> radStack = CuriosApi.getCuriosHelper().findFirstCurio(p, ModItems.RADIO.get());//Look for an equipped radio
+        if(!radStack.isEmpty()){//If radio is equipped
             listeners.add(p);
         }
     }
