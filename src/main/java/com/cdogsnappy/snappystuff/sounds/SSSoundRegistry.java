@@ -12,6 +12,6 @@ public class SSSoundRegistry {
 
     public static final RegistryObject<SoundEvent> DREAM_SWEET = createSoundEvent("dream_sweet");
     private static RegistryObject<SoundEvent> createSoundEvent(final String soundName) {
-        return SOUNDS.register(soundName, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(SnappyStuff.MODID, soundName)));
+        return SOUNDS.register(soundName, () -> new SoundEvent(new ResourceLocation(SnappyStuff.MODID, soundName)));
     }
 }

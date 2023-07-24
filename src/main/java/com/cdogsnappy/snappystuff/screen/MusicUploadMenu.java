@@ -19,14 +19,14 @@ public class MusicUploadMenu extends AbstractContainerMenu {
     private final ContainerData data;
 
     public MusicUploadMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        this(id, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(1));
+        this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
     public MusicUploadMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenus.MUSIC_UPLOAD_MENU.get(), id);
         checkContainerSize(inv, 3);
         blockEntity = (MusicUploadBlockEntity) entity;
-        this.level = inv.player.level();
+        this.level = inv.player.level;
         this.data = data;
 
         addPlayerInventory(inv);
@@ -40,7 +40,15 @@ public class MusicUploadMenu extends AbstractContainerMenu {
     }
 
     public boolean isUploading(){
+        return blockEntity.isProcessing;
 
+    }
+    public int getScaledProgress() {
+        int progress = this.data.get(0);
+        int maxProgress = this.data.get(1);  // Max Progress
+        int progressArrowSize = 26; // This is the height in pixels of your arrow
+
+        return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
 

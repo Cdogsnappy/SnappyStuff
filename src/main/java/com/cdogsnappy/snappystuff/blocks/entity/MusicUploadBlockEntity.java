@@ -13,6 +13,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -27,6 +28,7 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
     public int progress = 0;
     static final int completionProgress = 80;
     public boolean isProcessing = false;
+    protected final ContainerData data;
     private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -38,6 +40,30 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
 
     public MusicUploadBlockEntity(BlockPos pos, BlockState state) {
         super(ModEntityBlocks.MUSIC_UPLOAD_BLOCK.get(), pos, state);
+        data = new ContainerData(){
+            @Override
+            public int get(int num) {
+                return switch(num){
+                    case 0 -> MusicUploadBlockEntity.this.progress;
+
+                    case 1 -> MusicUploadBlockEntity.this.completionProgress;
+                    default -> 0;
+
+                };
+            }
+
+            @Override
+            public void set(int index, int val) {
+                MusicUploadBlockEntity.this.progress = val;
+            }
+
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        };
+
     }
 
     @Override
@@ -55,8 +81,9 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
-        return new MusicUploadMenu(id, inv, this, this.progress);
+        return new MusicUploadMenu(id, inv, this, this.data);
     }
+
 
     public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, MusicUploadBlockEntity e) {
         if(level.isClientSide || !e.isProcessing){
