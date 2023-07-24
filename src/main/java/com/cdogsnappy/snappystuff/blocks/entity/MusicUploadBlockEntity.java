@@ -29,7 +29,7 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
     static final int completionProgress = 80;
     public boolean isProcessing = false;
     protected final ContainerData data;
-    private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
+    public final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();

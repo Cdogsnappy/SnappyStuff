@@ -2,11 +2,17 @@ package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.blocks.ModBlocks;
 import com.cdogsnappy.snappystuff.blocks.entity.MusicUploadBlockEntity;
+import com.cdogsnappy.snappystuff.radio.RadioHandler;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.PlainTextButton;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -17,6 +23,7 @@ public class MusicUploadMenu extends AbstractContainerMenu {
     public final MusicUploadBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
+    private final Button uploadButton;
 
     public MusicUploadMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
@@ -28,6 +35,14 @@ public class MusicUploadMenu extends AbstractContainerMenu {
         blockEntity = (MusicUploadBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
+        uploadButton = new Button(40,30,10,4,
+                Component.literal("UPLOAD"), (uploadButton) -> {
+            if(!(blockEntity.itemHandler.getStackInSlot(0).getItem() instanceof RecordItem)){
+                return;
+            }
+            blockEntity.isProcessing = true;
+
+        });
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);

@@ -48,6 +48,7 @@ public class SnappyStuff
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        Registration.register(modEventBus);
 
         // Register the item to a creative tab
 

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "snappystuff:block/music_upload_front",
+    "side": "minecraft:block/jukebox_side",
+    "top": "minecraft:block/jukebox_top"
+  }
+}
