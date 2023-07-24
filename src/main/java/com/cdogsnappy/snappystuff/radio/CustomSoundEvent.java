@@ -1,6 +1,5 @@
-package com.cdogsnappy.snappystuff.Radio;
+package com.cdogsnappy.snappystuff.radio;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 public class CustomSoundEvent {

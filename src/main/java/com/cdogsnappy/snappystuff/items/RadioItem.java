@@ -1,16 +1,11 @@
 package com.cdogsnappy.snappystuff.items;
 
-import com.cdogsnappy.snappystuff.Radio.RadioHandler;
+import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class RadioItem extends Item implements ICurioItem {
