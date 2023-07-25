@@ -11,11 +11,11 @@ public class Registration {
 
 
     public static void register(IEventBus bus){
-        bus.register(ModBlocks.BLOCKS);
+        ModBlocks.BLOCKS.register(bus);
         ModItems.ITEMS.register(bus);
-        bus.register(SSSoundRegistry.SOUNDS);
-        bus.register(ModEntityBlocks.BLOCK_ENTITIES);
-        bus.register(ModMenus.MENUS);
+        SSSoundRegistry.SOUNDS.register(bus);
+        ModEntityBlocks.BLOCK_ENTITIES.register(bus);
+        ModMenus.MENUS.register(bus);
 
     }
 }

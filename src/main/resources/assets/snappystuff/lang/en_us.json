@@ -1,3 +1,6 @@
 {
-  "item.snappystuff.radio" : "Radio"
+  "item.snappystuff.radio" : "Radio",
+  "item.snappystuff.dream_sweet" : "Dream Sweet in Sea Major",
+  "itemGroup.snappystuff" : "Snappy Stuff",
+  "itemGroup.snappymusic": "Snappy Music"
 }
