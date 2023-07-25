@@ -12,7 +12,7 @@ public class Registration {
 
     public static void register(IEventBus bus){
         bus.register(ModBlocks.BLOCKS);
-        bus.register(ModItems.ITEMS);
+        ModItems.ITEMS.register(bus);
         bus.register(SSSoundRegistry.SOUNDS);
         bus.register(ModEntityBlocks.BLOCK_ENTITIES);
         bus.register(ModMenus.MENUS);
