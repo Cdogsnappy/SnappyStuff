@@ -17,4 +17,8 @@ public class EndorsementInfo implements Serializable {
     public LocalDateTime getTime(){
         return time;
     }
+
+    public String toString(){
+        return id + ", " + time;
+    }
 }

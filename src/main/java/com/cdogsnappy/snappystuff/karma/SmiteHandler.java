@@ -14,6 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.common.Mod;
 
 
@@ -22,6 +23,7 @@ import java.util.Random;
 @Mod.EventBusSubscriber
 public class SmiteHandler {
     public static double threshold = .0053333;
+    static int ticks = 0;
 
     enum Wraths{
         FIRE,
@@ -38,7 +40,17 @@ public class SmiteHandler {
     static MobEffect[] effects = {MobEffects.ABSORPTION,MobEffects.REGENERATION,MobEffects.DAMAGE_BOOST};
     protected static Random rand = new Random();
 
-    public void judge(MinecraftServer server) {
+    public static void onTick(TickEvent.ServerTickEvent event){
+        ticks++;
+        if (ticks >= 400) {
+            SmiteHandler.judge(event.getServer());
+            EndorsementHandler.updateCooldowns(event.getServer());
+            ticks = 0;
+        }
+
+    }
+
+    public static void judge(MinecraftServer server) {
         List<ServerPlayer> players =  server.getPlayerList().getPlayers();
         for (ServerPlayer p : players) {
             int score = SnappyStuff.k.karmaScores.get(p.getUUID()).getScore();

@@ -1,5 +1,4 @@
 package com.cdogsnappy.snappystuff.karma;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -10,12 +9,10 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static com.cdogsnappy.snappymod.SnappyMod.k;
+import static com.cdogsnappy.snappystuff.SnappyStuff.k;
 
 @Mod.EventBusSubscriber
 public class Karma{

@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 public class EndorseCommand {
@@ -27,6 +28,13 @@ public class EndorseCommand {
         root.then(builder);
     }
 
+    /**
+     * @author Cdogsnappy
+     * @param c Context from endorse command
+     * @param praised person being endorsed
+     * @param praiser person endorsing
+     * @return command success/fail value
+     */
     public static int endorse(CommandContext<CommandSourceStack> c, Player praised, Player praiser){
         UUID reid = praised.getUUID();//receiver
         UUID seid = praiser.getUUID();//sender
@@ -40,7 +48,7 @@ public class EndorseCommand {
             if(e[i] == null){
                 continue;
             }
-            if (e[i].getID() == reid) {
+            if (e[i].getID().equals(reid)) {// == doesn't work here :\, use .equals() is you know your obj1 is non null
                 c.getSource().sendFailure((Component.literal("You've already praised " + praised.getName().getString() + " today!")));
                 return -2;
             }
@@ -48,6 +56,7 @@ public class EndorseCommand {
         SnappyStuff.k.setEndorsements(reid,SnappyStuff.k.getEndorsements(reid) + 1);
         SnappyStuff.k.updateEndorsed(seid,reid);
         EndorsementHandler.checkEndorsements(reid);
+        c.getSource().sendSystemMessage(Component.literal(Arrays.toString(SnappyStuff.k.getKarmaInfo(seid).getPlayersEndorsed())));
         c.getSource().sendSystemMessage(Component.literal("Endorsed " + praised.getName().getString() + "!"));
         return 0;
 

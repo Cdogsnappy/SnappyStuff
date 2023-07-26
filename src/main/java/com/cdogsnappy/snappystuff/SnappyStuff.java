@@ -4,12 +4,11 @@ import com.cdogsnappy.snappystuff.commands.EndorseCommand;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
-import com.google.common.eventbus.Subscribe;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,20 +18,18 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -46,7 +43,7 @@ public class SnappyStuff
     private static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
 
-    public static final Karma k = new Karma();
+    public static Karma k = new Karma();
 
     // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
 
@@ -58,6 +55,8 @@ public class SnappyStuff
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::imcSend);
         modEventBus.addListener(this::stitch);
+
+
 
         // Register the Deferred Register to the mod event bus so blocks get registered
 
@@ -80,15 +79,21 @@ public class SnappyStuff
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) throws IOException, ClassNotFoundException {
+    public void onServerStarting(ServerStartingEvent event){
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
         File karma = new File("karma.txt");
-        if(karma.exists()){
-            FileInputStream fos = new FileInputStream(karma);
-            ObjectInputStream objReader = new ObjectInputStream(fos);
-            k.karmaScores = (HashMap<UUID, KarmaPlayerInfo>) objReader.readObject();
-            objReader.close();
+        try {
+            if (karma.exists()) {
+                FileInputStream fos = new FileInputStream(karma);
+                ObjectInputStream objReader = new ObjectInputStream(fos);
+                k.karmaScores = (HashMap<UUID, KarmaPlayerInfo>) objReader.readObject();
+                objReader.close();
+                LOGGER.info("SUCCESSFULLY RESTORED SNAPPYSTUFF DATA");
+            }
+        }
+        catch(Exception e){
+            LOGGER.info("FATAL ERROR RELOADING DATA");
         }
     }
     @SubscribeEvent
@@ -101,16 +106,24 @@ public class SnappyStuff
     }
 
     @SubscribeEvent
-    public void onServerDeath(ServerStoppingEvent event) throws IOException {
-        File karma = new File("karma.txt");
-        if(karma.exists()){karma.delete();}
-        karma.createNewFile();
-        FileOutputStream fos = new FileOutputStream(karma);
-        ObjectOutputStream objWriter = new ObjectOutputStream(fos);
-        HashMap<UUID, KarmaPlayerInfo> toSave = k.karmaScores;
-        objWriter.writeObject(toSave);
-        objWriter.flush();
-        objWriter.close();
+    public void onServerDeath(ServerStoppingEvent event){
+        try {
+            File karma = new File("karma.txt");
+            if (karma.exists()) {
+                karma.delete();
+            }
+            karma.createNewFile();
+            FileOutputStream fos = new FileOutputStream(karma);
+            ObjectOutputStream objWriter = new ObjectOutputStream(fos);
+            HashMap<UUID, KarmaPlayerInfo> toSave = k.karmaScores;
+            objWriter.writeObject(toSave);
+            objWriter.flush();
+            objWriter.close();
+            LOGGER.info("SUCCESS WRITING DATA");
+        }
+        catch(IOException e){
+            LOGGER.info("FATAL ERROR WRITING DATA");
+        }
     }
 
     @SubscribeEvent
@@ -131,11 +144,6 @@ public class SnappyStuff
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
-    }
-    @SubscribeEvent
-    public void ServerSideSetup(FMLDedicatedServerSetupEvent event){
-        MinecraftForge.EVENT_BUS.register(new RadioHandler());
-
     }
 
 

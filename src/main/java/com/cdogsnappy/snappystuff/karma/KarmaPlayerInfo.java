@@ -1,8 +1,8 @@
 package com.cdogsnappy.snappystuff.karma;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.Serializable;
-import java.util.List;
-import java.util.UUID;
 
 public class KarmaPlayerInfo implements Serializable {
     private static final long serialVersionUID = 7536482295622776147L;
@@ -11,7 +11,7 @@ public class KarmaPlayerInfo implements Serializable {
     protected int numEndorsements;
     protected int numEndorsed;
 
-    protected com.cdogsnappy.snappystuff.karma.EndorsementInfo[] playersEndorsed;
+    protected EndorsementInfo[] playersEndorsed;
 
     public KarmaPlayerInfo(){
         this.score = 1;
@@ -34,7 +34,6 @@ public class KarmaPlayerInfo implements Serializable {
         this.numEndorsements = numEndorsements;
         this.numEndorsed = numEndorsed;
         this.playersEndorsed = playersEndorsed;
-        playersEndorsed = new EndorsementInfo[3];
     }
     public int getScore(){
         return score;

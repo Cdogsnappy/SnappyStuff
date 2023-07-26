@@ -30,11 +30,8 @@ public class RadioHandler {
     static boolean justPlayedMusic = false;
 
 
-    @SubscribeEvent
-    public void onTick(TickEvent.ServerTickEvent event){
-        if(!event.getServer().isDedicatedServer()){
-            return;
-        }
+
+    public static void onTick(){
         if(!audioPlaying){
             playSomething();
             return;
@@ -50,7 +47,7 @@ public class RadioHandler {
 
     //We don't want phantom listeners
     @SubscribeEvent
-    public void onPlayerLogOff(PlayerEvent.PlayerLoggedOutEvent event){
+    public static void onPlayerLogOff(PlayerEvent.PlayerLoggedOutEvent event){
         Player p = event.getEntity();
             listeners.remove(p);
             playingSounds.remove(p);
@@ -58,7 +55,7 @@ public class RadioHandler {
 
     //Radio users should still be active on the radio when they relog
     @SubscribeEvent
-    public void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event){
+    public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event){
         Player p = event.getEntity();
         Optional<SlotResult> radStack = CuriosApi.getCuriosHelper().findFirstCurio(p, ModItems.RADIO.get());//Look for an equipped radio
         if(!radStack.isEmpty()){//If radio is equipped

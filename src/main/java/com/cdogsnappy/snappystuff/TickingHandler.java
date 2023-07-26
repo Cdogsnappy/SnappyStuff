@@ -1,23 +1,22 @@
-package com.cdogsnappy.snappymod;
+package com.cdogsnappy.snappystuff;
 
-import com.cdogsnappy.snappymod.karma.EndorsementHandler;
-import com.cdogsnappy.snappymod.karma.SmiteHandler;
+import com.cdogsnappy.snappystuff.karma.EndorsementHandler;
+import com.cdogsnappy.snappystuff.karma.SmiteHandler;
+import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class TickingHandler {
-    SmiteHandler smiteHandler = new SmiteHandler();
-    int ticks = 0;
 
+    /**
+     * Handles every snappystuff action that requires being called every server tick
+     * @param event The ServerTickEvent
+     */
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
-        ticks++;
-        if (ticks >= 400) {
-            smiteHandler.judge(event.getServer());
-            EndorsementHandler.updateCooldowns(event.getServer());
-            ticks = 0;
-        }
+        RadioHandler.onTick();
+        SmiteHandler.onTick(event);
     }
 }
