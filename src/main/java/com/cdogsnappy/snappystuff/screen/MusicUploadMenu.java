@@ -31,7 +31,7 @@ public class MusicUploadMenu extends AbstractContainerMenu {
 
     public MusicUploadMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenus.MUSIC_UPLOAD_MENU.get(), id);
-        checkContainerSize(inv, 3);
+        checkContainerSize(inv, 1);
         blockEntity = (MusicUploadBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
