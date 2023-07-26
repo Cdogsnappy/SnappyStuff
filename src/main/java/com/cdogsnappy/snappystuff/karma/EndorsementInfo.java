@@ -1,4 +1,4 @@
-package com.cdogsnappy.snappymod.karma;
+package com.cdogsnappy.snappystuff.karma;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

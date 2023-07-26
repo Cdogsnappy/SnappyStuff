@@ -1,8 +1,8 @@
-package com.cdogsnappy.snappymod.commands;
+package com.cdogsnappy.snappystuff.commands;
 
-import com.cdogsnappy.snappymod.SnappyMod;
-import com.cdogsnappy.snappymod.karma.EndorsementHandler;
-import com.cdogsnappy.snappymod.karma.EndorsementInfo;
+import com.cdogsnappy.snappystuff.SnappyStuff;
+import com.cdogsnappy.snappystuff.karma.EndorsementHandler;
+import com.cdogsnappy.snappystuff.karma.EndorsementInfo;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -30,11 +30,11 @@ public class EndorseCommand {
     public static int endorse(CommandContext<CommandSourceStack> c, Player praised, Player praiser){
         UUID reid = praised.getUUID();//receiver
         UUID seid = praiser.getUUID();//sender
-        if(SnappyMod.k.getEndorsed(seid) == 3){//CHECK THAT PRAISER HAS ENDORSEMENTS LEFT
+        if(SnappyStuff.k.getEndorsed(seid) == 3){//CHECK THAT PRAISER HAS ENDORSEMENTS LEFT
             c.getSource().sendFailure(Component.literal("You've already used all of your endorsements today!"));
             return -1;
         }
-        EndorsementInfo[] e = SnappyMod.k.getKarmaInfo(seid).getPlayersEndorsed();
+        EndorsementInfo[] e = SnappyStuff.k.getKarmaInfo(seid).getPlayersEndorsed();
 
         for(int i = 0; i<3; i++) {//CHECK THAT PRAISER HASN'T ALREADY ENDORSED THIS PLAYER
             if(e[i] == null){
@@ -45,8 +45,8 @@ public class EndorseCommand {
                 return -2;
             }
         }
-        SnappyMod.k.setEndorsements(reid,SnappyMod.k.getEndorsements(reid) + 1);
-        SnappyMod.k.updateEndorsed(seid,reid);
+        SnappyStuff.k.setEndorsements(reid,SnappyStuff.k.getEndorsements(reid) + 1);
+        SnappyStuff.k.updateEndorsed(seid,reid);
         EndorsementHandler.checkEndorsements(reid);
         c.getSource().sendSystemMessage(Component.literal("Endorsed " + praised.getName().getString() + "!"));
         return 0;

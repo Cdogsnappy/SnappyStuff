@@ -1,7 +1,7 @@
-package com.cdogsnappy.snappymod.karma;
+package com.cdogsnappy.snappystuff.karma;
 
 
-import com.cdogsnappy.snappymod.SnappyMod;
+import com.cdogsnappy.snappystuff.SnappyStuff;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,9 +14,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 
@@ -44,7 +41,7 @@ public class SmiteHandler {
     public void judge(MinecraftServer server) {
         List<ServerPlayer> players =  server.getPlayerList().getPlayers();
         for (ServerPlayer p : players) {
-            int score = SnappyMod.k.karmaScores.get(p.getUUID()).getScore();
+            int score = SnappyStuff.k.karmaScores.get(p.getUUID()).getScore();
             if(rand.nextFloat() <= Math.max(Math.abs(score),1)*threshold){
                 if(score<0){
                     smite(p,p.getLevel());

@@ -1,4 +1,4 @@
-package com.cdogsnappy.snappymod.karma;
+package com.cdogsnappy.snappystuff.karma;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,14 +11,14 @@ public class KarmaPlayerInfo implements Serializable {
     protected int numEndorsements;
     protected int numEndorsed;
 
-    protected EndorsementInfo[] playersEndorsed;
+    protected com.cdogsnappy.snappystuff.karma.EndorsementInfo[] playersEndorsed;
 
     public KarmaPlayerInfo(){
         this.score = 1;
         this.health = -2.0f;
         this.numEndorsed = 0;
         this.numEndorsements = 0;
-        playersEndorsed = new EndorsementInfo[3];
+        playersEndorsed = new com.cdogsnappy.snappystuff.karma.EndorsementInfo[3];
     }
 
     public KarmaPlayerInfo(int score, float health){
