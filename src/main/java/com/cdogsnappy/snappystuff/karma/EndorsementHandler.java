@@ -10,22 +10,22 @@ import java.util.UUID;
 public class EndorsementHandler {
     public static int dailyEndorsements = 3;
     public static void checkEndorsements(UUID id){
-        if(SnappyStuff.k.getEndorsements(id)>=4){
-            SnappyStuff.k.setScore(id,SnappyStuff.k.getScore(id) + 2);
-            SnappyStuff.k.setEndorsements(id,SnappyStuff.k.getEndorsements(id) - 4);
+        if(Karma.getEndorsements(id)>=4){
+            Karma.setScore(id,Karma.getScore(id) + 2);
+            Karma.setEndorsements(id,Karma.getEndorsements(id) - 4);
         }
     }
     public static void updateCooldowns(MinecraftServer server){
         List<ServerPlayer> players =  server.getPlayerList().getPlayers();
         for (ServerPlayer p : players) {
-            KarmaPlayerInfo info = SnappyStuff.k.getKarmaInfo(p.getUUID());
+            KarmaPlayerInfo info = Karma.getKarmaInfo(p.getUUID());
             for(int i = 0; i<dailyEndorsements; i++){
                 if(LocalDateTime.now().isAfter(info.playersEndorsed[i].time)){
                     info.playersEndorsed[i] = null;
                     info.numEndorsed--;
                 }
         }
-            SnappyStuff.k.setKarmaInfo(p.getUUID(), info);
+            Karma.setKarmaInfo(p.getUUID(), info);
         }
     }
 

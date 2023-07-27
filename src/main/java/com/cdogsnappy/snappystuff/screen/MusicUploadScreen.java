@@ -39,7 +39,7 @@ public class MusicUploadScreen extends AbstractContainerScreen<MusicUploadMenu> 
 
         private void renderProgressArrow(PoseStack pPoseStack, int x, int y) {
             if(menu.isUploading()) {
-                blit(pPoseStack, x + 105, y + 33, 176, 0, 8, menu.getScaledProgress());
+                blit(pPoseStack, x + 104, y + 53, 176, 28, 12, -menu.getScaledProgress());
             }
         }
 

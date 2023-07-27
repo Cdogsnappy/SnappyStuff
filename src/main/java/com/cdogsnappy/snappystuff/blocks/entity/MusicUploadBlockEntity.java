@@ -5,6 +5,7 @@ import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.MusicUploadMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
@@ -17,11 +18,13 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider {
@@ -68,7 +71,7 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
 
     @Override
     public Component getDisplayName() {
-        return null;
+        return Component.literal("Music Uploader");
     }
     @Override
     public void saveAdditional(CompoundTag tag) {
@@ -83,14 +86,35 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
     public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
         return new MusicUploadMenu(id, inv, this, this.data);
     }
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if(cap == ForgeCapabilities.ITEM_HANDLER) {
+            return lazyItemHandler.cast();
+        }
+
+        return super.getCapability(cap, side);
+    }
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyItemHandler.invalidate();
+    }
 
 
     public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, MusicUploadBlockEntity e) {
-        if(level.isClientSide || !e.isProcessing){
+        if(e.itemHandler.getStackInSlot(0).getItem() instanceof RecordItem){
+            e.isProcessing = true;
+        }
+        else{
             return;
         }
-        if(!(e.itemHandler.getStackInSlot(0).getItem() instanceof RecordItem)){
-            e.isProcessing = false;
+        if(level.isClientSide || !e.isProcessing){
             return;
         }
         e.progress++;

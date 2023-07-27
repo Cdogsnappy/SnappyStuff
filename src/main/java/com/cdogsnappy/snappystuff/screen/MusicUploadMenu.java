@@ -23,7 +23,6 @@ public class MusicUploadMenu extends AbstractContainerMenu {
     public final MusicUploadBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
-    private final Button uploadButton;
 
     public MusicUploadMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
@@ -35,33 +34,22 @@ public class MusicUploadMenu extends AbstractContainerMenu {
         blockEntity = (MusicUploadBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
-        uploadButton = new Button(40,30,10,4,
-                Component.literal("UPLOAD"), (uploadButton) -> {
-            if(!(blockEntity.itemHandler.getStackInSlot(0).getItem() instanceof RecordItem)){
-                return;
-            }
-            blockEntity.isProcessing = true;
-
-        });
-
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            this.addSlot(new SlotItemHandler(handler, 0, 12, 15));
+            this.addSlot(new SlotItemHandler(handler, 0, 80, 32));
         });
 
-        //addDataSlots(data);
+        addDataSlots(data);
     }
-
-    public boolean isUploading(){
-        return blockEntity.isProcessing;
-
+    public boolean isUploading() {
+        return data.get(0) > 0;
     }
     public int getScaledProgress() {
         int progress = this.data.get(0);
         int maxProgress = this.data.get(1);  // Max Progress
-        int progressArrowSize = 26; // This is the height in pixels of your arrow
+        int progressArrowSize = 28; // This is the height in pixels of your arrow
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }

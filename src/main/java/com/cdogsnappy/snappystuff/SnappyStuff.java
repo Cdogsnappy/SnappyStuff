@@ -4,8 +4,10 @@ import com.cdogsnappy.snappystuff.commands.EndorseCommand;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
+import com.cdogsnappy.snappystuff.screen.ModMenus;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.commands.Commands;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -27,9 +29,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
+import com.cdogsnappy.snappystuff.screen.MusicUploadScreen;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -43,7 +45,7 @@ public class SnappyStuff
     private static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
 
-    public static Karma k = new Karma();
+
 
     // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
 
@@ -87,9 +89,12 @@ public class SnappyStuff
             if (karma.exists()) {
                 FileInputStream fos = new FileInputStream(karma);
                 ObjectInputStream objReader = new ObjectInputStream(fos);
-                k.karmaScores = (HashMap<UUID, KarmaPlayerInfo>) objReader.readObject();
+                Karma.karmaScores = (HashMap<UUID, KarmaPlayerInfo>) objReader.readObject();
                 objReader.close();
                 LOGGER.info("SUCCESSFULLY RESTORED SNAPPYSTUFF DATA");
+            }
+            else{
+                Karma.init();
             }
         }
         catch(Exception e){
@@ -115,7 +120,7 @@ public class SnappyStuff
             karma.createNewFile();
             FileOutputStream fos = new FileOutputStream(karma);
             ObjectOutputStream objWriter = new ObjectOutputStream(fos);
-            HashMap<UUID, KarmaPlayerInfo> toSave = k.karmaScores;
+            HashMap<UUID, KarmaPlayerInfo> toSave = Karma.karmaScores;
             objWriter.writeObject(toSave);
             objWriter.flush();
             objWriter.close();
@@ -143,6 +148,7 @@ public class SnappyStuff
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            MenuScreens.register(ModMenus.MUSIC_UPLOAD_MENU.get(), MusicUploadScreen::new);
         }
     }
 
