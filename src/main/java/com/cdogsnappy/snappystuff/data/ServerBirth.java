@@ -5,6 +5,7 @@ import com.cdogsnappy.snappystuff.SnappyStuff;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
 import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
+import com.cdogsnappy.snappystuff.radio.SoundInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class ServerBirth {
 
     /**
+     * @author Cdogsnappy
      * Reads all data stored from a previous server life
      */
     public static void readData(){
@@ -36,11 +38,8 @@ public class ServerBirth {
 
                 }
                 if(serverData.containsKey("music")){
-                    RadioHandler.music = (List<CustomSoundEvent>) serverData.get("music");
+                    RadioHandler.musicLocations = (List<SoundInfo>) serverData.get("music");
                 }
-
-
-
 
                 objReader.close();
             }

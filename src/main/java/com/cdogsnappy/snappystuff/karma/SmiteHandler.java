@@ -40,6 +40,11 @@ public class SmiteHandler {
     static MobEffect[] effects = {MobEffects.ABSORPTION,MobEffects.REGENERATION,MobEffects.DAMAGE_BOOST};
     protected static Random rand = new Random();
 
+    /**
+     * Counts up ticks until a threshold is met and then calls a judge event and updates endorsement cooldowns
+     * @author Cdogsnappy
+     * @param event ServerTickEvent
+     */
     public static void onTick(TickEvent.ServerTickEvent event){
         ticks++;
         if (ticks >= 400) {
@@ -50,6 +55,12 @@ public class SmiteHandler {
 
     }
 
+    /**
+     * Takes all players and rolls a random chance to judge them. If their karma is negative they are smited and if positive they are
+     * graced.
+     * @author Cdogsnappy
+     * @param server The minecraft server
+     */
     public static void judge(MinecraftServer server) {
         List<ServerPlayer> players =  server.getPlayerList().getPlayers();
         for (ServerPlayer p : players) {
@@ -66,6 +77,13 @@ public class SmiteHandler {
         }
 
     }
+
+    /**
+     * Smites a player with some effect
+     * @author Cdogsnappy
+     * @param p The player
+     * @param w The world
+     */
     public static void smite(ServerPlayer p, ServerLevel w){
         int wr = rand.nextInt(3);
         switch(wraths[wr]) {
@@ -92,6 +110,13 @@ public class SmiteHandler {
         }
 
     }
+
+    /**
+     * Graces a player with some effect
+     * @author Cdogsnappy
+     * @param p The player
+     * @param w The world
+     */
     public static void grace(ServerPlayer p, ServerLevel w){
         int gr = rand.nextInt(3);
         switch(graces[gr]){

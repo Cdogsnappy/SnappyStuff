@@ -3,11 +3,14 @@ package com.cdogsnappy.snappystuff.blocks.entity;
 import com.cdogsnappy.snappystuff.blocks.ModEntityBlocks;
 import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
+import com.cdogsnappy.snappystuff.radio.SoundInfo;
 import com.cdogsnappy.snappystuff.screen.MusicUploadMenu;
+import com.cdogsnappy.snappystuff.sounds.SSSoundRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -24,8 +27,12 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.curios.api.type.capability.ICurio;
+
+import java.util.Arrays;
 
 public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider {
     public int progress = 0;
@@ -138,6 +145,9 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
                 return;
             }
         }
-        RadioHandler.music.add((CustomSoundEvent)song.getSound());
+        SoundEvent[] s = (SoundEvent[])SSSoundRegistry.SOUNDS.getEntries().toArray();
+        int index = ArrayUtils.indexOf(s,song.getSound());
+        RadioHandler.musicLocations.add(new SoundInfo(index,song.getLengthInTicks()));
+        RadioHandler.music.add(new CustomSoundEvent(song.getSound(), song.getLengthInTicks()));
     }
 }

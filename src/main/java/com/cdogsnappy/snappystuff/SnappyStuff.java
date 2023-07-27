@@ -1,8 +1,10 @@
 package com.cdogsnappy.snappystuff;
 
 import com.cdogsnappy.snappystuff.commands.EndorseCommand;
+import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
+import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.ModMenus;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -85,22 +87,13 @@ public class SnappyStuff
     public void onServerStarting(ServerStartingEvent event){
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
-        File karma = new File("karma.txt");
         try {
-            if (karma.exists()) {
-                FileInputStream fos = new FileInputStream(karma);
-                ObjectInputStream objReader = new ObjectInputStream(fos);
-                Karma.karmaScores = (HashMap<UUID, KarmaPlayerInfo>) objReader.readObject();
-                objReader.close();
-                LOGGER.info("SUCCESSFULLY RESTORED SNAPPYSTUFF DATA");
-            }
-            else{
-                Karma.init();
-            }
+            ServerBirth.readData();
         }
         catch(Exception e){
             LOGGER.info("FATAL ERROR RELOADING DATA");
         }
+        RadioHandler.init();
     }
     @SubscribeEvent
     public void imcSend(InterModEnqueueEvent event){

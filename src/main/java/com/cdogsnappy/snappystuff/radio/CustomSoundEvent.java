@@ -5,14 +5,15 @@ import net.minecraft.sounds.SoundEvent;
 
 import java.io.Serializable;
 
-public class CustomSoundEvent extends SoundEvent implements Serializable {
+public class CustomSoundEvent {
     protected int tickLength;
-    public CustomSoundEvent(ResourceLocation rL, int tickLength){
-        super(rL);
+    protected SoundEvent sound;
+    public CustomSoundEvent(SoundEvent sound, int tickLength){
+        this.sound = sound;
         this.tickLength = tickLength;
     }
     public SoundEvent getSound(){
-        return this;
+        return this.sound;
     }
     public int getTickLength() {
         return this.tickLength;

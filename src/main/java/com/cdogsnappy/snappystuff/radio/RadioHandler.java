@@ -1,10 +1,12 @@
 package com.cdogsnappy.snappystuff.radio;
 
 import com.cdogsnappy.snappystuff.items.ModItems;
+import com.cdogsnappy.snappystuff.sounds.SSSoundRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
@@ -14,12 +16,14 @@ import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber
 public class RadioHandler {
     public static List<Player> listeners = new ArrayList<Player>();
+    public static List<SoundInfo> musicLocations = new ArrayList<>();
     public static List<CustomSoundEvent> music = new ArrayList<CustomSoundEvent>();
     public static List<CustomSoundEvent> casts = new ArrayList<CustomSoundEvent>();
     public static Map<Player, SoundInstance> playingSounds = new ConcurrentHashMap<Player, SoundInstance>();
@@ -92,7 +96,14 @@ public class RadioHandler {
         justPlayedMusic = !justPlayedMusic;
         audioPlaying = true;
     }
+    public static void init(){
+        SoundEvent[] sounds = (SoundEvent[])SSSoundRegistry.SOUNDS.getEntries().toArray();
+        for(SoundInfo info : musicLocations){
+            music.add(new CustomSoundEvent(sounds[info.index],info.lengthInTicks));
+        }
+    }
 
 
 
 }
+
