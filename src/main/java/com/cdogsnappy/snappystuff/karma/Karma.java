@@ -43,12 +43,6 @@ public class Karma{
 
 
     }
-    @SubscribeEvent
-    public static void onSpawn(PlayerEvent.PlayerLoggedInEvent event) {
-        playerCheck(event);
-
-
-    }
     public static void playerCheck(PlayerEvent event){
         Player player = event.getEntity();
         AttributeInstance attr = player.getAttribute(Attributes.MAX_HEALTH);

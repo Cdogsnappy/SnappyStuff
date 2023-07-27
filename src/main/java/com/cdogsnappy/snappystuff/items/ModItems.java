@@ -1,6 +1,7 @@
 package com.cdogsnappy.snappystuff.items;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
+import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.sounds.SSSoundRegistry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
@@ -20,7 +21,7 @@ public class ModItems {
 
     public static RegistryObject<RecordItem> makeRecord(String name, RegistryObject<SoundEvent> sound, int seconds){
          return ITEMS.register(name, () ->
-                new RecordItem(0,sound,new Item.Properties().rarity(Rarity.EPIC).fireResistant().tab(SnappyStuffTabs.SNAPPY_MUSIC_TAB), (seconds+2)*20));
+                new RecordItem(0,sound,new Item.Properties().rarity(Rarity.EPIC).fireResistant().tab(SnappyStuffTabs.SNAPPY_MUSIC_TAB),(seconds+2)*20));
 
     }
 }

@@ -1,20 +1,18 @@
 package com.cdogsnappy.snappystuff.radio;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
-public class CustomSoundEvent {
-    protected SoundEvent sound;
+import java.io.Serializable;
+
+public class CustomSoundEvent extends SoundEvent implements Serializable {
     protected int tickLength;
-    public CustomSoundEvent(){
-        sound = null;
-        tickLength = 0;
-    }
-    public CustomSoundEvent(SoundEvent sound, int tickLength){
-        this.sound = sound;
+    public CustomSoundEvent(ResourceLocation rL, int tickLength){
+        super(rL);
         this.tickLength = tickLength;
     }
     public SoundEvent getSound(){
-        return this.sound;
+        return this;
     }
     public int getTickLength() {
         return this.tickLength;

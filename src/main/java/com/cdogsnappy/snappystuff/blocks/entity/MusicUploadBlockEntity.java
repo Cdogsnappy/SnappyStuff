@@ -138,6 +138,6 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
                 return;
             }
         }
-        RadioHandler.music.add(new CustomSoundEvent(song.getSound(), song.getLengthInTicks()));
+        RadioHandler.music.add((CustomSoundEvent)song.getSound());
     }
 }
