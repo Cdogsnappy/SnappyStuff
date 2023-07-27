@@ -8,11 +8,17 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SSSoundRegistry {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, SnappyStuff.MODID);
+    public static List<SoundEvent> uploadableSounds = new ArrayList<SoundEvent>();
 
-    public static final RegistryObject<SoundEvent> DREAM_SWEET = createSoundEvent("dream_sweet");
-    private static RegistryObject<SoundEvent> createSoundEvent(final String soundName) {
-        return SOUNDS.register(soundName, () -> new SoundEvent(new ResourceLocation(SnappyStuff.MODID, soundName)));
+    public static final RegistryObject<SoundEvent> DREAM_SWEET = createSoundEvent("dream_sweet", true);
+    private static RegistryObject<SoundEvent> createSoundEvent(final String soundName, boolean uploadable) {
+        SoundEvent sound = new SoundEvent(new ResourceLocation(SnappyStuff.MODID,soundName));
+        uploadableSounds.add(sound);
+        return SOUNDS.register(soundName, () -> sound);
     }
 }

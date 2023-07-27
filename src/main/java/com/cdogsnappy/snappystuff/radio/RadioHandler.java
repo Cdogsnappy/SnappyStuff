@@ -13,6 +13,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegistryObject;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -97,9 +98,8 @@ public class RadioHandler {
         audioPlaying = true;
     }
     public static void init(){
-        SoundEvent[] sounds = (SoundEvent[])SSSoundRegistry.SOUNDS.getEntries().toArray();
         for(SoundInfo info : musicLocations){
-            music.add(new CustomSoundEvent(sounds[info.index],info.lengthInTicks));
+            music.add(new CustomSoundEvent(SSSoundRegistry.uploadableSounds.get(info.index),info.lengthInTicks));
         }
     }
 

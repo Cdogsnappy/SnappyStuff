@@ -27,6 +27,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -145,9 +146,8 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
                 return;
             }
         }
-        SoundEvent[] s = (SoundEvent[])SSSoundRegistry.SOUNDS.getEntries().toArray();
-        int index = ArrayUtils.indexOf(s,song.getSound());
-        RadioHandler.musicLocations.add(new SoundInfo(index,song.getLengthInTicks()));
+       SSSoundRegistry.uploadableSounds.add(song.getSound());
+        RadioHandler.musicLocations.add(new SoundInfo(SSSoundRegistry.uploadableSounds.indexOf(song.getSound()),song.getLengthInTicks()));
         RadioHandler.music.add(new CustomSoundEvent(song.getSound(), song.getLengthInTicks()));
     }
 }
