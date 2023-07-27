@@ -112,23 +112,7 @@ public class SnappyStuff
 
     @SubscribeEvent
     public void onServerDeath(ServerStoppingEvent event){
-        try {
-            File karma = new File("karma.txt");
-            if (karma.exists()) {
-                karma.delete();
-            }
-            karma.createNewFile();
-            FileOutputStream fos = new FileOutputStream(karma);
-            ObjectOutputStream objWriter = new ObjectOutputStream(fos);
-            HashMap<UUID, KarmaPlayerInfo> toSave = Karma.karmaScores;
-            objWriter.writeObject(toSave);
-            objWriter.flush();
-            objWriter.close();
-            LOGGER.info("SUCCESS WRITING DATA");
-        }
-        catch(IOException e){
-            LOGGER.info("FATAL ERROR WRITING DATA");
-        }
+
     }
 
     @SubscribeEvent

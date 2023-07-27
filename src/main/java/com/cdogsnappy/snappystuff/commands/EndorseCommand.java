@@ -57,7 +57,6 @@ public class EndorseCommand {
         Karma.setEndorsements(reid,Karma.getEndorsements(reid) + 1);
         Karma.updateEndorsed(seid,reid);
         EndorsementHandler.checkEndorsements(reid);
-        c.getSource().sendSystemMessage(Component.literal(Arrays.toString(Karma.getKarmaInfo(seid).getPlayersEndorsed())));
         c.getSource().sendSystemMessage(Component.literal("Endorsed " + praised.getName().getString() + "!"));
         return 0;
 

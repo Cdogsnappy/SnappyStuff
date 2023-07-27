@@ -1,12 +1,16 @@
 package com.cdogsnappy.snappystuff.data;
 
 import com.cdogsnappy.snappystuff.karma.Karma;
+import com.cdogsnappy.snappystuff.SnappyStuff;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
+import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
+import com.cdogsnappy.snappystuff.radio.RadioHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,21 +21,35 @@ public class ServerBirth {
      */
     public static void readData(){
         HashMap<String, Object> serverData = new HashMap<String, Object>();
-        File karma = new File("karma.txt");
+        File snappyData = new File("snappydata.txt");
         try {
             if (snappyData.exists()) {
-                FileInputStream fos = new FileInputStream(karma);
+                FileInputStream fos = new FileInputStream(snappyData);
                 ObjectInputStream objReader = new ObjectInputStream(fos);
-                Karma.karmaScores = (HashMap<UUID, KarmaPlayerInfo>) objReader.readObject();
+                serverData = (HashMap<String,Object>) objReader.readObject();
+
+                if(serverData.containsKey("karma")){
+                    Karma.karmaScores = (HashMap<UUID, KarmaPlayerInfo>) serverData.get("karma");
+                }
+                else{Karma.init();}
+                if(serverData.containsKey("courts")){
+
+                }
+                if(serverData.containsKey("music")){
+                    RadioHandler.music = (List<CustomSoundEvent>) serverData.get("music");
+                }
+
+
+
+
                 objReader.close();
-                LOGGER.info("SUCCESSFULLY RESTORED SNAPPYSTUFF DATA");
             }
             else{
                 Karma.init();
             }
         }
         catch(Exception e){
-            LOGGER.info("FATAL ERROR RELOADING DATA");
+
         }
     }
 
