@@ -22,7 +22,7 @@ public class CitizenData implements Serializable {
 
     protected UUID id;
     protected String name;
-    protected int[] services = new int[4];
+    protected int[] services = new int[5];//Map, 0 = Judge, 1 = Jury, 2 = Defendant, 3 = Plaintiff, 4 = Lawyer
     protected ArrayList<Crime> crimes = new ArrayList<Crime>();
 
     public CitizenData(Player p){
