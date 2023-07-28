@@ -16,6 +16,8 @@ import com.cdogsnappy.snappystuff.karma.Karma;
 import java.util.Arrays;
 import java.util.UUID;
 
+import static net.minecraft.commands.arguments.EntityArgument.getPlayer;
+
 public class EndorseCommand {
     public static void register(LiteralArgumentBuilder<CommandSourceStack> root) {
         LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("endorse").requires(c -> c.hasPermission(1));
@@ -23,7 +25,7 @@ public class EndorseCommand {
         builder.then(
                 Commands.argument("player", EntityArgument.player())
                         .executes(c -> {
-                            return endorse(c, EntityArgument.getPlayer(c,"player"), c.getSource().getPlayer());
+                            return endorse(c, getPlayer(c,"player"), c.getSource().getPlayer());
                         })
         );
         root.then(builder);
@@ -37,6 +39,10 @@ public class EndorseCommand {
      * @return command success/fail value
      */
     public static int endorse(CommandContext<CommandSourceStack> c, Player praised, Player praiser){
+        if(praised == praiser){
+            c.getSource().sendFailure(Component.literal("You cannot endorse yourself!"));
+            return -3;
+        }
         UUID reid = praised.getUUID();//receiver
         UUID seid = praiser.getUUID();//sender
         if(Karma.getEndorsed(seid) == 3){//CHECK THAT PRAISER HAS ENDORSEMENTS LEFT
