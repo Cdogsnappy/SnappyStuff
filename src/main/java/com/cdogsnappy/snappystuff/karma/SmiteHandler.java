@@ -64,7 +64,7 @@ public class SmiteHandler {
     public static void judge(MinecraftServer server) {
         List<ServerPlayer> players =  server.getPlayerList().getPlayers();
         for (ServerPlayer p : players) {
-            int score = Karma.karmaScores.get(p.getUUID()).getScore();
+            float score = Karma.karmaScores.get(p.getUUID()).getScore();
             if(rand.nextFloat() <= Math.max(Math.abs(score),1)*threshold){
                 if(score<0){
                     smite(p,p.getLevel());

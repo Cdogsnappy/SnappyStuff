@@ -63,16 +63,20 @@ public class Karma{
     @SubscribeEvent
     public static void onPlayerKilled(LivingDeathEvent event){
         if(event.getEntity() instanceof Player && event.getEntity().getKillCredit() instanceof Player murderer){
-            Karma.setScore(murderer.getUUID(),Karma.getScore(murderer.getUUID()) - 3);
+            Karma.setScore(murderer.getUUID(),Karma.getScore(murderer.getUUID()) - 10);
 
         }
     }
 
     public static void setHealth(UUID id, float newHealth){
-        karmaScores.put(id,new KarmaPlayerInfo(karmaScores.get(id).getScore(),newHealth));
+        KarmaPlayerInfo info = karmaScores.get(id);
+        info.score = newHealth;
+        karmaScores.put(id, info);
     }
-    public static void setScore(UUID id, int score){
-        karmaScores.put(id, new KarmaPlayerInfo(score,karmaScores.get(id).getHealth()));
+    public static void setScore(UUID id, float score){
+        KarmaPlayerInfo info = karmaScores.get(id);
+        info.score = score;
+        karmaScores.put(id, info);
     }
     public static void setEndorsements(UUID id, int endorsements){
         KarmaPlayerInfo i = karmaScores.get(id);
@@ -94,7 +98,7 @@ public class Karma{
     public static float getHealth(UUID id){
         return karmaScores.get(id).health;
     }
-    public static int getScore(UUID id) {return karmaScores.get(id).score;}
+    public static float getScore(UUID id) {return karmaScores.get(id).score;}
     public static int getEndorsements(UUID id){return karmaScores.get(id).numEndorsements;}
     public static int getEndorsed(UUID id){return karmaScores.get(id).numEndorsed;}
     public static KarmaPlayerInfo getKarmaInfo(UUID id){

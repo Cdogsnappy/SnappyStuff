@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class KarmaPlayerInfo implements Serializable {
     private static final long serialVersionUID = 7536482295622776147L;
-    protected int score;
+    protected float score;
     protected float health;
     protected int numEndorsements;
     protected int numEndorsed;
@@ -21,21 +21,21 @@ public class KarmaPlayerInfo implements Serializable {
         playersEndorsed = new com.cdogsnappy.snappystuff.karma.EndorsementInfo[3];
     }
 
-    public KarmaPlayerInfo(int score, float health){
+    public KarmaPlayerInfo(float score, float health){
         this.score = score;
         this.health = health;
         this.numEndorsements = 0;
         this.numEndorsed = 0;
         playersEndorsed = new EndorsementInfo[3];
     }
-    public KarmaPlayerInfo(int score, float health, int numEndorsements, int numEndorsed, EndorsementInfo[] playersEndorsed){
+    public KarmaPlayerInfo(float score, float health, int numEndorsements, int numEndorsed, EndorsementInfo[] playersEndorsed){
         this.score = score;
         this.health = health;
         this.numEndorsements = numEndorsements;
         this.numEndorsed = numEndorsed;
         this.playersEndorsed = playersEndorsed;
     }
-    public int getScore(){
+    public float getScore(){
         return score;
     }
     public float getHealth(){

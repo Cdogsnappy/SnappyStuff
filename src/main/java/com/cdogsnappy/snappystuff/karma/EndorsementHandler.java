@@ -17,7 +17,7 @@ public class EndorsementHandler {
      */
     public static void checkEndorsements(UUID id){
         if(Karma.getEndorsements(id)>=4){
-            Karma.setScore(id,Karma.getScore(id) + 2);
+            Karma.setScore(id,Karma.getScore(id) + 2.0f);
             Karma.setEndorsements(id,Karma.getEndorsements(id) - 4);
         }
     }

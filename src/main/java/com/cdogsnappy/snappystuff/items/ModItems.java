@@ -4,6 +4,7 @@ import com.cdogsnappy.snappystuff.SnappyStuff;
 import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.sounds.SSSoundRegistry;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.RecordItem;
@@ -16,6 +17,8 @@ public class ModItems {
 
     public static final RegistryObject<RecordItem> DREAM_SWEET = makeRecord("dream_sweet", SSSoundRegistry.DREAM_SWEET,420);
     public static final RegistryObject<Item> RADIO = ITEMS.register("radio", () -> new Item(new Item.Properties().stacksTo(1).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)));
+    public static final RegistryObject<Item> DIVINE_FRUIT_ITEM = ITEMS.register("divine_fruit_item", () -> new Item(new Item.Properties().stacksTo(64).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)
+            .rarity(Rarity.EPIC).food(new FoodProperties.Builder().nutrition(0).alwaysEat().build())));
 
 
 

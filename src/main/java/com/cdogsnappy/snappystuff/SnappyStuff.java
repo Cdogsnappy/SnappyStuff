@@ -2,6 +2,7 @@ package com.cdogsnappy.snappystuff;
 
 import com.cdogsnappy.snappystuff.commands.EndorseCommand;
 import com.cdogsnappy.snappystuff.data.ServerBirth;
+import com.cdogsnappy.snappystuff.data.ServerDeath;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
@@ -106,6 +107,7 @@ public class SnappyStuff
 
     @SubscribeEvent
     public void onServerDeath(ServerStoppingEvent event){
+        ServerDeath.generateData();
 
     }
 
