@@ -1,5 +1,7 @@
 package com.cdogsnappy.snappystuff.data;
 
+import com.cdogsnappy.snappystuff.court.CitizenData;
+import com.cdogsnappy.snappystuff.court.CourtCase;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.SnappyStuff;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
@@ -34,8 +36,11 @@ public class ServerBirth {
                     Karma.karmaScores = (HashMap<UUID, KarmaPlayerInfo>) serverData.get("karma");
                 }
                 else{Karma.init();}
-                if(serverData.containsKey("courts")){
-
+                if(serverData.containsKey("citizens")){
+                    CitizenData.citizenRegistry =(HashMap<String,CitizenData>)serverData.get("citizens");
+                }
+                if(serverData.containsKey("cases")){
+                    CourtCase.caseArchive = (HashMap<Integer, CourtCase>)serverData.get("cases");
                 }
                 if(serverData.containsKey("music")){
                     RadioHandler.musicLocations = (List<SoundInfo>) serverData.get("music");

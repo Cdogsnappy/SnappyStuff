@@ -19,7 +19,7 @@ public class CourtCase implements Serializable {
      * 0 : Judge
      * 1 : Defendant
      * 2 : Plaintiff
-     * 3 : Defendent lawyer (NULLABLE
+     * 3 : Defendant lawyer (NULLABLE)
      * 4 : Plaintiff Lawyer (NULLABLE)
      * 5-7 : Jury
      */
@@ -44,6 +44,7 @@ public class CourtCase implements Serializable {
     }
 
     /**
+     * @author Cdogsnappy
      * Concludes a courtcase and updates the case archive
      * @param status status of the case
      * @param verdict verdict for the defendant
