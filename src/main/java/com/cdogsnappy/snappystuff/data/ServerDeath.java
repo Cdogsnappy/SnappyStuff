@@ -17,7 +17,7 @@ public class ServerDeath {
      */
     public static void generateData(){
         try {
-            File snappyData = new File("snappydata.txt");
+            File snappyData = new File("snappydata.dat");
             if (snappyData.exists()) {
                 snappyData.delete();
             }

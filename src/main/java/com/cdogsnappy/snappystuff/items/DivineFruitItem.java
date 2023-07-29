@@ -41,6 +41,11 @@ public class DivineFruitItem extends Item {
         return res;
     }
 
+    /**
+     * Attempts to augment a players health, will always increment the player's health but will only have impact with high enough karma
+     * @param player the player
+     */
+
     public static void attemptAugmentHealth(Player player){
         if(Karma.getScore(player.getUUID()) <=0) {
             player.sendSystemMessage(Component.literal("A foul taste fills your mouth. YOU ARE UNWORTHY OF SUCH A GIFT."));
@@ -53,6 +58,11 @@ public class DivineFruitItem extends Item {
             updateDivineHealth(player);
 
     }
+
+    /**
+     * Updates a player's divine fruit health modifier. This modifier isn't applied if the player's karma is too low
+     * @param player the player
+     */
     public static void updateDivineHealth(Player player){
         if(Karma.getScore(player.getUUID()) <= 0){
             return;

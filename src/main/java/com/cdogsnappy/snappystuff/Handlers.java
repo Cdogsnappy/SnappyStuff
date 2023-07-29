@@ -1,6 +1,7 @@
 package com.cdogsnappy.snappystuff;
 
 import com.cdogsnappy.snappystuff.court.CitizenData;
+import com.cdogsnappy.snappystuff.items.DivineFruitItem;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
@@ -24,12 +25,22 @@ public class Handlers {
 
     /**
      * Handles every snappystuff action that is run on player login
-     * @param event
+     * @param event the PlayerLoggedInEvent
      */
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
         CitizenData.onPlayerJoin(event.getEntity());
         Karma.playerCheck(event);
 
+    }
+
+    /**
+     * Handles ever snappystuff action that is run on player respawn
+     * @param event the PlayerRespawnEvent
+     */
+    @SubscribeEvent
+    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event){
+        Karma.playerCheck(event);
+        DivineFruitItem.updateDivineHealth(event.getEntity());
     }
 }

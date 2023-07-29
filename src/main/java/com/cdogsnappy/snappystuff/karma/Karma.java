@@ -34,15 +34,6 @@ public class Karma{
         karmaScores.put(UUID.fromString("f3e63fb6-8491-4bf2-b7e7-34bb4b292750"), new KarmaPlayerInfo(-1, 0.0f));
     }
 
-
-
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onSpawn(PlayerEvent.PlayerRespawnEvent event) {
-        playerCheck(event);
-
-
-    }
     public static void playerCheck(PlayerEvent event){
         Player player = event.getEntity();
         AttributeInstance attr = player.getAttribute(Attributes.MAX_HEALTH);

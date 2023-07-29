@@ -25,7 +25,7 @@ public class ServerBirth {
      */
     public static void readData(){
         HashMap<String, Object> serverData = new HashMap<String, Object>();
-        File snappyData = new File("snappydata.txt");
+        File snappyData = new File("snappydata.dat");
         try {
             if (snappyData.exists()) {
                 FileInputStream fos = new FileInputStream(snappyData);
