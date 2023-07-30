@@ -5,7 +5,6 @@ import com.cdogsnappy.snappystuff.items.DivineFruitItem;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
-import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
