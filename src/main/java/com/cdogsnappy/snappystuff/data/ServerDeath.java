@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class ServerDeath {
-
     /**
      * Generates a file that stores all global persistent server data
      */
