@@ -28,7 +28,7 @@ public class ServerDeath {
             FileOutputStream fos = new FileOutputStream(snappyData);
             ObjectOutputStream objWriter = new ObjectOutputStream(fos);
             HashMap<String,Object> serverData = new HashMap<String,Object>();//FILL THIS HASHMAP WITH THE INFO WE WANT TO SAVE
-            serverData.put("karma",Karma.karmaScores);
+            serverData.put("karma", Karma.karmaScores);
             serverData.put("citizens", CitizenData.citizenRegistry);
             serverData.put("cases", CourtCase.caseArchive);
             serverData.put("music", RadioHandler.musicLocations);

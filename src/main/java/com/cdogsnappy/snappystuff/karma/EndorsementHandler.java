@@ -32,7 +32,7 @@ public class EndorsementHandler {
         for (ServerPlayer p : players) {
             KarmaPlayerInfo info = Karma.getKarmaInfo(p.getUUID());
             for(int i = 0; i<dailyEndorsements; i++){
-                if(LocalDateTime.now().isAfter(info.playersEndorsed[i].time)){
+                if(info.playersEndorsed[i] != null && LocalDateTime.now().isAfter(info.playersEndorsed[i].time)){
                     info.playersEndorsed[i] = null;
                     info.numEndorsed--;
                 }

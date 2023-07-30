@@ -14,7 +14,7 @@ public class KarmaPlayerInfo implements Serializable {
     protected EndorsementInfo[] playersEndorsed;
 
     public KarmaPlayerInfo(){
-        this.score = 1;
+        this.score = 1.0f;
         this.health = -2.0f;
         this.numEndorsed = 0;
         this.numEndorsements = 0;
@@ -44,4 +44,7 @@ public class KarmaPlayerInfo implements Serializable {
     public int getEndorsements(){return numEndorsements;}
     public int getEndorsed(){return numEndorsed;}
     public EndorsementInfo[] getPlayersEndorsed(){return playersEndorsed;}
+    public String toString(){
+        return "Score: " + this.score + ", Health: " + this.health;
+    }
 }

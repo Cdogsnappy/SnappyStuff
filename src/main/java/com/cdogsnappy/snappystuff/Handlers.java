@@ -18,8 +18,8 @@ public class Handlers {
      * @param event The ServerTickEvent
      */
     @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        RadioHandler.onTick();
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        //RadioHandler.onTick();
         SmiteHandler.onTick(event);
     }
 
@@ -28,9 +28,14 @@ public class Handlers {
      * @param event the PlayerLoggedInEvent
      */
     @SubscribeEvent
-    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
+        if(event.getEntity().level.isClientSide){
+            return;
+        }
         CitizenData.onPlayerJoin(event.getEntity());
         Karma.playerCheck(event);
+        DivineFruitItem.addTag(event.getEntity());
+        DivineFruitItem.updateDivineHealth(event.getEntity());
 
     }
 
@@ -39,8 +44,11 @@ public class Handlers {
      * @param event the PlayerRespawnEvent
      */
     @SubscribeEvent
-    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event){
-        Karma.playerCheck(event);
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event){
+        if(event.getEntity().level.isClientSide){
+            return;
+        }
         DivineFruitItem.updateDivineHealth(event.getEntity());
+        Karma.playerCheck(event);
     }
 }
