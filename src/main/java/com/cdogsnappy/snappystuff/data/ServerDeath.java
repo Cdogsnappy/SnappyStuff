@@ -68,9 +68,11 @@ public class ServerDeath {
                  * 4 - scores (APPEND TO END)
                  */
                 List<String> list = Files.readAllLines(playerFile.toPath());
-                log.getScores().remove(0);
-                String nextScores = log.getScores().toString();
-                list.set(2,list.get(2).substring(0,list.get(2).length()-1) + ", " + nextScores.substring(1,nextScores.length()));
+                if(log.getScores().size() > 1) {
+                    log.getScores().remove(0);
+                    String nextScores = log.getScores().toString();
+                    list.set(2, list.get(2).substring(0, list.get(2).length() - 1) + ", " + nextScores.substring(1, nextScores.length()));
+                }
                 FileUtils.writeLines(playerFile,list,false);
             }
             else{//File doesn't exist, push all data to new file
