@@ -18,6 +18,7 @@ public class ModItems {
     public static final RegistryObject<Item> RADIO = ITEMS.register("radio", () -> new Item(new Item.Properties().stacksTo(1).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)));
     public static final RegistryObject<Item> DIVINE_FRUIT = ITEMS.register("divine_fruit", () -> new DivineFruitItem(new Item.Properties().stacksTo(64).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)
             .rarity(Rarity.EPIC).food(new FoodProperties.Builder().nutrition(0).alwaysEat().build())));
+    /*
     public static final RegistryObject<Item> DIVINE_ARMOR_HELMET = ITEMS.register("divine_armor_helmet", () -> new DivineArmorItem(ArmorMaterials.NETHERITE,
             EquipmentSlot.HEAD, new ArmorItem.Properties()));
     public static final RegistryObject<Item> DIVINE_ARMOR_CHEST = ITEMS.register("divine_armor_chest", () -> new DivineArmorItem(ArmorMaterials.NETHERITE,
@@ -28,6 +29,8 @@ public class ModItems {
             EquipmentSlot.FEET, new ArmorItem.Properties()));
     public static final RegistryObject<Item> DIVINIUM_INGOT = ITEMS.register("divinium_ingot", () -> new Item(new Item.Properties().rarity(Rarity.EPIC).fireResistant().stacksTo(64)));
 
+
+     */
 
 
     public static RegistryObject<RecordItem> makeRecord(String name, RegistryObject<SoundEvent> sound, int seconds){

@@ -15,7 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.UUID;
 
 public class DivineArmorItem extends ArmorItem {
-    private Item[] armor = {ModItems.DIVINE_ARMOR_LEGS.get(),ModItems.DIVINE_ARMOR_CHEST.get(),ModItems.DIVINE_ARMOR_FEET.get(),ModItems.DIVINE_ARMOR_HELMET.get()};
+    //private Item[] armor = {ModItems.DIVINE_ARMOR_LEGS.get(),ModItems.DIVINE_ARMOR_CHEST.get(),ModItems.DIVINE_ARMOR_FEET.get(),ModItems.DIVINE_ARMOR_HELMET.get()};
     private UUID attrID = UUID.fromString("a0e88c02-21cc-427f-b584-24b1e16a928b");
 
     public DivineArmorItem(ArmorMaterial p_40386_, EquipmentSlot p_40387_, Properties p_40388_) {
@@ -29,6 +29,8 @@ public class DivineArmorItem extends ArmorItem {
      * @param level the dimension (WILL BE USEFUL)
      * @param player the player wearing the Divine Armor
      */
+
+    /*
     @Override
     public void onArmorTick(ItemStack stack, Level level, Player player)
     {
@@ -54,5 +56,7 @@ public class DivineArmorItem extends ArmorItem {
                     divineModifier*instanceModifiers[i], AttributeModifier.Operation.ADDITION));
         }
     }
+    */
+
 
 }
