@@ -1,4 +1,5 @@
 package com.cdogsnappy.snappystuff.karma;
+import com.cdogsnappy.snappystuff.items.DivineFruitItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -36,6 +37,13 @@ public class Karma{
         karmaScores.put(UUID.fromString("f3e63fb6-8491-4bf2-b7e7-34bb4b292750"), new KarmaPlayerInfo(-1.0f, 0.0f));
     }
 
+    /**
+     * @author Cdogsnappy
+     * Called when a player's health may be reset, i.e. on login or respawn, also used to initialize karma data for a player that
+     * hasn't joined before.
+     * @param event the event that caused this check
+     */
+
     public static void playerCheck(PlayerEvent event){
         Player player = event.getEntity();
         AttributeInstance attr = player.getAttribute(Attributes.MAX_HEALTH);
@@ -53,23 +61,46 @@ public class Karma{
 
     }
 
+    /**
+     * @author Cdogsnappy
+     * Every time an object(item, block, attribute, etc.) relies on karma value, call the method that updates it from here.
+     * @param player the player whose karma value has changed
+     */
+    public static void onKarmaUpdate(Player player){
+        DivineFruitItem.updateDivineHealth(player);
+    }
+
+    /**
+     * @author Cdogsnappy
+     * Handles murder, lowering a player's karma if they murder another
+     * @param event the death event of an entity
+     */
     @SubscribeEvent
     public static void onPlayerKilled(LivingDeathEvent event){
-        if(event.getEntity() instanceof Player && event.getEntity().getKillCredit() instanceof Player murderer){
-            Karma.setScore(murderer.getUUID(),Karma.getScore(murderer.getUUID()) - 10);
+        if(!event.getEntity().level.isClientSide && event.getEntity() instanceof Player && event.getEntity().getKillCredit() instanceof Player murderer){
+            Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - 10);
 
         }
     }
 
     public static void setHealth(UUID id, float newHealth){
         KarmaPlayerInfo info = karmaScores.get(id);
-        info.score = newHealth;
+        info.health = newHealth;
         karmaScores.put(id, info);
     }
-    public static void setScore(UUID id, float score){
-        KarmaPlayerInfo info = karmaScores.get(id);
+
+    /**
+     * @author Cdogsnappy
+     * Updates the karma score of a player, ALL KARMA SCORE CHANGES SHOULD BE DONE THROUGH THIS, DO NOT CHANGE THEM DIRECTLY
+     * @param player UUID of the player
+     * @param score the score to change to
+     */
+    public static void setScore(Player player, float score){
+        KarmaPlayerInfo info = karmaScores.get(player.getUUID());
         info.score = score;
-        karmaScores.put(id, info);
+        karmaScores.put(player.getUUID(), info);
+        KarmaLog.update(player.getUUID());
+        Karma.onKarmaUpdate(player);
     }
     public static void setEndorsements(UUID id, int endorsements){
         KarmaPlayerInfo i = karmaScores.get(id);

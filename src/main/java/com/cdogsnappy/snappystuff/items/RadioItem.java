@@ -13,6 +13,13 @@ public class RadioItem extends Item implements ICurioItem {
     public RadioItem(Properties p_41383_) {
         super(p_41383_);
     }
+
+    /**
+     * @author Cdogsnappy
+     * @param slotContext Context about the slot that the ItemStack was just unequipped from
+     * @param prevStack   The previous ItemStack in the slot
+     * @param stack       The ItemStack in question
+     */
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         RadioHandler.listeners.add((Player) slotContext.getWearer());

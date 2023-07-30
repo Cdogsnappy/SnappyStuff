@@ -3,6 +3,8 @@ package com.cdogsnappy.snappystuff.karma;
 import com.cdogsnappy.snappystuff.SnappyStuff;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -13,11 +15,12 @@ public class EndorsementHandler {
     /**
      * Checks to see if the endorsement threshold has been met, and then rewards the player
      * @author Cdogsnappy
-     * @param id The player's UUID
+     * @param player The player
      */
-    public static void checkEndorsements(UUID id){
+    public static void checkEndorsements(Player player){
+        UUID id = player.getUUID();
         if(Karma.getEndorsements(id)>=4){
-            Karma.setScore(id,Karma.getScore(id) + 2.0f);
+            Karma.setScore(player,Karma.getScore(id) + 2.0f);
             Karma.setEndorsements(id,Karma.getEndorsements(id) - 4);
         }
     }

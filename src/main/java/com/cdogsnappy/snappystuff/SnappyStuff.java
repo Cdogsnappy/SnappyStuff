@@ -1,5 +1,7 @@
 package com.cdogsnappy.snappystuff;
 
+import com.cdogsnappy.snappystuff.commands.ChangeKarmaCommand;
+import com.cdogsnappy.snappystuff.commands.CommandRegistration;
 import com.cdogsnappy.snappystuff.commands.EndorseCommand;
 import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
@@ -56,7 +58,9 @@ public class SnappyStuff
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Register the commonSetup method for modloading
+        /*
+        Just registering event subscribers in THIS CLASS through addListener(), for other classes use the EventBusSubscriber header.
+         */
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::imcSend);
         modEventBus.addListener(this::stitch);
@@ -86,6 +90,7 @@ public class SnappyStuff
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event){
+        //FMLDedicatedServerSetupEvent may be better for when we are done testing mechanics
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
         try {
@@ -107,20 +112,22 @@ public class SnappyStuff
 
     @SubscribeEvent
     public void onServerDeath(ServerStoppingEvent event){
-        ServerDeath.generateData();
+        ServerDeath.generateData(LOGGER);
+        try {
+            //if(event.getServer().isDedicatedServer()) { THIS WILL FIX THE INTEGRATED SERVER ISSUE, KARMALOGS DO NOT WORK ON
+            //INTEGRATED SERVERS
+                ServerDeath.writeKarmaLogs();
+            //}
+        }
+        catch(IOException e){
+            LOGGER.info("FATAL ERROR SAVING KARMA LOGS");
+        }
 
     }
 
     @SubscribeEvent
     public void cmds(RegisterCommandsEvent e){
-        var builder = Commands.literal("snappy");
-        EndorseCommand.register(builder);
-        e.getDispatcher().register(builder);
-    }
-
-    @SubscribeEvent
-    public void worldSave(ServerStoppedEvent event){
-
+        CommandRegistration.registerCommands(e);
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent

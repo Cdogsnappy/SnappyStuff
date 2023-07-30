@@ -36,7 +36,10 @@ public class RadioHandler {
     static boolean justPlayedMusic = false;
 
 
-
+    /**
+     * @author Cdogsnappy
+     * runs every tick, keeping track of how far along the radio is in playing a song.
+     */
     public static void onTick(){
         if(!audioPlaying){
             playSomething();
@@ -68,9 +71,10 @@ public class RadioHandler {
             listeners.add(p);
         }
     }
-    /*
-    Call this when nothing is playing
-    If a song just played, play an intermission(cast), otherwise play a song.
+
+    /**
+     * @author Cdogsnappy
+     * runs if nothing is currently playing on the radio; Plays a song if a cast just played, plays a cast if a song just played
      */
     public static void playSomething(){
         playingSounds.clear();
@@ -79,9 +83,6 @@ public class RadioHandler {
         if(justPlayedMusic){//Determine from what list of sounds to grab from
             toPlay = casts;
             nextAudio = rand.nextInt(casts.size());
-
-
-
         }
         else{
             toPlay = music;
@@ -97,6 +98,11 @@ public class RadioHandler {
         justPlayedMusic = !justPlayedMusic;
         audioPlaying = true;
     }
+
+    /**
+     * @author Cdogsnappy
+     * Loads the uploadable songs into the list of music
+     */
     public static void init(){
         for(SoundInfo info : musicLocations){
             music.add(new CustomSoundEvent(SSSoundRegistry.uploadableSounds.get(info.index),info.lengthInTicks));

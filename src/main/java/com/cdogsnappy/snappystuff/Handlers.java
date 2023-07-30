@@ -3,6 +3,7 @@ package com.cdogsnappy.snappystuff;
 import com.cdogsnappy.snappystuff.court.CitizenData;
 import com.cdogsnappy.snappystuff.items.DivineFruitItem;
 import com.cdogsnappy.snappystuff.karma.Karma;
+import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import net.minecraftforge.event.TickEvent;
@@ -33,6 +34,7 @@ public class Handlers {
             return;
         }
         CitizenData.onPlayerJoin(event.getEntity());
+        KarmaLog.onPlayerJoin(event.getEntity());
         Karma.playerCheck(event);
         DivineFruitItem.addTag(event.getEntity());
         DivineFruitItem.updateDivineHealth(event.getEntity());

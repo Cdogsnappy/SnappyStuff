@@ -53,13 +53,14 @@ public class DivineFruitItem extends Item{
      */
 
     public static void attemptAugmentHealth(Player player){
-        if(Karma.getScore(player.getUUID()) <=0) {
-            player.sendSystemMessage(Component.literal("A foul taste fills your mouth. YOU ARE UNWORTHY OF SUCH A GIFT."));
-        }
         CompoundTag tag = player.getPersistentData();
         if(tag.getInt("divine_fruit") >= 20){
             player.sendSystemMessage(Component.literal("It seems you cannot absorb anymore power from the divine fruit."));
             return;
+        }
+        else if(Karma.getScore(player.getUUID()) <=0) {
+            player.sendSystemMessage(Component.literal("A foul taste fills your mouth. YOU ARE UNWORTHY OF SUCH A GIFT."));
+            player.level.playSound((ServerPlayer)null, player.position().x, player.position().y, player.position().z, SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 10000.0F, 0.8F);
         }
         else{
             player.sendSystemMessage(Component.literal("A blissful taste fills your mouth. ACCEPT THIS GIFT."));
@@ -76,10 +77,10 @@ public class DivineFruitItem extends Item{
      * @param player the player
      */
     public static void updateDivineHealth(Player player){
+        player.getAttribute(Attributes.MAX_HEALTH).removePermanentModifier(divineModifier);
         if(Karma.getScore(player.getUUID()) <= 0){
             return;
         }
-        player.getAttribute(Attributes.MAX_HEALTH).removePermanentModifier(divineModifier);
         player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(divineModifier,"divine_fruit.health",
                 player.getPersistentData().getInt("divine_fruit"), AttributeModifier.Operation.ADDITION));
         player.setHealth(Math.min(player.getHealth()+2,player.getMaxHealth()));
