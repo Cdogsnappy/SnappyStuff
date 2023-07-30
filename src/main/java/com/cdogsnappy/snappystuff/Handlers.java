@@ -5,7 +5,10 @@ import com.cdogsnappy.snappystuff.items.DivineFruitItem;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
+import com.cdogsnappy.snappystuff.quest.MissionHandler;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -51,5 +54,18 @@ public class Handlers {
         }
         DivineFruitItem.updateDivineHealth(event.getEntity());
         Karma.playerCheck(event);
+    }
+    /**
+     * @author Cdogsnappy
+     * Handles murder, lowering a player's karma if they murder another
+     * @param event the death event of an entity
+     */
+    @SubscribeEvent
+    public static void onPlayerKilled(LivingDeathEvent event){
+        if(!event.getEntity().level.isClientSide && event.getEntity() instanceof Player && event.getEntity().getKillCredit() instanceof Player murderer){
+            MissionHandler.onPlayerMurder((Player)event.getEntity(),murderer);
+            Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - 10);
+
+        }
     }
 }

@@ -1,18 +1,22 @@
 package com.cdogsnappy.snappystuff.quest;
 
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Monster;
+
+import javax.swing.text.html.parser.Entity;
 
 public class KillMission extends Mission {
-    protected LivingEntity toKill;
+    protected EntityType toKill;
     protected int numKills;
     protected int numToKill;
     protected boolean complete = false;
-    public KillMission(LivingEntity entity, int num){
+    public KillMission(EntityType mob, int num){
         missionType = Type.KILL;
-        toKill = entity;
+        toKill = mob;
         numToKill = num;
         numKills = 0;
-
     }
 
     @Override

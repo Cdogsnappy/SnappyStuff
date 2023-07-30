@@ -8,4 +8,10 @@ public class Quest {
     protected List<IMission> missions;
     protected List<ItemStack> reward;
 
+    public Quest(List<IMission> missions, List<ItemStack> rewards){
+        this.missions = missions;
+        this.reward = rewards;
+
+    }
+
 }

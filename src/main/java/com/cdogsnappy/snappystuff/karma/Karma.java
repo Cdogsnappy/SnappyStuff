@@ -70,19 +70,6 @@ public class Karma{
         DivineFruitItem.updateDivineHealth(player);
     }
 
-    /**
-     * @author Cdogsnappy
-     * Handles murder, lowering a player's karma if they murder another
-     * @param event the death event of an entity
-     */
-    @SubscribeEvent
-    public static void onPlayerKilled(LivingDeathEvent event){
-        if(!event.getEntity().level.isClientSide && event.getEntity() instanceof Player && event.getEntity().getKillCredit() instanceof Player murderer){
-            Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - 10);
-
-        }
-    }
-
     public static void setHealth(UUID id, float newHealth){
         KarmaPlayerInfo info = karmaScores.get(id);
         info.health = newHealth;

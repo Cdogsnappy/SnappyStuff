@@ -1,6 +1,8 @@
 package com.cdogsnappy.snappystuff.quest;
 
-public class Mission implements IMission{
+import java.io.Serializable;
+
+public class Mission implements IMission, Serializable {
     @Override
     public boolean isComplete() {
         return false;
@@ -11,7 +13,8 @@ public class Mission implements IMission{
 
     public enum Type{
         KILL,
-        COLLECT
+        COLLECT,
+        BLOCK
     }
     Type missionType;
 }
