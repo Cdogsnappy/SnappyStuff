@@ -41,9 +41,6 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
 
         addDataSlots(data);
     }
-    protected QuestAcceptMenu(@Nullable MenuType<?> p_38851_, int p_38852_) {
-        super(p_38851_, p_38852_);
-    }
 
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
