@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider {
     public int progress = 0;
@@ -147,8 +148,13 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
                 return;
             }
         }
-       SSSoundRegistry.uploadableSounds.add(song.getSound());
-        RadioHandler.musicLocations.add(new SoundInfo(SSSoundRegistry.uploadableSounds.indexOf(song.getSound()),song.getLengthInTicks()));
+        List<RegistryObject<SoundEvent>> sounds = SSSoundRegistry.SOUNDS.getEntries().stream().toList();
+        for(int i = 0; i<sounds.size(); i++){
+            if(sounds.get(i).get() == song.getSound()){
+                RadioHandler.musicLocations.add(new SoundInfo(i,song.getLengthInTicks()));
+                break;
+            }
+        }
         RadioHandler.music.add(new CustomSoundEvent(song.getSound(), song.getLengthInTicks()));
     }
 }

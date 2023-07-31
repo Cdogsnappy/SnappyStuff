@@ -23,13 +23,13 @@ public class CourtCase implements Serializable {
      * 4 : Plaintiff Lawyer (NULLABLE)
      * 5-7 : Jury
      */
-    CitizenData[] participants = new CitizenData[8];
-    Status status;
-    Verdict verdict;
-    int severity;
-    int id;
-    String punishment;
-    Crime crime;
+    protected CitizenData[] participants = new CitizenData[8];
+    protected Status status;
+    protected Verdict verdict;
+    protected int severity;
+    protected int id;
+    protected String punishment;
+    protected Crime crime;
 
 
     public CourtCase(CitizenData[] participants, int severity){
@@ -57,5 +57,8 @@ public class CourtCase implements Serializable {
         this.status = status;
         this.crime = crime;
         caseArchive.put(this.id,this);
+    }
+    public int getCaseID(){
+        return this.id;
     }
 }

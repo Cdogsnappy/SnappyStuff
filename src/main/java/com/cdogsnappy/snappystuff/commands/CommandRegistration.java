@@ -8,6 +8,7 @@ public class CommandRegistration {
         var builder = Commands.literal("snappy");
         EndorseCommand.register(builder);
         ChangeKarmaCommand.register(builder);
+        CourtCreateCommand.register(builder);
         e.getDispatcher().register(builder);
     }
 }
