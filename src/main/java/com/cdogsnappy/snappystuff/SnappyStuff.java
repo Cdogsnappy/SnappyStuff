@@ -9,6 +9,7 @@ import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.ModMenus;
+import com.cdogsnappy.snappystuff.screen.QuestAcceptScreen;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -141,6 +142,7 @@ public class SnappyStuff
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
             MenuScreens.register(ModMenus.MUSIC_UPLOAD_MENU.get(), MusicUploadScreen::new);
+            MenuScreens.register(ModMenus.QUEST_ACCEPT_MENU.get(), QuestAcceptScreen::new);
         }
     }
 

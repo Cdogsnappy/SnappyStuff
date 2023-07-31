@@ -1,6 +1,7 @@
 package com.cdogsnappy.snappystuff.blocks;
 
 import com.cdogsnappy.snappystuff.blocks.entity.MusicUploadBlockEntity;
+import com.cdogsnappy.snappystuff.blocks.entity.QuestAcceptBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,6 +18,9 @@ public class ModEntityBlocks {
             BLOCK_ENTITIES.register("music_upload", () ->
                     BlockEntityType.Builder.of(MusicUploadBlockEntity::new, ModBlocks.MUSIC_UPLOAD_BLOCK.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<QuestAcceptBlockEntity>> QUEST_ACCEPT_BLOCK =
+            BLOCK_ENTITIES.register("quest_accept", () ->
+                    BlockEntityType.Builder.of(QuestAcceptBlockEntity::new, ModBlocks.QUEST_ACCEPT_BLOCK.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
