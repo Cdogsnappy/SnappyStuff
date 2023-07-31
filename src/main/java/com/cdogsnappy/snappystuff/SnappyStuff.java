@@ -7,6 +7,7 @@ import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
+import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.ModMenus;
 import com.cdogsnappy.snappystuff.screen.QuestAcceptScreen;
@@ -15,6 +16,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.commands.Commands;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ForgeMod;
@@ -101,6 +104,7 @@ public class SnappyStuff
             LOGGER.info("FATAL ERROR RELOADING DATA");
         }
         RadioHandler.init();
+        QuestHandler.get(event.getServer().getLevel(Level.OVERWORLD));
     }
     @SubscribeEvent
     public void imcSend(InterModEnqueueEvent event){
@@ -123,6 +127,7 @@ public class SnappyStuff
         catch(IOException e){
             LOGGER.info("FATAL ERROR SAVING KARMA LOGS");
         }
+        QuestHandler.setQuestsDirty();
 
     }
 

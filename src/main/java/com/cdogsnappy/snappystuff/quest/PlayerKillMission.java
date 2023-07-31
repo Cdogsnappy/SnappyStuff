@@ -1,5 +1,7 @@
 package com.cdogsnappy.snappystuff.quest;
 
+import net.minecraft.nbt.CompoundTag;
+
 import java.util.UUID;
 
 public class PlayerKillMission extends Mission{
@@ -7,12 +9,29 @@ public class PlayerKillMission extends Mission{
     protected UUID hitman;
     protected boolean complete = false;
     public PlayerKillMission(UUID toKill) {
+        this.missionType = Type.KILL;
         this.toKill = toKill;
     }
-    public PlayerKillMission(UUID toKill, UUID hitman){
+    public PlayerKillMission(UUID toKill, UUID hitman, boolean complete){
+        this.missionType = Type.KILL;
         this.toKill = toKill;
         this.hitman = hitman;
     }
     public boolean completeMission(){return complete = true;}
     public boolean isComplete(){return complete;}
+
+    @Override
+    public CompoundTag save(CompoundTag tag){
+        tag.putInt("type",3);
+        tag.putUUID("toKill",toKill);
+        tag.putUUID("hitman",hitman);
+        tag.putBoolean("complete",complete);
+        return tag;
+    }
+    public static IMission load(CompoundTag tag){
+        UUID toKill = tag.getUUID("toKill");
+        UUID hitman = tag.getUUID("hitman");
+        boolean complete = tag.getBoolean("complete");
+        return new PlayerKillMission(toKill,hitman,complete);
+    }
 }

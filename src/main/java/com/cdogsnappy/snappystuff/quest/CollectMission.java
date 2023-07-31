@@ -16,21 +16,31 @@ public class CollectMission extends Mission {
         this.missionType = Type.COLLECT;
         this.toCollect = toCollect;
     }
+    public CollectMission(ItemStack toCollect, UUID player, boolean complete){
+        this.missionType = Type.COLLECT;
+        this.toCollect = toCollect;
+        this.playerID = player;
+        this.complete = complete;
+    }
 
     @Override
     public boolean isComplete(){return complete;}
 
     @Override
     public CompoundTag save(CompoundTag tag){
+        tag.putInt("type",2);
         toCollect.save(tag);
-        tag.putString("id",playerID.toString());
+        tag.putUUID("id",playerID);
         tag.putBoolean("complete",complete);
 
         return tag;
     }
 
     public static IMission load(CompoundTag tag){
-        return null;
+        ItemStack stack = ItemStack.of(tag);
+        UUID player = tag.getUUID("id");
+        boolean complete = tag.getBoolean("complete");
+        return new CollectMission(stack,player,complete);
     }
 
 
