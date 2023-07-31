@@ -67,7 +67,7 @@ public class Handlers {
             if(event.getEntity() instanceof Player){
                 QuestHandler.onMurder((Player)event.getEntity(), murderer);
                 MissionHandler.onPlayerMurder((Player)event.getEntity(),murderer);
-                Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - 10);
+                Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - Karma.adjustedKarmaValue(Karma.getScore(murderer.getUUID()),10));
             }
             else{
                 MissionHandler.onEntityKill(event.getEntity(),murderer);

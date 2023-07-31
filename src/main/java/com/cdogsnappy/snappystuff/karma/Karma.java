@@ -70,6 +70,15 @@ public class Karma{
         DivineFruitItem.updateDivineHealth(player);
     }
 
+    /**
+     * @author Cdogsnappy
+     * Adds resistance to karma gain for players
+     * @param karma player karma
+     * @param initKarma the amount of karma a near neutral player should get from this action
+     * @return
+     */
+    public static float adjustedKarmaValue(float karma, float initKarma){return Math.min(initKarma,(float) (initKarma/Math.pow(karma,.35)));}
+
     public static void setHealth(UUID id, float newHealth){
         KarmaPlayerInfo info = karmaScores.get(id);
         info.health = newHealth;
