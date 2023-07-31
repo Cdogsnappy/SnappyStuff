@@ -3,5 +3,7 @@
   "item.snappystuff.dream_sweet" : "Dream Sweet in Sea Major",
   "item.snappystuff.divine_fruit" : "Divine Fruit",
   "itemGroup.snappystuff" : "Snappy Stuff",
-  "itemGroup.snappymusic": "Snappy Music"
+  "itemGroup.snappymusic": "Snappy Music",
+  "block.snappystuff.music_upload_block" : "Music Uploader",
+  "block.snappystuff.quest_accept_block" : "Quest Viewer"
 }

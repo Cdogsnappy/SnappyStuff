@@ -3,6 +3,7 @@ package com.cdogsnappy.snappystuff.screen;
 import com.cdogsnappy.snappystuff.SnappyStuff;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -14,6 +15,7 @@ public class QuestAcceptScreen extends AbstractContainerScreen<QuestAcceptMenu> 
     public QuestAcceptScreen(QuestAcceptMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
     }
+    private Font font1;
 
     @Override
     protected void init() {
@@ -30,10 +32,17 @@ public class QuestAcceptScreen extends AbstractContainerScreen<QuestAcceptMenu> 
         this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
     }
 
+    //use PoseStack.scale -> PoseStack.scale(float x, float y, float z) to scale the text
+    // Font.draw to render the text needed -> this.font.draw(PoseStack, float x, float y, int color)
     @Override
     public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
         renderBackground(pPoseStack);
         super.render(pPoseStack, mouseX, mouseY, delta);
         renderTooltip(pPoseStack, mouseX, mouseY);
+        Font font1 = this.font;
+        pPoseStack.scale(.5f, .5f, .5f);
+        this.font.draw(pPoseStack, "Test1", 50, 100, 0);
+        this.font.draw(pPoseStack, "Test2", (float) 100, (float) 150, 1);
+        this.font.draw(pPoseStack, "Test3", 150, 100, 255);
     }
 }

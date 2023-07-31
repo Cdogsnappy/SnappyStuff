@@ -36,8 +36,8 @@ public class Handlers {
             return;
         }
         CitizenData.onPlayerJoin(event.getEntity());
-        KarmaLog.onPlayerJoin(event.getEntity());
         Karma.playerCheck(event);
+        KarmaLog.onPlayerJoin(event.getEntity());
         DivineFruitItem.addTag(event.getEntity());
         DivineFruitItem.updateDivineHealth(event.getEntity());
 

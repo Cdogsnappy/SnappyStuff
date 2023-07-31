@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class QuestAcceptBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(0) {
         @Override
         protected void onContentsChanged (int slot) {
             setChanged();
@@ -57,7 +57,7 @@ public class QuestAcceptBlockEntity extends BlockEntity implements MenuProvider 
 
     @Override
     public Component getDisplayName() {
-        return Component.literal("Quest Accept Block");
+        return Component.literal("Quest Viewer");
     }
 
     @Nullable
