@@ -1,5 +1,6 @@
 package com.cdogsnappy.snappystuff.quest;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -29,5 +30,9 @@ public class KillMission extends Mission {
             return complete = true;
         }
         return false;
+    }
+
+    public static IMission load(CompoundTag tag){
+        return null;
     }
 }

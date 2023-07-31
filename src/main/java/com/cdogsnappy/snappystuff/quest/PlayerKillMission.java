@@ -6,7 +6,10 @@ public class PlayerKillMission extends Mission{
     protected UUID toKill;
     protected UUID hitman;
     protected boolean complete = false;
-    public PlayerKillMission(UUID toKill, UUID hitman) {
+    public PlayerKillMission(UUID toKill) {
+        this.toKill = toKill;
+    }
+    public PlayerKillMission(UUID toKill, UUID hitman){
         this.toKill = toKill;
         this.hitman = hitman;
     }

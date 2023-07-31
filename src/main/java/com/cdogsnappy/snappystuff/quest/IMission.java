@@ -1,8 +1,11 @@
 package com.cdogsnappy.snappystuff.quest;
 
+import net.minecraft.nbt.CompoundTag;
+
 public interface IMission {
 
-    public boolean isComplete();
+    boolean isComplete();
 
-    public boolean attemptComplete();
+    boolean attemptComplete();
+    CompoundTag save(CompoundTag tag);
 }

@@ -21,7 +21,7 @@ public class JuryHandler {
         if(citizens.size() <= 3){
             return citizens;
         }
-        for(int j = 0; j<3; j++){
+        for(int j = 0; j<3; ++j){
             int ind = rand.nextInt(citizens.size());
             juryMembers.add(citizens.get(ind));
             citizens.remove(ind);
