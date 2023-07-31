@@ -29,7 +29,6 @@ public class RadioHandler {
     public static List<CustomSoundEvent> casts = new ArrayList<CustomSoundEvent>();
     public static Map<Player, SoundInstance> playingSounds = new ConcurrentHashMap<Player, SoundInstance>();
     static Random rand = new Random();
-
     static int currentAudioTime = 0;
     static int audioLength = 0;
     static boolean audioPlaying = false;
@@ -104,8 +103,9 @@ public class RadioHandler {
      * Loads the uploadable songs into the list of music
      */
     public static void init(){
+        List<RegistryObject<SoundEvent>> sounds = SSSoundRegistry.SOUNDS.getEntries().stream().toList();
         for(SoundInfo info : musicLocations){
-            music.add(new CustomSoundEvent(SSSoundRegistry.uploadableSounds.get(info.index),info.lengthInTicks));
+            music.add(new CustomSoundEvent(sounds.get(info.index).get(),info.lengthInTicks));
         }
     }
 

@@ -1,10 +1,15 @@
 package com.cdogsnappy.snappystuff.quest;
 
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import java.util.UUID;
 
-public class PlayerKillMission extends KillMission{
-    public PlayerKillMission(Player entity) {
-        super(entity, 1);
+public class PlayerKillMission extends Mission{
+    protected UUID toKill;
+    protected UUID hitman;
+    protected boolean complete = false;
+    public PlayerKillMission(UUID toKill, UUID hitman) {
+        this.toKill = toKill;
+        this.hitman = hitman;
     }
+    public boolean completeMission(){return complete = true;}
+    public boolean isComplete(){return complete;}
 }
