@@ -26,18 +26,12 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
 
     public QuestAcceptMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenus.QUEST_ACCEPT_MENU.get(), id);
-        checkContainerSize(inv, 3);
+        checkContainerSize(inv, 0);
         blockEntity = (QuestAcceptBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
-
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            this.addSlot(new SlotItemHandler(handler, 0, 12, 15));
-            this.addSlot(new SlotItemHandler(handler, 0, 86, 15));
-            this.addSlot(new SlotItemHandler(handler, 0, 86, 60));
-        });
 
         addDataSlots(data);
     }
@@ -51,7 +45,7 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 3;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 0;  // must be the number of slots you have!
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
@@ -92,14 +86,16 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
     }
     //may not need this method because final block should not have an inventory
     private void addPlayerInventory(Inventory playerInventory) {
-        for (int i = 0; i < 3; ++i)
-            for (int l = 0; l < 9; ++l)
-                this.addSlot(new Slot(playerInventory, l + i + 9 + 9, 8 + l + 18, 86 + i * 18));
+        for (int i = 0; i < 3; ++i) {
+            for (int l = 0; l < 9; ++l) {
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 86 + i * 18));
+            }
+        }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 47 + i * 18, 231));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 144));
         }
     }
 }
