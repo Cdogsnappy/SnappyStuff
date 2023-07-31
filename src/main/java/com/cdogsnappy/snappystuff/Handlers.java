@@ -6,6 +6,7 @@ import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
 import com.cdogsnappy.snappystuff.quest.MissionHandler;
+import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -44,7 +45,7 @@ public class Handlers {
     }
 
     /**
-     * Handles ever snappystuff action that is run on player respawn
+     * Handles every snappystuff action that is run on player respawn
      * @param event the PlayerRespawnEvent
      */
     @SubscribeEvent
@@ -57,14 +58,21 @@ public class Handlers {
     }
     /**
      * @author Cdogsnappy
-     * Handles murder, lowering a player's karma if they murder another
+     * Handles every snappystuff action that is run when a player kills something
      * @param event the death event of an entity
      */
     @SubscribeEvent
     public static void onPlayerKilled(LivingDeathEvent event){
-        if(!event.getEntity().level.isClientSide && event.getEntity() instanceof Player && event.getEntity().getKillCredit() instanceof Player murderer){
-            MissionHandler.onPlayerMurder((Player)event.getEntity(),murderer);
-            Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - 10);
+        if(!event.getEntity().level.isClientSide && event.getEntity().getKillCredit() instanceof Player murderer){
+            if(event.getEntity() instanceof Player){
+                QuestHandler.onMurder((Player)event.getEntity(), murderer);
+                MissionHandler.onPlayerMurder((Player)event.getEntity(),murderer);
+                Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - 10);
+            }
+            else{
+                MissionHandler.onEntityKill(event.getEntity(),murderer);
+            }
+
 
         }
     }
