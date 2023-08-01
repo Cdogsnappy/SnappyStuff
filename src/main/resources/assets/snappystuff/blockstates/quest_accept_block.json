@@ -1,5 +1,19 @@
 {
   "variants": {
-    "": {"model":  "snappystuff:block/quest_accept_block"}
+    "facing=east": {
+      "model": "snappystuff:block/quest_accept_block",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "snappystuff:block/quest_accept_block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "snappystuff:block/quest_accept_block",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "snappystuff:block/quest_accept_block"
+    }
   }
 }
