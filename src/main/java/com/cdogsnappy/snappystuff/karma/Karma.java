@@ -72,12 +72,12 @@ public class Karma{
 
     /**
      * @author Cdogsnappy
-     * Adds resistance to karma gain for players
+     * Adds resistance to karma gain for players (PROBABLY NEEDS TINKERING)
      * @param karma player karma
      * @param initKarma the amount of karma a near neutral player should get from this action
-     * @return
+     * @return a nonnegative karma resisted value
      */
-    public static float adjustedKarmaValue(float karma, float initKarma){return Math.min(initKarma,(float) (initKarma/Math.pow(karma,.35)));}
+    public static float adjustedKarmaValue(float karma, float initKarma){return Math.min(initKarma,(float) (initKarma/Math.pow(Math.abs(karma),(.9 + 1/(initKarma*2)))));}
 
     public static void setHealth(UUID id, float newHealth){
         KarmaPlayerInfo info = karmaScores.get(id);
@@ -93,7 +93,12 @@ public class Karma{
      */
     public static void setScore(Player player, float score){
         KarmaPlayerInfo info = karmaScores.get(player.getUUID());
-        info.score = score;
+        if(score == 0){//SCORE OF 0 WILL CRASH THE GAME WITH KARMA RESISTANCE
+            info.score = .01f;
+        }
+        else {
+            info.score = score;
+        }
         karmaScores.put(player.getUUID(), info);
         KarmaLog.update(player.getUUID());
         Karma.onKarmaUpdate(player);

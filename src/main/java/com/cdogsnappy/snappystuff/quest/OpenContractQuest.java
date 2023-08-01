@@ -12,10 +12,11 @@ import java.util.UUID;
 public class OpenContractQuest extends Quest{
     protected PlayerKillMission mission;
 
-    public OpenContractQuest(PlayerKillMission mission, List<ItemStack> rewards, UUID requestor){
+    public OpenContractQuest(PlayerKillMission mission, List<ItemStack> rewards, UUID requestor, QuestType type){
         this.mission = mission;
         this.rewards = rewards;
         this.requestor = requestor;
+        this.type = type;
     }
 
     public static CompoundTag save(CompoundTag tag, OpenContractQuest q){
@@ -24,6 +25,12 @@ public class OpenContractQuest extends Quest{
             rewards.add(q.rewards.get(k).save(new CompoundTag()));
         }
         tag.putUUID("requestor", q.requestor);
+        if(q.type == QuestType.PLAYER) {
+            tag.putInt("type", 0);
+        }
+        else{
+            tag.putInt("type", 1);
+        }
         tag.put("mission", q.mission.save(new CompoundTag()));
         tag.put("rewards", rewards);
         return tag;

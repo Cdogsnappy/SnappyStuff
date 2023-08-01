@@ -13,19 +13,21 @@ public class ClosedContractQuest extends Quest{
 
     protected UUID questor;//Player who has accepted quest
     protected List<IMission> missions;
-    public ClosedContractQuest(List<IMission> missions, List<ItemStack> rewards, UUID requestor){
+    public ClosedContractQuest(List<IMission> missions, List<ItemStack> rewards, UUID requestor, QuestType type){
         this.missions = missions;
         this.rewards = rewards;
         this.questor = null;
         this.requestor = requestor;
+        this.type = type;
         QuestHandler.unacceptedQuests.add(this);
 
     }
-    public ClosedContractQuest(List<IMission> missions, List<ItemStack> rewards, UUID requestor, UUID questor){
+    public ClosedContractQuest(List<IMission> missions, List<ItemStack> rewards, UUID requestor, UUID questor, QuestType type){
         this.missions = missions;
         this.rewards = rewards;
         this.questor = questor;
         this.requestor = requestor;
+        this.type = type;
         QuestHandler.acceptedQuests.add(this);
 
     }
@@ -52,17 +54,23 @@ public class ClosedContractQuest extends Quest{
      */
     public static CompoundTag save(CompoundTag tag, ClosedContractQuest q){
 
-            ListTag missions = new ListTag();
-            ListTag rewards = new ListTag();
-            for(int j = 0; j<q.missions.size(); ++j){
-                missions.add(q.missions.get(j).save(new CompoundTag()));
-            }
-            for(int k = 0; k<q.rewards.size(); ++k){
-                rewards.add(q.rewards.get(k).save(new CompoundTag()));
-            }
-            if(q.questor != null) {
-                tag.putUUID("questor", q.questor);
-            }
+        ListTag missions = new ListTag();
+        ListTag rewards = new ListTag();
+        for(int j = 0; j<q.missions.size(); ++j){
+            missions.add(q.missions.get(j).save(new CompoundTag()));
+        }
+        for(int k = 0; k<q.rewards.size(); ++k){
+            rewards.add(q.rewards.get(k).save(new CompoundTag()));
+        }
+        if(q.questor != null) {
+            tag.putUUID("questor", q.questor);
+        }
+        if(q.type == QuestType.PLAYER) {
+            tag.putInt("type", 0);
+        }
+        else{
+            tag.putInt("type", 1);
+        }
             tag.putUUID("requestor", q.requestor);
             tag.put("missions", missions);
             tag.put("rewards", rewards);
@@ -87,12 +95,19 @@ public class ClosedContractQuest extends Quest{
         for(int j = 0; j<rewardsTag.size(); ++j){
             rewards.add(ItemStack.of(rewardsTag.getCompound(j)));
         }
-        if(accepted) {
-            UUID player = tag.getUUID("questor");
-            new ClosedContractQuest(missions, rewards, requestor, player);
+        QuestType type;
+        if(tag.getInt("type") == 0){
+            type = QuestType.PLAYER;
         }
         else{
-            new ClosedContractQuest(missions, rewards, requestor);
+            type = QuestType.DAILY;
+        }
+        if(accepted) {
+            UUID player = tag.getUUID("questor");
+            new ClosedContractQuest(missions, rewards, requestor, player, type);
+        }
+        else{
+            new ClosedContractQuest(missions, rewards, requestor, type);
         }
     }
 

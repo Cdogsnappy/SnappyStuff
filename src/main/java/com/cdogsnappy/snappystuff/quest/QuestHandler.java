@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class QuestHandler extends SavedData {
     public static List<ClosedContractQuest> unacceptedQuests = new ArrayList<>();
     public static List<OpenContractQuest> openContractQuests = new ArrayList<>();
     public static QuestHandler q;
+    public static LocalDateTime dailiesTime = LocalDateTime.now().minusDays(2);//If this isn't overwritten on server start then no dailies are active.
 
     /**
      * @author Cdogsnappy
@@ -39,7 +41,7 @@ public class QuestHandler extends SavedData {
     public QuestHandler(){q = this;}
 
     /**
-     * Writes the entire global questlog to NBT data and save it to the overworld data
+     * Writes the entire global questlog to NBT data and saves it to the overworld data
      * @param tag the tag to save the questlog to
      * @return the tag with the questlog saved to it
      */

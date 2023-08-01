@@ -5,6 +5,7 @@ import com.cdogsnappy.snappystuff.court.CourtCase;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.SnappyStuff;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
+import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.radio.SoundInfo;
@@ -12,6 +13,7 @@ import com.cdogsnappy.snappystuff.radio.SoundInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +46,9 @@ public class ServerBirth {
                 }
                 if(serverData.containsKey("music")){
                     RadioHandler.musicLocations = (List<SoundInfo>) serverData.get("music");
+                }
+                if(serverData.containsKey("dailytime")){
+                    QuestHandler.dailiesTime = (LocalDateTime) serverData.get("dailytime");
                 }
 
                 objReader.close();
