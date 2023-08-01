@@ -39,12 +39,17 @@ public class OpenContractQuest extends Quest{
         UUID requestor = tag.getUUID("requestor");
         List<ItemStack> rewards = new ArrayList<>();
         PlayerKillMission mission = (PlayerKillMission)PlayerKillMission.load(tag);
+        QuestType type = switch(tag.getInt("type")){
+            case 0 -> QuestType.PLAYER;
+            case 1 -> QuestType.DAILY;
+            default -> throw new IllegalStateException("Unexpected value: " + tag.getInt("type"));
+        };
         ListTag rewardsTag = (ListTag)tag.get("rewards");
         for(int j = 0; j<rewardsTag.size(); ++j){
             rewards.add(ItemStack.of(rewardsTag.getCompound(j)));
         }
 
-            new OpenContractQuest(mission, rewards, requestor);
+            new OpenContractQuest(mission, rewards, requestor, type);
 
     }
 

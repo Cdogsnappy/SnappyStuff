@@ -95,13 +95,11 @@ public class ClosedContractQuest extends Quest{
         for(int j = 0; j<rewardsTag.size(); ++j){
             rewards.add(ItemStack.of(rewardsTag.getCompound(j)));
         }
-        QuestType type;
-        if(tag.getInt("type") == 0){
-            type = QuestType.PLAYER;
-        }
-        else{
-            type = QuestType.DAILY;
-        }
+        QuestType type = switch(tag.getInt("type")){
+            case 0 -> QuestType.PLAYER;
+            case 1 -> QuestType.DAILY;
+            default -> throw new IllegalStateException("Unexpected value: " + tag.getInt("type"));
+        };
         if(accepted) {
             UUID player = tag.getUUID("questor");
             new ClosedContractQuest(missions, rewards, requestor, player, type);
