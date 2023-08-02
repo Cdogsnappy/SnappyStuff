@@ -39,6 +39,16 @@ public class QuestNetwork {
                 .encoder(QuestRequestPacket::toBytes)
                 .consumerMainThread(QuestRequestPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(PlayerQuestPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerQuestPacket::new)
+                .encoder(PlayerQuestPacket::toBytes)
+                .consumerMainThread(PlayerQuestPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(PlayerQuestRequestPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerQuestRequestPacket::new)
+                .encoder(PlayerQuestRequestPacket::toBytes)
+                .consumerMainThread(PlayerQuestRequestPacket::handle)
+                .add();
     }
     public static <MSG> void sendToServer(MSG message) {
         INSTANCE.sendToServer(message);
