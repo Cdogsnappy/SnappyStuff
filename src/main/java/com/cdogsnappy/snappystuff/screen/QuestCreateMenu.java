@@ -3,6 +3,8 @@ package com.cdogsnappy.snappystuff.screen;
 import com.cdogsnappy.snappystuff.blocks.ModBlocks;
 import com.cdogsnappy.snappystuff.blocks.entity.MusicUploadBlockEntity;
 import com.cdogsnappy.snappystuff.blocks.entity.QuestAcceptBlockEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.searchtree.SearchRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,17 +16,17 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
-public class QuestAcceptMenu extends AbstractContainerMenu {
+public class QuestCreateMenu extends AbstractContainerMenu {
     public final QuestAcceptBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
 
-    public QuestAcceptMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
+    public QuestCreateMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(3));
     }
 
-    public QuestAcceptMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
+    public QuestCreateMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenus.QUEST_ACCEPT_MENU.get(), id);
         checkContainerSize(inv, 0);
         blockEntity = (QuestAcceptBlockEntity) entity;
@@ -32,8 +34,8 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
         this.data = data;
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
-
         addDataSlots(data);
+        Minecraft.getInstance().getSearchTree(SearchRegistry.CREATIVE_TAGS);
     }
 
     private static final int HOTBAR_SLOT_COUNT = 9;
@@ -45,7 +47,7 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 0;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 5;  // must be the number of slots you have!
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
@@ -84,17 +86,18 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.QUEST_ACCEPT_BLOCK.get());
     }
+    //may not need this method because final block should not have an inventory
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 24 + l * 18, 141 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 86 + i * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 24 + i * 18, 199));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 144));
         }
     }
 }

@@ -156,6 +156,5 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
                 break;
             }
         }
-
-    }
+     }
 }
