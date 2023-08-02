@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_top",
   "textures": {
-    "side": "snappystuff:block/music_upload_front",
+    "side": "snappystuff:block/music_upload_block_front",
     "top": "minecraft:block/jukebox_top"
   }
 }

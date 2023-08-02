@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -59,5 +60,9 @@ public class MusicUploadBlock extends BaseEntityBlock {
                                                                   BlockEntityType<T> type) {
         return createTickerHelper(type, ModEntityBlocks.MUSIC_UPLOAD_BLOCK.get(),
                 MusicUploadBlockEntity::tick);
+    }
+
+    public RenderShape getRenderShape(BlockState p_54296_) {
+        return RenderShape.MODEL;
     }
 }

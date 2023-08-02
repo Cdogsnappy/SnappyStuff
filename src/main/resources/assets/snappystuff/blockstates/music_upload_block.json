@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": {"model":  "snappystuff:block/music_upload_block"}
+    "": {
+      "model": "snappystuff:block/music_upload_block"
+    }
   }
 }
