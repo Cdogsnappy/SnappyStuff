@@ -35,7 +35,7 @@ public class OpenContractQuest extends Quest{
         tag.put("rewards", rewards);
         return tag;
     }
-    public static void load(CompoundTag tag) {
+    public static OpenContractQuest load(CompoundTag tag) {
         UUID requestor = tag.getUUID("requestor");
         List<ItemStack> rewards = new ArrayList<>();
         PlayerKillMission mission = (PlayerKillMission)PlayerKillMission.load(tag);
@@ -49,7 +49,7 @@ public class OpenContractQuest extends Quest{
             rewards.add(ItemStack.of(rewardsTag.getCompound(j)));
         }
 
-            new OpenContractQuest(mission, rewards, requestor, type);
+            return new OpenContractQuest(mission, rewards, requestor, type);
 
     }
 
