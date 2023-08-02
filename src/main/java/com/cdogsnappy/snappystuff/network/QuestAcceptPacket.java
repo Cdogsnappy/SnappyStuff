@@ -18,8 +18,8 @@ public class QuestAcceptPacket {
         int questType = buf.readInt();
         this.q = switch(questType){
             case 0 -> ClosedContractQuest.load(buf.readNbt(),false);
-            case 1 -> ClosedContractQuest.load(buf.readNbt(), true);//Shouldn't ever be called.
-            case 2 -> OpenContractQuest.load(buf.readNbt());
+            case 1 -> OpenContractQuest.load(buf.readNbt());
+            case 2 -> null;
             default -> throw new IllegalStateException("Quest packet failure...");
         };
 
@@ -33,18 +33,16 @@ public class QuestAcceptPacket {
 
 
     public void toBytes(FriendlyByteBuf buf) {
+        if(q == null){
+            buf.writeInt(2);
+        }
         if(q instanceof OpenContractQuest){
             buf.writeNbt(OpenContractQuest.save(new CompoundTag(),(OpenContractQuest)q));
-            buf.writeInt(2);
+            buf.writeInt(1);
         }
         else{
             buf.writeNbt(ClosedContractQuest.save(new CompoundTag(), (ClosedContractQuest) q));
-            if(QuestHandler.acceptedQuests.contains(q)){
-                buf.writeInt(1);
-            }
-            else{
-                buf.writeInt(0);
-            }
+            buf.writeInt(0);
         }
 
     }

@@ -28,10 +28,16 @@ public class QuestNetwork {
 
         instance = new QuestNetwork();
         INSTANCE = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(SnappyStuff.MODID, "questnetwork")).simpleChannel();
+
         INSTANCE.messageBuilder(QuestAcceptPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(QuestAcceptPacket::new)
                 .encoder(QuestAcceptPacket::toBytes)
                 .consumerMainThread(QuestAcceptPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(QuestRequestPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(QuestRequestPacket::new)
+                .encoder(QuestRequestPacket::toBytes)
+                .consumerMainThread(QuestRequestPacket::handle)
                 .add();
     }
     public static <MSG> void sendToServer(MSG message) {

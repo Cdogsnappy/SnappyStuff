@@ -34,7 +34,16 @@ public class ClosedContractQuest extends Quest{
     public void acceptQuest(Player player){
         this.questor = player.getUUID();
         QuestHandler.unacceptedQuests.remove(this);
-        QuestHandler.acceptedQuests.add(this);
+        List<ClosedContractQuest> quests;
+        if(QuestHandler.acceptedQuests.containsKey(player.getUUID())){
+            quests = QuestHandler.acceptedQuests.get(this.questor);
+            quests.add(this);
+        }
+        else{
+            quests = new ArrayList<>();
+            quests.add(this);
+        }
+        QuestHandler.acceptedQuests.put(this.questor, quests);
     }
     public boolean isComplete(){
         for(IMission mission : missions){
