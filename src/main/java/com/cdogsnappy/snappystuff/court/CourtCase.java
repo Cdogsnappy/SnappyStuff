@@ -58,7 +58,13 @@ public class CourtCase implements Serializable {
         this.crime = crime;
         caseArchive.put(this.id,this);
     }
+    public void addCrime(Crime crime){
+        this.crime = crime;
+    }
     public int getCaseID(){
         return this.id;
     }
+    public int getSeverity(){return this.severity;}
+    public CitizenData getParticipant(int ind){return participants[ind];}
+
 }
