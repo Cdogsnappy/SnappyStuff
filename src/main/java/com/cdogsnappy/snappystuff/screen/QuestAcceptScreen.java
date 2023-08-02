@@ -1,6 +1,7 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
+import com.cdogsnappy.snappystuff.quest.Quest;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;

@@ -76,13 +76,13 @@ public class QuestHandler extends SavedData {
         ListTag unacceptedQuestsTag = (ListTag)tag.get("unacceptedquests");
         ListTag openContractQuestsTag = (ListTag)tag.get("opencontractquests");
         for(int i = 0; i<questsTag.size(); ++i){
-            ClosedContractQuest.load(questsTag.getCompound(i),true);
+           unacceptedQuests.add(ClosedContractQuest.load(questsTag.getCompound(i),true));
         }
         for(int j = 0; j<unacceptedQuestsTag.size(); ++j){
-            ClosedContractQuest.load(unacceptedQuestsTag.getCompound(j),false);
+            acceptedQuests.add(ClosedContractQuest.load(unacceptedQuestsTag.getCompound(j),false));
         }
         for(int k = 0; k<openContractQuestsTag.size(); ++k){
-            OpenContractQuest.load(openContractQuestsTag.getCompound(k));
+            openContractQuests.add(OpenContractQuest.load(openContractQuestsTag.getCompound(k)));
         }
         return new QuestHandler();
     }

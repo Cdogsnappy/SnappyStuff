@@ -2,13 +2,15 @@ package com.cdogsnappy.snappystuff.network;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class QuestNetwork {
     private static QuestNetwork instance = null;
-    public static SimpleChannel network;
+    public static SimpleChannel INSTANCE;
     private static int id = 0;
 
     public static QuestNetwork getInstance() {
@@ -25,6 +27,18 @@ public class QuestNetwork {
         }
 
         instance = new QuestNetwork();
-        network = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(SnappyStuff.MODID, "questnetwork")).simpleChannel();
+        INSTANCE = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(SnappyStuff.MODID, "questnetwork")).simpleChannel();
+        INSTANCE.messageBuilder(QuestAcceptPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(QuestAcceptPacket::new)
+                .encoder(QuestAcceptPacket::toBytes)
+                .consumerMainThread(QuestAcceptPacket::handle)
+                .add();
+    }
+    public static <MSG> void sendToServer(MSG message) {
+        INSTANCE.sendToServer(message);
+    }
+
+    public static <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
 }

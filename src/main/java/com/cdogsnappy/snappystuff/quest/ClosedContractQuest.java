@@ -19,7 +19,7 @@ public class ClosedContractQuest extends Quest{
         this.questor = null;
         this.requestor = requestor;
         this.type = type;
-        QuestHandler.unacceptedQuests.add(this);
+
 
     }
     public ClosedContractQuest(List<IMission> missions, List<ItemStack> rewards, UUID requestor, UUID questor, QuestType type){
@@ -28,7 +28,7 @@ public class ClosedContractQuest extends Quest{
         this.questor = questor;
         this.requestor = requestor;
         this.type = type;
-        QuestHandler.acceptedQuests.add(this);
+
 
     }
     public void acceptQuest(Player player){
@@ -82,7 +82,7 @@ public class ClosedContractQuest extends Quest{
      * Given a tag with a quest saved to it, rebuild the quest
      * @param tag the tag with the quest on it
      */
-    public static void load(CompoundTag tag, boolean accepted) {
+    public static ClosedContractQuest load(CompoundTag tag, boolean accepted) {
 
         UUID requestor = tag.getUUID("requestor");
         List<IMission> missions = new ArrayList<>();
@@ -102,10 +102,10 @@ public class ClosedContractQuest extends Quest{
         };
         if(accepted) {
             UUID player = tag.getUUID("questor");
-            new ClosedContractQuest(missions, rewards, requestor, player, type);
+            return new ClosedContractQuest(missions, rewards, requestor, player, type);
         }
         else{
-            new ClosedContractQuest(missions, rewards, requestor, type);
+            return new ClosedContractQuest(missions, rewards, requestor, type);
         }
     }
 
