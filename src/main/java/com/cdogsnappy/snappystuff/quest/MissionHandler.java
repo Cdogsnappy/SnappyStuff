@@ -104,5 +104,39 @@ public class MissionHandler {
         }
     }
 
+    /**
+     * @author Cdogsnappy
+     * Run on server start, loads all ACTIVE missions into the mission handler maps.
+     * @param missions list of accepted missions for a quest
+     * @param player the player who is currently doing the quest
+     */
+    public static void loadMissions(List<Mission> missions, UUID player){
+        missions.forEach((m) -> {
+            if(!m.isComplete()){//DO NOT ADD COMPLETED MISSIONS TO THE MAPS
+                switch(m.missionType){
+                    case KILL:
+                        List<KillMission> killMissions = killMissionList.get(player);
+                        if(killMissions == null){killMissions = new ArrayList<>();}
+                        killMissions.add((KillMission)m);
+                        killMissionList.put(player, killMissions);
+                    case KILL_PLAYER:
+                        List<PlayerKillMission> playerKillMissions = playerKillMissionList.get(player);
+                        if(playerKillMissions == null){playerKillMissions = new ArrayList<>();}
+                        playerKillMissions.add((PlayerKillMission)m);
+                        playerKillMissionList.put(player, playerKillMissions);
+                    case BLOCK:
+                        List<BlockMission> blockMissions = blockMissionList.get(player);
+                        if(blockMissions == null){blockMissions = new ArrayList<>();}
+                        blockMissions.add((BlockMission)m);
+                        blockMissionList.put(player, blockMissions);
+                    default:
+                        break;
+                }
+
+            }
+
+        });
+    }
+
 
 }

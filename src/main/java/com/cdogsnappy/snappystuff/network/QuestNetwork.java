@@ -8,6 +8,11 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+
+/**
+ * @author Cdogsnappy
+ * Packet channel that all quest packets are sent on
+ */
 public class QuestNetwork {
     private static QuestNetwork instance = null;
     public static SimpleChannel INSTANCE;

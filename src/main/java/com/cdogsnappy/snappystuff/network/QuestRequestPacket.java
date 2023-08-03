@@ -11,6 +11,9 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/**
+ * Sent when a quest accept GUI needs to render the next available quest for a player. Player is then sent a packet containing the quest
+ */
 public class QuestRequestPacket {
     private int ind;
     private boolean open;

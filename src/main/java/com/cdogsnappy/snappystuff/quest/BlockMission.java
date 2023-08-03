@@ -55,7 +55,7 @@ public class BlockMission extends Mission implements Serializable {
         tag.putBoolean("complete", complete);
         return tag;
     }
-    public static IMission load(CompoundTag tag){
+    public static BlockMission load(CompoundTag tag){
         Block toBreak = Registry.BLOCK.byId(tag.getInt("block"));
         UUID player = tag.getUUID("id");
         int numToBreak = tag.getInt("numToBreak");

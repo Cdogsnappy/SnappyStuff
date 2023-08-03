@@ -11,7 +11,9 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-
+/**
+ * Sends a packet containing the next quest that a client wants to render
+ */
 public class QuestAcceptPacket {
     Quest q;
     public QuestAcceptPacket(FriendlyByteBuf buf){

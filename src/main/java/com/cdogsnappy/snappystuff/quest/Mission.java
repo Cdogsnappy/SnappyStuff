@@ -20,7 +20,7 @@ public class Mission extends SavedData implements IMission, Serializable {
     }
 
 
-    public static IMission load(CompoundTag tag) {
+    public static Mission load(CompoundTag tag) {
         if(!tag.contains("type")){
             return null;
         }
@@ -42,7 +42,8 @@ public class Mission extends SavedData implements IMission, Serializable {
     public enum Type{
         KILL,
         COLLECT,
-        BLOCK
+        BLOCK,
+        KILL_PLAYER
     }
     Type missionType;
 }

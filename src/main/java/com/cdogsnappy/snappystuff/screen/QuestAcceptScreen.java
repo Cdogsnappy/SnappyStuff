@@ -101,7 +101,7 @@ public class QuestAcceptScreen extends AbstractContainerScreen<QuestAcceptMenu> 
         public boolean isShowingTooltip() { return this.isHovered; }
         public void updateNarration(NarrationElementOutput buttonOutput) { this.defaultButtonNarrationText(buttonOutput); }
     }
-    abstract class QuestAcceptSpriteScreenButton extends QuestAcceptScreen.QuestAcceptScreenButton {
+    abstract class QuestAcceptSpriteScreenButton extends QuestAcceptScreenButton {
         private final int iconX;
         private final int iconY;
 
@@ -117,7 +117,7 @@ public class QuestAcceptScreen extends AbstractContainerScreen<QuestAcceptMenu> 
             QuestAcceptScreen.this.renderTooltip(pPoseStack, QuestAcceptScreen.this.title, mouseX, mouseY);
         }
     }
-    class QuestAcceptMenuButton extends QuestAcceptScreen.QuestAcceptScreenButton {
+    class QuestAcceptMenuButton extends QuestAcceptScreenButton {
         private TextureAtlasSprite sprite;
         private Component tooltip;
         QuestAcceptMenuButton(int x, int y) {

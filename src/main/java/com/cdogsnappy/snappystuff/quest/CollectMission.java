@@ -36,7 +36,7 @@ public class CollectMission extends Mission {
         return tag;
     }
 
-    public static IMission load(CompoundTag tag){
+    public static CollectMission load(CompoundTag tag){
         ItemStack stack = ItemStack.of(tag);
         UUID player = tag.getUUID("id");
         boolean complete = tag.getBoolean("complete");

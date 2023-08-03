@@ -6,7 +6,7 @@ import com.cdogsnappy.snappystuff.quest.Quest;
 import java.util.List;
 
 /**
- * Some client side data that gets modified when a client requests data from the server
+ * Some client side data that gets modified when a client requests data from the server, THIS IS NEVER ACCESSED SERVERSIDE, IT IS USELESS THERE
  */
 public class QuestScreensData {
     public static Quest questAcceptScreenDisplay = null;

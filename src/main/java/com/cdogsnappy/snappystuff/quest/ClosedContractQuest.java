@@ -12,8 +12,8 @@ import java.util.UUID;
 public class ClosedContractQuest extends Quest{
 
     protected UUID questor;//Player who has accepted quest
-    protected List<IMission> missions;
-    public ClosedContractQuest(List<IMission> missions, List<ItemStack> rewards, UUID requestor, QuestType type){
+    protected List<Mission> missions;
+    public ClosedContractQuest(List<Mission> missions, List<ItemStack> rewards, UUID requestor, QuestType type){
         this.missions = missions;
         this.rewards = rewards;
         this.questor = null;
@@ -22,7 +22,7 @@ public class ClosedContractQuest extends Quest{
 
 
     }
-    public ClosedContractQuest(List<IMission> missions, List<ItemStack> rewards, UUID requestor, UUID questor, QuestType type){
+    public ClosedContractQuest(List<Mission> missions, List<ItemStack> rewards, UUID requestor, UUID questor, QuestType type){
         this.missions = missions;
         this.rewards = rewards;
         this.questor = questor;
@@ -94,7 +94,7 @@ public class ClosedContractQuest extends Quest{
     public static ClosedContractQuest load(CompoundTag tag, boolean accepted) {
 
         UUID requestor = tag.getUUID("requestor");
-        List<IMission> missions = new ArrayList<>();
+        List<Mission> missions = new ArrayList<>();
         List<ItemStack> rewards = new ArrayList<>();
         ListTag missionTag = (ListTag)tag.get("missions");
         ListTag rewardsTag = (ListTag)tag.get("rewards");
@@ -111,6 +111,7 @@ public class ClosedContractQuest extends Quest{
         };
         if(accepted) {
             UUID player = tag.getUUID("questor");
+            MissionHandler.loadMissions(missions, player);
             return new ClosedContractQuest(missions, rewards, requestor, player, type);
         }
         else{

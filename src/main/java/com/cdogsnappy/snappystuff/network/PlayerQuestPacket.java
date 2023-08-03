@@ -1,8 +1,6 @@
 package com.cdogsnappy.snappystuff.network;
 
 import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
-import com.cdogsnappy.snappystuff.quest.OpenContractQuest;
-import com.cdogsnappy.snappystuff.quest.Quest;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.screen.QuestScreensData;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +13,9 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 
+/**
+ * Packet sent by the server whenever it is told that a client needs to refresh it's player quests.
+ */
 public class PlayerQuestPacket {
     private List<ClosedContractQuest> playerQuests;
     private int amount;

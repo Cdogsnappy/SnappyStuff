@@ -51,7 +51,7 @@ public class KillMission extends Mission {
         tag.putBoolean("complete",complete);
         return tag;
     }
-    public static IMission load(CompoundTag tag){
+    public static KillMission load(CompoundTag tag){
         EntityType target = entities.get(tag.getInt("entity"));
         int numKills = tag.getInt("numKills");
         int numToKill = tag.getInt("numToKill");

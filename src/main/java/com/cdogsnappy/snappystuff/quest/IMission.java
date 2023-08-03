@@ -8,4 +8,5 @@ public interface IMission {
 
     boolean attemptComplete();
     CompoundTag save(CompoundTag tag);
+
 }
