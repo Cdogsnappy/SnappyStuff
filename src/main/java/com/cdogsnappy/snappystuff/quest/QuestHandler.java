@@ -23,7 +23,6 @@ public class QuestHandler extends SavedData {
     public static List<OpenContractQuest> openContractQuests = new ArrayList<>();
     public static HashMap<UUID, List<ClosedContractQuest>> acceptedQuests = new HashMap<>();
     public static QuestHandler q;
-    public static LocalDateTime dailiesTime = LocalDateTime.now().minusDays(2);//If this isn't overwritten on server start then no dailies are active.
 
     /**
      * @author Cdogsnappy

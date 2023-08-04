@@ -24,7 +24,6 @@ import java.util.Random;
 public class SmiteHandler {
     public static double threshold = .0053333;
     static int ticks = 0;
-
     enum Wraths{
         FIRE,
         LIGHTNING,
@@ -54,7 +53,6 @@ public class SmiteHandler {
         }
 
     }
-
     /**
      * Takes all players and rolls a random chance to judge them. If their karma is negative they are smited and if positive they are
      * graced.
@@ -91,20 +89,16 @@ public class SmiteHandler {
                 p.setSecondsOnFire(12);
                 w.playSound((ServerPlayer)null, p.position().x, p.position().y, p.position().z, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 10000.0F, 0.8F + rand.nextFloat() * 0.2F);
                 break;
-
-
             case LIGHTNING:
                 LightningBolt e = new LightningBolt(EntityType.LIGHTNING_BOLT, w);
                 e.setPos(p.position());
                 w.addFreshEntity(e);
                 p.setHealth(p.getHealth()-8.0f);
                 break;
-
             case FAMINE:
                 p.causeFoodExhaustion(80);
                 w.playSound((ServerPlayer)null, p.position().x, p.position().y, p.position().z, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 10000.0F, 0.8F + rand.nextFloat() * 0.2F);
                 break;
-
             default:
                 break;
         }
@@ -133,10 +127,7 @@ public class SmiteHandler {
                 break;
             default:
                 break;
-
         }
         w.playSound((ServerPlayer)null, p.position().x, p.position().y, p.position().z, SoundEvents.EVOKER_CAST_SPELL, SoundSource.HOSTILE, 10000.0F, 0.8F + rand.nextFloat() * 0.2F);
-
     }
 }
-

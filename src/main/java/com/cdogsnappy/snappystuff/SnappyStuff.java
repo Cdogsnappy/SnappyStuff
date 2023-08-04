@@ -4,7 +4,6 @@ import com.cdogsnappy.snappystuff.commands.CommandRegistration;
 import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
-import com.cdogsnappy.snappystuff.quest.mission.Mission;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.mission.MissionJSONHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
@@ -31,7 +30,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
-
 import java.io.*;
 import java.util.ArrayList;
 
@@ -44,9 +42,6 @@ public class SnappyStuff
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
-
-
-
     // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
 
     public SnappyStuff()
@@ -59,10 +54,6 @@ public class SnappyStuff
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::imcSend);
         modEventBus.addListener(this::stitch);
-
-
-
-
         // Register the Deferred Register to the mod event bus so blocks get registered
 
         // Register ourselves for server and other game events we are interested in
@@ -73,7 +64,6 @@ public class SnappyStuff
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
     }
-
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         // Some common setup code
@@ -81,7 +71,6 @@ public class SnappyStuff
 
 
     }
-
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) throws FileNotFoundException {
@@ -122,7 +111,6 @@ public class SnappyStuff
         }
         QuestHandler.setQuestsDirty();
         MissionHandler.dailyMissionList = new ArrayList<>();
-
     }
 
     @SubscribeEvent
@@ -146,6 +134,4 @@ public class SnappyStuff
             MenuScreens.register(ModMenus.QUEST_CREATE_MENU.get(), QuestCreateScreen::new);
         }
     }
-
-
 }

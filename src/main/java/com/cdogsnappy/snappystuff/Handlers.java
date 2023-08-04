@@ -7,7 +7,7 @@ import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
-import com.cdogsnappy.snappystuff.quest.RadiantQuestHandler;
+import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class Handlers {
+    static int ticker = 0;
 
     /**
      * Handles every snappystuff action that is run every server tick
@@ -24,9 +25,12 @@ public class Handlers {
      */
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
+        ticker++;
+        if(ticker > 36000){
+            SmiteHandler.judge(event.getServer());
+            DailyQuestHandler.checkRefresh();
+        }
         //RadioHandler.onTick();
-        SmiteHandler.onTick(event);
-        RadiantQuestHandler.onTick(event);
     }
 
     /**

@@ -26,7 +26,7 @@ public class RightClickHarvest {
     }
     public static InteractionResult onRightClick(Level level, Player player, InteractionHand hand, net.minecraft.world.phys.BlockHitResult hitResult){
         BlockState state = level.getBlockState(hitResult.getBlockPos());
-        if(!(state.getBlock() instanceof CropBlock) || level.isClientSide){
+        if(level.isClientSide || !(state.getBlock() instanceof CropBlock)){
             return InteractionResult.PASS;
         }
 
