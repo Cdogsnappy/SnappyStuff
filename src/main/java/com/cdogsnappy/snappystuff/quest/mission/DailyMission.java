@@ -1,4 +1,4 @@
-package com.cdogsnappy.snappystuff.quest;
+package com.cdogsnappy.snappystuff.quest.mission;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -7,17 +7,15 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DailyMission extends Mission{
+public class DailyMission extends Mission {
 
-    int minPay;
-    int maxPay;
-    List<ItemStack> rewards;
-    Mission mission;
-    public DailyMission(Mission mission, int minPay, int maxPay, List<ItemStack> rewards){
+    public List<DailyReward> rewards;
+    public Mission mission;
+    public DailyMission(Mission mission, List<DailyReward> rewards){
         this.mission = mission;
-        this.minPay = minPay;
-        this.maxPay = maxPay;
+        this.rewards = rewards;
     }
+    /*
     public CompoundTag save(CompoundTag tag){
         tag.put("mission",mission.save(tag));
         tag.putInt("min",minPay);
@@ -39,4 +37,6 @@ public class DailyMission extends Mission{
         return new DailyMission(Mission.load(tag.getCompound("mission")),
             tag.getInt("min"),tag.getInt("max"), stacks);
     }
+
+     */
 }

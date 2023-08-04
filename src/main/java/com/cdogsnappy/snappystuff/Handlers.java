@@ -5,7 +5,7 @@ import com.cdogsnappy.snappystuff.items.DivineFruitItem;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
-import com.cdogsnappy.snappystuff.quest.MissionHandler;
+import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.quest.RadiantQuestHandler;
 import net.minecraft.world.entity.player.Player;

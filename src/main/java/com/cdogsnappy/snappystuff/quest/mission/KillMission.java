@@ -1,16 +1,10 @@
-package com.cdogsnappy.snappystuff.quest;
+package com.cdogsnappy.snappystuff.quest.mission;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Arrays;
 import java.util.List;
 

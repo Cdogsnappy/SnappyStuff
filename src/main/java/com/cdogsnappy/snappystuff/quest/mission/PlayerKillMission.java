@@ -1,10 +1,10 @@
-package com.cdogsnappy.snappystuff.quest;
+package com.cdogsnappy.snappystuff.quest.mission;
 
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.UUID;
 
-public class PlayerKillMission extends Mission{
+public class PlayerKillMission extends Mission {
     protected UUID toKill;
     protected UUID hitman;
     protected boolean complete = false;
@@ -19,6 +19,7 @@ public class PlayerKillMission extends Mission{
     }
     public boolean completeMission(){return complete = true;}
     public boolean isComplete(){return complete;}
+    public UUID getTarget(){return toKill;}
 
     @Override
     public CompoundTag save(CompoundTag tag){

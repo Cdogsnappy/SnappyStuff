@@ -9,6 +9,8 @@ public class CommandRegistration {
         EndorseCommand.register(builder);
         ChangeKarmaCommand.register(builder);
         CourtCreateCommand.register(builder);
+        CreateKillMissionCommand.register(builder, e.getBuildContext());
+        LogCrimeCommand.register(builder);
         e.getDispatcher().register(builder);
     }
 }

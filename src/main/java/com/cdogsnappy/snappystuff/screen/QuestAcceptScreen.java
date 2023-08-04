@@ -1,9 +1,6 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
-import com.cdogsnappy.snappystuff.blocks.QuestAcceptBlock;
-import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
-import com.cdogsnappy.snappystuff.quest.Quest;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -12,7 +9,6 @@ import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.BeaconScreen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -20,8 +16,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import com.cdogsnappy.snappystuff.quest.QuestHandler;
-import com.cdogsnappy.snappystuff.quest.Mission;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

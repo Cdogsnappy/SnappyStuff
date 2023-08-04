@@ -1,5 +1,7 @@
 package com.cdogsnappy.snappystuff.quest;
 
+import com.cdogsnappy.snappystuff.quest.mission.DailyMission;
+import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
@@ -7,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class QuestHandler extends SavedData {
         ListTag acceptedQuestsTag = new ListTag();
         ListTag unacceptedQuestsTag = new ListTag();
         ListTag openContractQuestsTag = new ListTag();
-        ListTag dailyMissionsTag = new ListTag();
+        //ListTag dailyMissionsTag = new ListTag();
         acceptedQuests.forEach((key,val) ->{
             for(ClosedContractQuest q : val){
                 acceptedQuestsTag.add(ClosedContractQuest.save(new CompoundTag(),q));
@@ -66,13 +67,16 @@ public class QuestHandler extends SavedData {
         openContractQuests.forEach((q) -> {
             openContractQuestsTag.add(OpenContractQuest.save(new CompoundTag(),q));
         });
+        /*
         MissionHandler.dailyMissionList.forEach((m) ->{
             dailyMissionsTag.add(m.save(new CompoundTag()));
         });
+
+         */
         tag.put("acceptedquests",acceptedQuestsTag);
         tag.put("unacceptedquests",unacceptedQuestsTag);
         tag.put("opencontractquests",openContractQuestsTag);
-        tag.put("dailymissions",dailyMissionsTag);
+        //tag.put("dailymissions",dailyMissionsTag);
         return tag;
     }
 
@@ -105,9 +109,12 @@ public class QuestHandler extends SavedData {
         for(int k = 0; k<openContractQuestsTag.size(); ++k){
             openContractQuests.add(OpenContractQuest.load(openContractQuestsTag.getCompound(k)));
         }
+        /*
         for(int l = 0; l < dailyMissionsTag.size(); ++l){
             MissionHandler.dailyMissionList.add(DailyMission.load((CompoundTag)dailyMissionsTag.get(l)));
         }
+
+         */
         return new QuestHandler();
     }
     /**
@@ -127,7 +134,7 @@ public class QuestHandler extends SavedData {
      */
     public static void onMurder(Player murdered, Player murderer){
         for(int j = 0; j<openContractQuests.size(); ++j){
-            if(openContractQuests.get(j).mission.toKill == murdered.getUUID()){
+            if(openContractQuests.get(j).mission.getTarget() == murdered.getUUID()){
                 openContractQuests.remove(j).distributeRewards(murderer);
             }
         }

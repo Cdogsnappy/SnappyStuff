@@ -1,4 +1,4 @@
-package com.cdogsnappy.snappystuff.quest;
+package com.cdogsnappy.snappystuff.quest.mission;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

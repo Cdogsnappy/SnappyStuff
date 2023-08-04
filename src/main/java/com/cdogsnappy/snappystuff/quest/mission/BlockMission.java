@@ -1,13 +1,9 @@
-package com.cdogsnappy.snappystuff.quest;
+package com.cdogsnappy.snappystuff.quest.mission;
 
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.Serializable;
@@ -20,6 +16,11 @@ public class BlockMission extends Mission implements Serializable {
     protected int numBroken = 0;
     protected boolean complete;
 
+    public BlockMission(Block block, int numToBreak){
+        this.missionType = Type.BLOCK;
+        this.toBreak = block;
+        this.numToBreak = numToBreak;
+    }
 
     public BlockMission(Block block,UUID questor, int numToBreak){
         this.missionType = Type.BLOCK;

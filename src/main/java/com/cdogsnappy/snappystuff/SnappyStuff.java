@@ -4,9 +4,10 @@ import com.cdogsnappy.snappystuff.commands.CommandRegistration;
 import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
+import com.cdogsnappy.snappystuff.quest.mission.Mission;
+import com.cdogsnappy.snappystuff.quest.mission.MissionJSONHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
-import com.cdogsnappy.snappystuff.screen.ModMenus;
-import com.cdogsnappy.snappystuff.screen.QuestAcceptScreen;
+import com.cdogsnappy.snappystuff.screen.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -29,7 +30,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
-import com.cdogsnappy.snappystuff.screen.MusicUploadScreen;
 
 import java.io.*;
 
@@ -82,18 +82,20 @@ public class SnappyStuff
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event){
+    public void onServerStarting(ServerStartingEvent event) throws FileNotFoundException {
         //FMLDedicatedServerSetupEvent may be better for when we are done testing mechanics
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
         try {
             ServerBirth.readData();
+            RadioHandler.init();
+            QuestHandler.get(event.getServer().getLevel(Level.OVERWORLD));
+            MissionJSONHandler.init();
+            MissionJSONHandler.readDailies();
         }
         catch(Exception e){
-            LOGGER.info("FATAL ERROR RELOADING DATA");
+            LOGGER.info("FATAL ERROR RELOADING OR INITIALIZING SNAPPY DATA");
         }
-        RadioHandler.init();
-        QuestHandler.get(event.getServer().getLevel(Level.OVERWORLD));
     }
     @SubscribeEvent
     public void imcSend(InterModEnqueueEvent event){
@@ -135,8 +137,10 @@ public class SnappyStuff
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            QuestScreensData.init();
             MenuScreens.register(ModMenus.MUSIC_UPLOAD_MENU.get(), MusicUploadScreen::new);
             MenuScreens.register(ModMenus.QUEST_ACCEPT_MENU.get(), QuestAcceptScreen::new);
+            MenuScreens.register(ModMenus.QUEST_CREATE_MENU.get(), QuestCreateScreen::new);
         }
     }
 

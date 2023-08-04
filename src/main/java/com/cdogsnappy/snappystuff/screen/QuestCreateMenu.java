@@ -28,7 +28,7 @@ public class QuestCreateMenu extends AbstractContainerMenu {
 
     public QuestCreateMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenus.QUEST_CREATE_MENU.get(), id);
-        checkContainerSize(inv, 0);
+        checkContainerSize(inv, 5);
         blockEntity = (QuestAcceptBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;

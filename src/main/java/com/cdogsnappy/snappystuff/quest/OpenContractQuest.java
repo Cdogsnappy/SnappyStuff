@@ -1,5 +1,6 @@
 package com.cdogsnappy.snappystuff.quest;
 
+import com.cdogsnappy.snappystuff.quest.mission.PlayerKillMission;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
