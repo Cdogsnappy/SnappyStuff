@@ -34,6 +34,8 @@ public class Mission extends SavedData implements IMission, Serializable {
                 return CollectMission.load(tag);
             case 3:
                 return PlayerKillMission.load(tag);
+            case 4:
+                return DailyMission.load(tag);
             default:
                 return null;
         }

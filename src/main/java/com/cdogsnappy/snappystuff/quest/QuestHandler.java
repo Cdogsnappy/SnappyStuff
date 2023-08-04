@@ -54,20 +54,25 @@ public class QuestHandler extends SavedData {
         ListTag acceptedQuestsTag = new ListTag();
         ListTag unacceptedQuestsTag = new ListTag();
         ListTag openContractQuestsTag = new ListTag();
+        ListTag dailyMissionsTag = new ListTag();
         acceptedQuests.forEach((key,val) ->{
-            for(int j = 0; j<val.size(); ++j){
-                acceptedQuestsTag.add(ClosedContractQuest.save(new CompoundTag(),val.get(j)));
+            for(ClosedContractQuest q : val){
+                acceptedQuestsTag.add(ClosedContractQuest.save(new CompoundTag(),q));
             }
         });
-        for(int i = 0; i < unacceptedQuests.size(); ++i){
-            unacceptedQuestsTag.add(ClosedContractQuest.save(new CompoundTag(), unacceptedQuests.get(i)));
-        }
-        for(int k = 0; k < openContractQuests.size(); ++k){
-            openContractQuestsTag.add(OpenContractQuest.save(new CompoundTag(),openContractQuests.get(k)));
-        }
+        unacceptedQuests.forEach((q) -> {
+            unacceptedQuestsTag.add(ClosedContractQuest.save(new CompoundTag(), q));
+        });
+        openContractQuests.forEach((q) -> {
+            openContractQuestsTag.add(OpenContractQuest.save(new CompoundTag(),q));
+        });
+        MissionHandler.dailyMissionList.forEach((m) ->{
+            dailyMissionsTag.add(m.save(new CompoundTag()));
+        });
         tag.put("acceptedquests",acceptedQuestsTag);
         tag.put("unacceptedquests",unacceptedQuestsTag);
         tag.put("opencontractquests",openContractQuestsTag);
+        tag.put("dailymissions",dailyMissionsTag);
         return tag;
     }
 
@@ -81,6 +86,7 @@ public class QuestHandler extends SavedData {
         ListTag questsTag = (ListTag)tag.get("acceptedquests");
         ListTag unacceptedQuestsTag = (ListTag)tag.get("unacceptedquests");
         ListTag openContractQuestsTag = (ListTag)tag.get("opencontractquests");
+        ListTag dailyMissionsTag = (ListTag)tag.get("dailymissions");
         for(int i = 0; i<unacceptedQuestsTag.size(); ++i){
            unacceptedQuests.add(ClosedContractQuest.load(questsTag.getCompound(i),false));
         }
@@ -98,6 +104,9 @@ public class QuestHandler extends SavedData {
         }
         for(int k = 0; k<openContractQuestsTag.size(); ++k){
             openContractQuests.add(OpenContractQuest.load(openContractQuestsTag.getCompound(k)));
+        }
+        for(int l = 0; l < dailyMissionsTag.size(); ++l){
+            MissionHandler.dailyMissionList.add(DailyMission.load((CompoundTag)dailyMissionsTag.get(l)));
         }
         return new QuestHandler();
     }

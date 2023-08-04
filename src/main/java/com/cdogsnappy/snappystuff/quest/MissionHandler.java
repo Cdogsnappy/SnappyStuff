@@ -22,6 +22,7 @@ public class MissionHandler {
     public static HashMap<UUID,List<BlockMission>> blockMissionList = new HashMap<>();
     public static HashMap<UUID,List<PlayerKillMission>> playerKillMissionList = new HashMap<>();
     public static HashMap<UUID,List<KillMission>> killMissionList = new HashMap<>();
+    public static List<DailyMission> dailyMissionList = new ArrayList<>();
 
     /**
      * Checks if a murder fulfills a contract
@@ -59,12 +60,11 @@ public class MissionHandler {
             return;
         }
         List<KillMission> killMissions = killMissionList.get(killer.getUUID());
-        for(int i = 0; i < killMissions.size(); ++i){
-            if(killMissions.get(i).toKill == killed.getType()){
-                killMissions.get(i).numKills++;
-                if(killMissions.get(i).attemptComplete()){
-                    killMissions.remove(i);
-                    --i;
+        for(KillMission k : killMissions){
+            if(k.toKill == killed.getType()){
+                k.numKills++;
+                if(k.attemptComplete()){
+                    killMissions.remove(k);
                 }
             }
         }

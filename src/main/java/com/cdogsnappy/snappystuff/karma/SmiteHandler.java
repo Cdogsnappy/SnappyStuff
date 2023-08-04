@@ -47,7 +47,7 @@ public class SmiteHandler {
      */
     public static void onTick(TickEvent.ServerTickEvent event){
         ticks++;
-        if (ticks >= 400) {
+        if (ticks >= 36000) {
             SmiteHandler.judge(event.getServer());
             EndorsementHandler.updateCooldowns(event.getServer());
             ticks = 0;

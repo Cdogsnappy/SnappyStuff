@@ -7,6 +7,7 @@ import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
 import com.cdogsnappy.snappystuff.quest.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
+import com.cdogsnappy.snappystuff.quest.RadiantQuestHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -25,6 +26,7 @@ public class Handlers {
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         //RadioHandler.onTick();
         SmiteHandler.onTick(event);
+        RadiantQuestHandler.onTick(event);
     }
 
     /**

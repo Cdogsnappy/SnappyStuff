@@ -1,12 +1,8 @@
 package com.cdogsnappy.snappystuff;
 
-import com.cdogsnappy.snappystuff.commands.ChangeKarmaCommand;
 import com.cdogsnappy.snappystuff.commands.CommandRegistration;
-import com.cdogsnappy.snappystuff.commands.EndorseCommand;
 import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
-import com.cdogsnappy.snappystuff.karma.Karma;
-import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.ModMenus;
@@ -14,18 +10,13 @@ import com.cdogsnappy.snappystuff.screen.QuestAcceptScreen;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.commands.Commands;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.extensions.IForgeLevel;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -41,8 +32,6 @@ import top.theillusivec4.curios.api.SlotTypePreset;
 import com.cdogsnappy.snappystuff.screen.MusicUploadScreen;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.UUID;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(SnappyStuff.MODID)

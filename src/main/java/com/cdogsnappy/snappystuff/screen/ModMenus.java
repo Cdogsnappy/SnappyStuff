@@ -19,6 +19,8 @@ public class ModMenus {
 
     public static final RegistryObject<MenuType<QuestAcceptMenu>> QUEST_ACCEPT_MENU =
             registerMenuType(QuestAcceptMenu::new, "quest_accept_menu");
+    public static final RegistryObject<MenuType<QuestCreateMenu>> QUEST_CREATE_MENU =
+            registerMenuType(QuestCreateMenu::new, "quest_create_menu");
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(IContainerFactory<T> factory,
                                                                                                   String name) {

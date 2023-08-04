@@ -26,9 +26,15 @@ public class CollectMission extends Mission {
     @Override
     public boolean isComplete(){return complete;}
 
+    /**
+     * @author Cdogsnappy
+     * save the mission to nbt data
+     * @param tag the tag to save the data to
+     * @return the tag with the data
+     */
     @Override
     public CompoundTag save(CompoundTag tag){
-        tag.putInt("type",2);
+        tag.putInt("type",2); //FOR MISSION RECOVERY PURPOSES
         toCollect.save(tag);
         tag.putUUID("id",playerID);
         tag.putBoolean("complete",complete);

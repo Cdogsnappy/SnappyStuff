@@ -27,7 +27,7 @@ public class QuestCreateMenu extends AbstractContainerMenu {
     }
 
     public QuestCreateMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenus.QUEST_ACCEPT_MENU.get(), id);
+        super(ModMenus.QUEST_CREATE_MENU.get(), id);
         checkContainerSize(inv, 0);
         blockEntity = (QuestAcceptBlockEntity) entity;
         this.level = inv.player.level;
@@ -35,7 +35,6 @@ public class QuestCreateMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
         addDataSlots(data);
-        Minecraft.getInstance().getSearchTree(SearchRegistry.CREATIVE_TAGS);
     }
 
     private static final int HOTBAR_SLOT_COUNT = 9;

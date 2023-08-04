@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class QuestCreationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(0) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(5) {
         @Override
         protected void onContentsChanged (int slot) {
             setChanged();
@@ -105,10 +105,6 @@ public class QuestCreationBlockEntity extends BlockEntity implements MenuProvide
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
     public static void tick(Level level, BlockPos pos, BlockState state, QuestAcceptBlockEntity pEntity) {
-        if(level.isClientSide()) {
-            return;
-        }
-
-
+        return;
     }
 }

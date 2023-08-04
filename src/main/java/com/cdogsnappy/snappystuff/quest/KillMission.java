@@ -1,12 +1,14 @@
 package com.cdogsnappy.snappystuff.quest;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.Arrays;
@@ -45,19 +47,19 @@ public class KillMission extends Mission {
 
     public CompoundTag save(CompoundTag tag){
         tag.putInt("type",0);
-        tag.putInt("entity",entities.indexOf(toKill));
+        tag.putString("entity", ForgeRegistries.ENTITY_TYPES.getKey(toKill).toString());
         tag.putInt("numKills",numKills);
         tag.putInt("numToKill",numToKill);
         tag.putBoolean("complete",complete);
         return tag;
     }
     public static KillMission load(CompoundTag tag){
-        EntityType target = entities.get(tag.getInt("entity"));
+        EntityType e = ForgeRegistries.ENTITY_TYPES.getValue(ResourceLocation.tryParse(tag.getString("entity")));
         int numKills = tag.getInt("numKills");
         int numToKill = tag.getInt("numToKill");
         boolean complete = tag.getBoolean("complete");
 
-        return new KillMission(target,numToKill,numKills,complete);
+        return new KillMission(e,numToKill,numKills,complete);
 
     }
 }

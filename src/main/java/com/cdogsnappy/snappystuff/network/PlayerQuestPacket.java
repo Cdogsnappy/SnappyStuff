@@ -41,8 +41,8 @@ public class PlayerQuestPacket {
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeUUID(player);
         List<ClosedContractQuest> quests = QuestHandler.acceptedQuests.get(player);
-        for(int j = 0; j < quests.size(); ++j){
-            buf.writeNbt(ClosedContractQuest.save(new CompoundTag(), quests.get(j)));
+        for(ClosedContractQuest q : quests){
+            buf.writeNbt(ClosedContractQuest.save(new CompoundTag(), q));
         }
         buf.writeInt(quests.size());
 

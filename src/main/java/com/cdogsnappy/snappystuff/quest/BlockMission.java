@@ -2,11 +2,13 @@ package com.cdogsnappy.snappystuff.quest;
 
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -48,7 +50,7 @@ public class BlockMission extends Mission implements Serializable {
     }
     public CompoundTag save(CompoundTag tag){
         tag.putInt("type",1);
-        tag.putInt("block", Registry.BLOCK.getId(toBreak));
+        tag.putString("block", Registry.BLOCK.getKey(toBreak).toString());
         tag.putUUID("id", player);
         tag.putInt("numToBreak", numToBreak);
         tag.putInt("numBroken", numBroken);
@@ -56,7 +58,7 @@ public class BlockMission extends Mission implements Serializable {
         return tag;
     }
     public static BlockMission load(CompoundTag tag){
-        Block toBreak = Registry.BLOCK.byId(tag.getInt("block"));
+        Block toBreak = ForgeRegistries.BLOCKS.getValue(ResourceLocation.tryParse(tag.getString("block")));
         UUID player = tag.getUUID("id");
         int numToBreak = tag.getInt("numToBreak");
         int numBroken = tag.getInt("numBroken");
