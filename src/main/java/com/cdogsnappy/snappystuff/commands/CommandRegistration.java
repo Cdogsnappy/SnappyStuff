@@ -11,6 +11,8 @@ public class CommandRegistration {
         CourtCreateCommand.register(builder);
         CreateKillMissionCommand.register(builder, e.getBuildContext());
         LogCrimeCommand.register(builder);
+        CreateCollectMissionCommand.register(builder,e.getBuildContext());
+        CreateBlockMissionCommand.register(builder,e.getBuildContext());
         e.getDispatcher().register(builder);
     }
 }

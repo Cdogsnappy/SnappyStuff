@@ -5,6 +5,7 @@ import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.quest.mission.Mission;
+import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.mission.MissionJSONHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.*;
@@ -32,6 +33,7 @@ import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
 import java.io.*;
+import java.util.ArrayList;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(SnappyStuff.MODID)
@@ -119,6 +121,7 @@ public class SnappyStuff
             LOGGER.info("FATAL ERROR SAVING KARMA LOGS");
         }
         QuestHandler.setQuestsDirty();
+        MissionHandler.dailyMissionList = new ArrayList<>();
 
     }
 
