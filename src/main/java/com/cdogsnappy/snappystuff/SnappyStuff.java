@@ -3,6 +3,7 @@ package com.cdogsnappy.snappystuff;
 import com.cdogsnappy.snappystuff.commands.CommandRegistration;
 import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
+import com.cdogsnappy.snappystuff.network.QuestNetwork;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.mission.MissionJSONHandler;
@@ -83,6 +84,7 @@ public class SnappyStuff
             QuestHandler.get(event.getServer().getLevel(Level.OVERWORLD));
             MissionJSONHandler.init();
             MissionJSONHandler.readDailies();
+            QuestNetwork.setup();
         }
         catch(Exception e){
             LOGGER.info("FATAL ERROR RELOADING OR INITIALIZING SNAPPY DATA");
