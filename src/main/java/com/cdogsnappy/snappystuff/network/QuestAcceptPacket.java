@@ -17,10 +17,11 @@ import java.util.function.Supplier;
 public class QuestAcceptPacket {
     Quest q;
     public QuestAcceptPacket(FriendlyByteBuf buf){
-        int questType = buf.readInt();
+        CompoundTag tag = buf.readNbt();
+        int questType = tag.getInt("type");
         this.q = switch(questType){
-            case 0 -> ClosedContractQuest.load(buf.readNbt(),false);
-            case 1 -> OpenContractQuest.load(buf.readNbt());
+            case 0 -> ClosedContractQuest.load(tag.getCompound("quest"),false);
+            case 1 -> OpenContractQuest.load(tag.getCompound("quest"));
             case 2 -> null;
             default -> throw new IllegalStateException("Quest packet failure...");
         };
@@ -35,17 +36,19 @@ public class QuestAcceptPacket {
 
 
     public void toBytes(FriendlyByteBuf buf) {
+        CompoundTag tag = new CompoundTag();
         if(q == null){
-            buf.writeInt(2);
+            tag.putInt("type",2);
         }
-        if(q instanceof OpenContractQuest){
-            buf.writeNbt(OpenContractQuest.save(new CompoundTag(),(OpenContractQuest)q));
-            buf.writeInt(1);
+        else if(q instanceof OpenContractQuest){
+            tag.put("quest",OpenContractQuest.save(new CompoundTag(),(OpenContractQuest)q));
+            tag.putInt("type",1);
         }
         else{
-            buf.writeNbt(ClosedContractQuest.save(new CompoundTag(), (ClosedContractQuest) q));
-            buf.writeInt(0);
+            tag.put("quest",ClosedContractQuest.save(new CompoundTag(), (ClosedContractQuest) q));
+            tag.putInt("type",0);
         }
+        buf.writeNbt(tag);
 
     }
 

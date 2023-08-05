@@ -50,7 +50,7 @@ public class Handlers {
         KarmaLog.onPlayerJoin(event.getEntity());
         DivineFruitItem.addTag(event.getEntity());
         DivineFruitItem.updateDivineHealth(event.getEntity());
-        //QuestNetwork.sendToPlayer(new AvailablePlayersPacket(CitizenData.citizenNames),(ServerPlayer)event.getEntity());
+        QuestNetwork.sendToPlayer(new AvailablePlayersPacket(CitizenData.citizenNames),(ServerPlayer)event.getEntity());
 
     }
 

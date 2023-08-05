@@ -67,6 +67,7 @@ public class SnappyStuff
     }
     private void commonSetup(final FMLCommonSetupEvent event)
     {
+        QuestNetwork.setup();
         // Some common setup code
         LOGGER.info("HELLO FROM COMMON SETUP");
 
@@ -84,7 +85,6 @@ public class SnappyStuff
             QuestHandler.get(event.getServer().getLevel(Level.OVERWORLD));
             MissionJSONHandler.init();
             MissionJSONHandler.readDailies();
-            QuestNetwork.setup();
         }
         catch(Exception e){
             LOGGER.info("FATAL ERROR RELOADING OR INITIALIZING SNAPPY DATA");

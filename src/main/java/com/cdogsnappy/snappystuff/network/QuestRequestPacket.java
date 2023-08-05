@@ -18,8 +18,9 @@ public class QuestRequestPacket {
     private int ind;
     private boolean open;
     public QuestRequestPacket(FriendlyByteBuf buf){
-        this.ind = buf.readInt();
-        this.open = buf.readBoolean();
+        CompoundTag tag = buf.readNbt();
+        this.ind = tag.getInt("ind");
+        this.open = tag.getBoolean("open");
     }
 
 
@@ -31,8 +32,10 @@ public class QuestRequestPacket {
 
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(ind);
-        buf.writeBoolean(open);
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("ind",ind);
+        tag.putBoolean("open",open);
+        buf.writeNbt(tag);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {

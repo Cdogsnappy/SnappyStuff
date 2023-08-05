@@ -4,7 +4,9 @@ import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.screen.QuestScreensData;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
@@ -18,29 +20,31 @@ import java.util.function.Supplier;
  */
 public class PlayerQuestPacket {
     private List<ClosedContractQuest> playerQuests;
-    private int amount;
     private UUID player;
     public PlayerQuestPacket(FriendlyByteBuf buf){
-        amount = buf.readInt();
-        player = buf.readUUID();
+        CompoundTag tag = buf.readNbt();
+        player = tag.getUUID("player");
         playerQuests = new ArrayList<>();
-        for(int j = 0; j < amount; ++j){
-            playerQuests.add(ClosedContractQuest.load(buf.readNbt(), true));
+        ListTag quests = (ListTag)tag.get("quests");
+        for(int j = 0; j < quests.size(); ++j){
+            playerQuests.add(ClosedContractQuest.load(quests.getCompound(j), true));
         }
     }
     public PlayerQuestPacket(List<ClosedContractQuest> playerQuests, UUID player) {
         this.playerQuests = playerQuests;
-        this.amount = playerQuests.size();
         this.player = player;
     }
 
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeUUID(player);
+        CompoundTag tag = new CompoundTag();
+        tag.putUUID("player",player);
         List<ClosedContractQuest> quests = QuestHandler.acceptedQuests.get(player);
-        for(ClosedContractQuest q : quests){
-            buf.writeNbt(ClosedContractQuest.save(new CompoundTag(), q));
-        }
-        buf.writeInt(quests.size());
+        ListTag questTag = new ListTag();
+        quests.forEach((q) -> {
+            questTag.add(ClosedContractQuest.save(new CompoundTag(),q));
+        });
+        tag.put("quests",questTag);
+        buf.writeNbt(tag);
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();

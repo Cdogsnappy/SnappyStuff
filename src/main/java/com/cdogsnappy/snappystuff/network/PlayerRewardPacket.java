@@ -2,6 +2,8 @@ package com.cdogsnappy.snappystuff.network;
 
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.screen.QuestScreensData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -13,31 +15,29 @@ import java.util.function.Supplier;
 
 public class PlayerRewardPacket {
     private List<ItemStack> playerRewards;
-    private int amount;
     private UUID player;
     public PlayerRewardPacket(FriendlyByteBuf buf){
-        amount = buf.readInt();
-        player = buf.readUUID();
+        CompoundTag tag = buf.readNbt();
+        ListTag rewards = (ListTag)tag.get("rewards");
         playerRewards = new ArrayList<>();
-        for(int j = 0; j < amount; ++j){
-            playerRewards.add(buf.readItem());
+        for(int j = 0; j < rewards.size(); ++j){
+            playerRewards.add(ItemStack.of(rewards.getCompound(j)));
         }
     }
     public PlayerRewardPacket(List<ItemStack> playerRewards, UUID player) {
         this.playerRewards = playerRewards;
-        this.amount = playerRewards.size();
         this.player = player;
     }
-
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeUUID(player);
+        CompoundTag tag = new CompoundTag();
+        ListTag rewardList = new ListTag();
         List<ItemStack> rewards = QuestHandler.rewardRegistry.get(player);
-        for(ItemStack i : rewards){
-            buf.writeItem(i);
-        }
-        buf.writeInt(rewards.size());
+        rewards.forEach((i) -> {
+            rewardList.add(i.save(new CompoundTag()));
+        });
+        tag.put("rewards",rewardList);
+        buf.writeNbt(tag);
     }
-
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
@@ -46,5 +46,4 @@ public class PlayerRewardPacket {
         });
         return true;
     }
-
 }

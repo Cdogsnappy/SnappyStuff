@@ -30,7 +30,14 @@ public class QuestNetwork {
         }
 
         instance = new QuestNetwork();
-        INSTANCE = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(SnappyStuff.MODID, "questnetwork")).simpleChannel();
+        SimpleChannel net = NetworkRegistry.ChannelBuilder
+                .named(new ResourceLocation(SnappyStuff.MODID, "questnetwork"))
+                .networkProtocolVersion(() -> "1.0")
+                .clientAcceptedVersions(s -> true)
+                .serverAcceptedVersions(s -> true)
+                .simpleChannel();
+
+        INSTANCE = net;
 
         INSTANCE.messageBuilder(QuestAcceptPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(QuestAcceptPacket::new)
@@ -62,6 +69,11 @@ public class QuestNetwork {
                 .encoder(PlayerRewardPacket::toBytes)
                 .consumerMainThread(PlayerRewardPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(AvailablePlayersPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(AvailablePlayersPacket::new)
+                .encoder(AvailablePlayersPacket::toBytes)
+                .consumerMainThread(AvailablePlayersPacket::handle)
+                .add();
     }
     public static <MSG> void sendToServer(MSG message) {
         INSTANCE.sendToServer(message);
@@ -69,5 +81,8 @@ public class QuestNetwork {
 
     public static <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+    }
+    public static <MSG> void sendToAllPlayers(MSG message){
+        INSTANCE.send(PacketDistributor.ALL.noArg(), message);
     }
 }

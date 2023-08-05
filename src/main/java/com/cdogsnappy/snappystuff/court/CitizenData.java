@@ -1,5 +1,7 @@
 package com.cdogsnappy.snappystuff.court;
 
+import com.cdogsnappy.snappystuff.network.AvailablePlayersPacket;
+import com.cdogsnappy.snappystuff.network.QuestNetwork;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -47,6 +49,7 @@ public class CitizenData implements Serializable {
         if(!citizenRegistry.containsKey(p.getName().getString())){
             citizenRegistry.put(p.getName().getString(),new CitizenData(p));
             citizenNames.add(p.getName().getString());
+            QuestNetwork.sendToAllPlayers(new AvailablePlayersPacket(citizenNames));
         }
     }
 
