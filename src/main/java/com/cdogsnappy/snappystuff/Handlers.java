@@ -5,9 +5,12 @@ import com.cdogsnappy.snappystuff.items.DivineFruitItem;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
+import com.cdogsnappy.snappystuff.network.AvailablePlayersPacket;
+import com.cdogsnappy.snappystuff.network.QuestNetwork;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -47,6 +50,8 @@ public class Handlers {
         KarmaLog.onPlayerJoin(event.getEntity());
         DivineFruitItem.addTag(event.getEntity());
         DivineFruitItem.updateDivineHealth(event.getEntity());
+
+        QuestNetwork.sendToPlayer(new AvailablePlayersPacket(CitizenData.citizenNames),(ServerPlayer)event.getEntity());
 
     }
 

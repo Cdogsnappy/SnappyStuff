@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -19,6 +20,7 @@ import java.util.UUID;
  */
 public class CitizenData implements Serializable {
     public static HashMap<String, CitizenData> citizenRegistry = new HashMap<String, CitizenData>();
+    public static List<String> citizenNames = new ArrayList<>();
 
     protected UUID id;
     protected String name;
@@ -30,6 +32,11 @@ public class CitizenData implements Serializable {
         name = p.getName().getString();
     }
 
+    public String getName(){return name;}
+    public UUID getUUID(){return id;}
+    public int[] getServices(){return services;}
+    public ArrayList<Crime> getCrimes(){return crimes;}
+
     /**
      * @author Cdogsnappy
      * Checks if a player is in the citizen registry when they join
@@ -39,6 +46,7 @@ public class CitizenData implements Serializable {
     public static void onPlayerJoin(Player p){
         if(!citizenRegistry.containsKey(p.getName().getString())){
             citizenRegistry.put(p.getName().getString(),new CitizenData(p));
+            citizenNames.add(p.getName().getString());
         }
     }
 

@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> {
     private static final ResourceLocation MAIN_TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_create_block_gui.png");
-    private static final ResourceLocation QUEST_TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_accept_block_gui.png");
+    private int page = 0;
 
     public QuestCreateScreen(QuestCreateMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
@@ -27,9 +27,13 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
 
 
     @Override
-    protected void renderBg(PoseStack p_97787_, float p_97788_, int p_97789_, int p_97790_) {
-
-
+    protected void renderBg(PoseStack pPoseStack, float p_97788_, int p_97789_, int p_97790_) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, MAIN_TEXTURE);
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
+        this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
     }
 
     abstract static class QuestCreateScreenButton extends AbstractButton {

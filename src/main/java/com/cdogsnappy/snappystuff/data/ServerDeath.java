@@ -4,6 +4,7 @@ import com.cdogsnappy.snappystuff.court.CitizenData;
 import com.cdogsnappy.snappystuff.court.CourtCase;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaLog;
+import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import org.apache.commons.io.FileUtils;
@@ -35,7 +36,8 @@ public class ServerDeath {
             serverData.put("citizens", CitizenData.citizenRegistry);
             serverData.put("cases", CourtCase.caseArchive);
             serverData.put("music", RadioHandler.musicLocations);
-            serverData.put("dailytime", QuestHandler.dailiesTime);
+            serverData.put("dailytime", DailyQuestHandler.lastRefresh);
+            serverData.put("citizenNames",CitizenData.citizenNames);
             objWriter.writeObject(serverData);
             objWriter.flush();
             objWriter.close();

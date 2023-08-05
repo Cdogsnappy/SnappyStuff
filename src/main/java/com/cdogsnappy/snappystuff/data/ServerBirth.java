@@ -5,6 +5,7 @@ import com.cdogsnappy.snappystuff.court.CourtCase;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.SnappyStuff;
 import com.cdogsnappy.snappystuff.karma.KarmaPlayerInfo;
+import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
@@ -44,6 +45,7 @@ public class ServerBirth {
                 else{Karma.init();}
                 if(serverData.containsKey("citizens")){
                     CitizenData.citizenRegistry =(HashMap<String,CitizenData>)serverData.get("citizens");
+                    CitizenData.citizenNames = (List<String>)serverData.get("citizenNames");
                 }
                 if(serverData.containsKey("cases")){
                     CourtCase.caseArchive = (HashMap<Integer, CourtCase>)serverData.get("cases");
@@ -52,7 +54,7 @@ public class ServerBirth {
                     RadioHandler.musicLocations = (List<SoundInfo>) serverData.get("music");
                 }
                 if(serverData.containsKey("dailytime")){
-                    QuestHandler.dailiesTime = (LocalDateTime) serverData.get("dailytime");
+                    DailyQuestHandler.lastRefresh = (LocalDateTime) serverData.get("dailytime");
                 }
 
                 objReader.close();

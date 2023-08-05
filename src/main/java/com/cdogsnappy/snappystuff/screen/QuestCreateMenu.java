@@ -20,6 +20,7 @@ public class QuestCreateMenu extends AbstractContainerMenu {
     public final QuestAcceptBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
+    private final Inventory playerInventory;
 
 
     public QuestCreateMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
@@ -35,6 +36,7 @@ public class QuestCreateMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
         addDataSlots(data);
+        this.playerInventory = inv;
     }
 
     private static final int HOTBAR_SLOT_COUNT = 9;
@@ -98,5 +100,8 @@ public class QuestCreateMenu extends AbstractContainerMenu {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 144));
         }
+    }
+    public Inventory getPlayerInventory(){
+        return playerInventory;
     }
 }
