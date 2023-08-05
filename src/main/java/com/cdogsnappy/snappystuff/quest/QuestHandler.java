@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -18,11 +19,16 @@ import java.util.UUID;
 
 
 public class QuestHandler extends SavedData {
+    /**
+     * This data is only kept up to date on the server side, if you need to access it on the client side
+     * for any reason you'll have to ask the server through a packet.
+     */
 
     public static List<ClosedContractQuest> unacceptedQuests = new ArrayList<>();
     public static List<OpenContractQuest> openContractQuests = new ArrayList<>();
     public static HashMap<UUID, List<ClosedContractQuest>> acceptedQuests = new HashMap<>();
     public static QuestHandler q;
+    public static HashMap<UUID,List<ItemStack>> rewardRegistry = new HashMap<>();
 
     /**
      * @author Cdogsnappy
@@ -54,7 +60,7 @@ public class QuestHandler extends SavedData {
         ListTag acceptedQuestsTag = new ListTag();
         ListTag unacceptedQuestsTag = new ListTag();
         ListTag openContractQuestsTag = new ListTag();
-        //ListTag dailyMissionsTag = new ListTag();
+        ListTag rewardRegistryTag = new ListTag();
         acceptedQuests.forEach((key,val) ->{
             for(ClosedContractQuest q : val){
                 acceptedQuestsTag.add(ClosedContractQuest.save(new CompoundTag(),q));
@@ -66,16 +72,20 @@ public class QuestHandler extends SavedData {
         openContractQuests.forEach((q) -> {
             openContractQuestsTag.add(OpenContractQuest.save(new CompoundTag(),q));
         });
-        /*
-        MissionHandler.dailyMissionList.forEach((m) ->{
-            dailyMissionsTag.add(m.save(new CompoundTag()));
+        rewardRegistry.forEach((k,v) -> {
+            CompoundTag playerRewards = new CompoundTag();
+            playerRewards.putUUID("player",k);
+            ListTag rewards = new ListTag();
+            v.forEach((r) ->{
+                rewards.add(r.save(new CompoundTag()));
+            });
+            playerRewards.put("rewards",rewards);
+            rewardRegistryTag.add(playerRewards);
         });
-
-         */
         tag.put("acceptedquests",acceptedQuestsTag);
         tag.put("unacceptedquests",unacceptedQuestsTag);
         tag.put("opencontractquests",openContractQuestsTag);
-        //tag.put("dailymissions",dailyMissionsTag);
+        tag.put("rewardregistry",rewardRegistryTag);
         return tag;
     }
 
@@ -86,15 +96,17 @@ public class QuestHandler extends SavedData {
      * @return the QuestHandler dummy instance
      */
     public static QuestHandler load(CompoundTag tag){
-        ListTag questsTag = (ListTag)tag.get("acceptedquests");
+        ListTag acceptedQuestsTag = (ListTag)tag.get("acceptedquests");
         ListTag unacceptedQuestsTag = (ListTag)tag.get("unacceptedquests");
         ListTag openContractQuestsTag = (ListTag)tag.get("opencontractquests");
-        ListTag dailyMissionsTag = (ListTag)tag.get("dailymissions");
+        ListTag rewardRegistryTag = (ListTag)tag.get("rewardregistry");
+         //unaccepted quests load
         for(int i = 0; i<unacceptedQuestsTag.size(); ++i){
-           unacceptedQuests.add(ClosedContractQuest.load(questsTag.getCompound(i),false));
+           unacceptedQuests.add(ClosedContractQuest.load(unacceptedQuestsTag.getCompound(i),false));
         }
-        for(int j = 0; j<questsTag.size(); ++j){
-            ClosedContractQuest q = ClosedContractQuest.load(unacceptedQuestsTag.getCompound(j),true);
+        //accepted quests load
+        for(int j = 0; j<acceptedQuestsTag.size(); ++j){
+            ClosedContractQuest q = ClosedContractQuest.load(acceptedQuestsTag.getCompound(j),true);
             List<ClosedContractQuest> list;
             if(acceptedQuests.containsKey(q.questor)){
                 list = acceptedQuests.get(q.questor);
@@ -105,15 +117,20 @@ public class QuestHandler extends SavedData {
             list.add(q);
             acceptedQuests.put(q.questor,list);
         }
+        //open contracts load
         for(int k = 0; k<openContractQuestsTag.size(); ++k){
             openContractQuests.add(OpenContractQuest.load(openContractQuestsTag.getCompound(k)));
         }
-        /*
-        for(int l = 0; l < dailyMissionsTag.size(); ++l){
-            MissionHandler.dailyMissionList.add(DailyMission.load((CompoundTag)dailyMissionsTag.get(l)));
+        //player rewards load
+        for(int l = 0; l<rewardRegistryTag.size(); ++l){
+            CompoundTag playerTag = rewardRegistryTag.getCompound(l);
+            ListTag rewards = (ListTag)playerTag.get("rewards");
+            List<ItemStack> items = new ArrayList<>();
+            for(int x = 0; x<rewards.size(); ++x){
+                items.add(ItemStack.of(rewards.getCompound(x)));
+            }
+            rewardRegistry.put(playerTag.getUUID("player"),items);
         }
-
-         */
         return new QuestHandler();
     }
     /**
