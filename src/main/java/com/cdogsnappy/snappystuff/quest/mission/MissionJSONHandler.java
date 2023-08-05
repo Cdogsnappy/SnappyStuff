@@ -18,7 +18,6 @@ import java.util.List;
 public class MissionJSONHandler {
     private static final File file = new File("snappystuff/missions.json");
 
-
     public static void init() throws IOException {
         if (!file.exists()) {
             file.createNewFile();
@@ -29,7 +28,6 @@ public class MissionJSONHandler {
             writer.close();
         }
     }
-
     public static void writeMission(DailyMission mission) throws IOException {
         JsonArray el = JsonParser.parseReader(new FileReader(file)).getAsJsonArray();
         el.add(serialize(mission));
@@ -40,7 +38,6 @@ public class MissionJSONHandler {
         writer.flush();
         writer.close();
     }
-
     public static void readDailies() throws FileNotFoundException {
         JsonArray el = JsonParser.parseReader(new FileReader(file)).getAsJsonArray();
         el.forEach((o) -> {
@@ -50,8 +47,6 @@ public class MissionJSONHandler {
 
 
     }
-
-
         public static JsonElement serialize(DailyMission src) {
             JsonObject res = new JsonObject();
             res.addProperty("type", src.mission.missionType.toString());
@@ -83,8 +78,6 @@ public class MissionJSONHandler {
             res.add("rewards", rewards);
             return res;
         }
-
-
         public static DailyMission deserialize(JsonElement json) throws JsonParseException {
             List<DailyReward> rewardList = new ArrayList<>();
             JsonObject obj = json.getAsJsonObject();

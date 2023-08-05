@@ -22,10 +22,8 @@ public class QuestNetwork {
         if (instance == null) {
             throw new IllegalStateException("Attempt to call network getInstance before network is setup");
         }
-
         return instance;
     }
-
     public static void setup(){
         if (instance != null) {
             return;
@@ -53,6 +51,16 @@ public class QuestNetwork {
                 .decoder(PlayerQuestRequestPacket::new)
                 .encoder(PlayerQuestRequestPacket::toBytes)
                 .consumerMainThread(PlayerQuestRequestPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(PlayerRewardRequestPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerRewardRequestPacket::new)
+                .encoder(PlayerRewardRequestPacket::toBytes)
+                .consumerMainThread(PlayerRewardRequestPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(PlayerRewardPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerRewardPacket::new)
+                .encoder(PlayerRewardPacket::toBytes)
+                .consumerMainThread(PlayerRewardPacket::handle)
                 .add();
     }
     public static <MSG> void sendToServer(MSG message) {

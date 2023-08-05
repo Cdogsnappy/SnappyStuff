@@ -28,15 +28,11 @@ public class PlayerQuestPacket {
             playerQuests.add(ClosedContractQuest.load(buf.readNbt(), true));
         }
     }
-
-
     public PlayerQuestPacket(List<ClosedContractQuest> playerQuests, UUID player) {
         this.playerQuests = playerQuests;
         this.amount = playerQuests.size();
         this.player = player;
     }
-
-
 
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeUUID(player);
@@ -45,10 +41,7 @@ public class PlayerQuestPacket {
             buf.writeNbt(ClosedContractQuest.save(new CompoundTag(), q));
         }
         buf.writeInt(quests.size());
-
-
     }
-
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
