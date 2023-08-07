@@ -27,7 +27,6 @@ public class MusicUploadMenu extends AbstractContainerMenu {
     public MusicUploadMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
-
     public MusicUploadMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenus.MUSIC_UPLOAD_MENU.get(), id);
         checkContainerSize(inv, 1);
@@ -53,9 +52,6 @@ public class MusicUploadMenu extends AbstractContainerMenu {
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
-
-
-
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
     // must assign a slot number to each of the slots used by the GUI.
     // For this container, we can see both the tile inventory's slots as well as the player inventory slots and the hotbar.

@@ -1,23 +1,35 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
-import com.cdogsnappy.snappystuff.quest.Quest;
+import com.cdogsnappy.snappystuff.quest.mission.Mission;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import java.util.List;
+
+import net.minecraft.world.item.ItemStack;
+
 
 
 public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> {
+    protected List<Mission> missions;
     private static final ResourceLocation MAIN_TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_create_block_gui.png");
     private int page = 0;
 
     public QuestCreateScreen(QuestCreateMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
+        this.imageWidth = 256;
+        this.imageHeight = 234;
+        this.titleLabelX = 12;
+        this.titleLabelY = 8;
+        this.inventoryLabelX = 22;
+        this.inventoryLabelY = this.imageHeight - 104;
     }
 
     @Override
@@ -63,5 +75,23 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
         public boolean isSelected() { return this.selected; }
         public void setSelected(boolean selected) { this.selected = selected; }
         protected abstract void renderIcon(PoseStack pPoseStack);
+    }
+
+
+
+    public void drawItem(int x, int y, ItemStack is) {
+        this.itemRenderer.blitOffset = 100.0F;
+        this.itemRenderer.renderAndDecorateItem(is, x, y);
+        this.itemRenderer.blitOffset = 0.0F;
+    }
+
+    /**
+     * @author Cdogsnappy
+     * @credit AE2 - Technici4n
+     * @param screen
+     */
+    protected final void switchToScreen(QuestCreateScreen screen) {
+        Minecraft.getInstance().screen = null;
+        Minecraft.getInstance().setScreen(screen);
     }
 }

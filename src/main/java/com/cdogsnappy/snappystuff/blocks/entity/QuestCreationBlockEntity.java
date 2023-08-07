@@ -1,7 +1,7 @@
 package com.cdogsnappy.snappystuff.blocks.entity;
 
 import com.cdogsnappy.snappystuff.blocks.ModEntityBlocks;
-import com.cdogsnappy.snappystuff.screen.QuestAcceptMenu;
+import com.cdogsnappy.snappystuff.screen.QuestCreateMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -36,7 +36,7 @@ public class QuestCreationBlockEntity extends BlockEntity implements MenuProvide
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     protected final ContainerData data;
     public QuestCreationBlockEntity (BlockPos pos, BlockState state) {
-        super (ModEntityBlocks.QUEST_ACCEPT_BLOCK.get(), pos, state);
+        super (ModEntityBlocks.QUEST_CREATE_BLOCK.get(), pos, state);
         this.data = new ContainerData() {
             @Override
             public int get(int p_39284_) {
@@ -57,13 +57,13 @@ public class QuestCreationBlockEntity extends BlockEntity implements MenuProvide
 
     @Override
     public Component getDisplayName() {
-        return Component.literal("Quest Viewer");
+        return Component.literal("Quest Creator");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-        return new QuestAcceptMenu(id, inventory, this, this.data);
+        return new QuestCreateMenu(id, inventory, this, this.data);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class QuestCreationBlockEntity extends BlockEntity implements MenuProvide
         }
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
-    public static void tick(Level level, BlockPos pos, BlockState state, QuestAcceptBlockEntity pEntity) {
+    public static void tick(Level level, BlockPos pos, BlockState state, QuestCreationBlockEntity pEntity) {
         return;
     }
 }

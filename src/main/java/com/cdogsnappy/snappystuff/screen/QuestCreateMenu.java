@@ -1,10 +1,7 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.blocks.ModBlocks;
-import com.cdogsnappy.snappystuff.blocks.entity.MusicUploadBlockEntity;
-import com.cdogsnappy.snappystuff.blocks.entity.QuestAcceptBlockEntity;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.searchtree.SearchRegistry;
+import com.cdogsnappy.snappystuff.blocks.entity.QuestCreationBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,29 +11,37 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
-import org.jetbrains.annotations.Nullable;
 
 public class QuestCreateMenu extends AbstractContainerMenu {
-    public final QuestAcceptBlockEntity blockEntity;
+    public final QuestCreationBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
     private final Inventory playerInventory;
 
-
     public QuestCreateMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(3));
+        this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(5));
     }
 
     public QuestCreateMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenus.QUEST_CREATE_MENU.get(), id);
         checkContainerSize(inv, 5);
-        blockEntity = (QuestAcceptBlockEntity) entity;
+        blockEntity = (QuestCreationBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
+        addRewardSlots();
         addDataSlots(data);
         this.playerInventory = inv;
+    }
+    private void addRewardSlots(){
+        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+            this.addSlot(new SlotItemHandler(handler, 0, 210, 29));
+            this.addSlot(new SlotItemHandler(handler,1,210,47));
+            this.addSlot(new SlotItemHandler(handler,2,210,65));
+            this.addSlot(new SlotItemHandler(handler,3,210,83));
+            this.addSlot(new SlotItemHandler(handler,4,210,101));
+        });
     }
 
     private static final int HOTBAR_SLOT_COUNT = 9;
@@ -85,20 +90,20 @@ public class QuestCreateMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.QUEST_ACCEPT_BLOCK.get());
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.QUEST_CREATE_BLOCK.get());
     }
     //may not need this method because final block should not have an inventory
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 86 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 24 + l * 18, 141 + i * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 144));
+            this.addSlot(new Slot(playerInventory, i, 24 + i * 18, 199));
         }
     }
     public Inventory getPlayerInventory(){
