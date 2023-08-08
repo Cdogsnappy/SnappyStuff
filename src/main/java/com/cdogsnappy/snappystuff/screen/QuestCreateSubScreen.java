@@ -116,4 +116,8 @@ public class QuestCreateSubScreen<C extends QuestCreateMenu, P extends QuestCrea
             drawCenteredString(p_93676_, font, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
         }
     }
+    public void returnToParent(){
+        Minecraft.getInstance().screen = null;
+        Minecraft.getInstance().setScreen(this.parent);
+    }
 }
