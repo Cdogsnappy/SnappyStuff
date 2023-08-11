@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.SearchRegistry;
 import net.minecraft.client.searchtree.SearchTree;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,7 +30,7 @@ public class QuestScreensData {
     public static List<EntityType<?>> entitySearchTokens = new ArrayList<>();
     public static List<Block> blockSearchTokens = new ArrayList<>();
     public static List<String> playerSearchTokens = new ArrayList<>();
-    public static SearchTree<ItemStack> itemSearch = Minecraft.getInstance().getSearchTree(SearchRegistry.CREATIVE_NAMES);
+    public static List<Item> itemSearchTokens = new ArrayList<>();
     public static Quest questAcceptScreenDisplay = null;
     public static List<ClosedContractQuest> playerQuests = null;//Player instanced quests, sent all in one packet so as not to require a packet every time the player move to the next quest.
     public static boolean playerQuestsStale = true;//If the player has accepted or completed quests at any point, the client will mark this true so that it knows to request the player quests again.
@@ -44,6 +45,9 @@ public class QuestScreensData {
         });
         ForgeRegistries.BLOCKS.getValues().stream().forEach((b) -> {
             blockSearchTokens.add(b);
+        });
+        ForgeRegistries.ITEMS.getValues().stream().forEach((i) -> {
+            itemSearchTokens.add(i);
         });
 
 
@@ -61,27 +65,44 @@ public class QuestScreensData {
         filteredTokens = new ArrayList<>();
         switch(type){
             case KILL:
+                if(token == ""){
+                    filteredTokens.addAll(entitySearchTokens);
+                    return;
+                }
                 entitySearchTokens.forEach((s) ->{
                     if(s.getCategory().getName().contains(token) || s.getDescription().getString().contains(token)){
                         filteredTokens.add(s);
                     }
                 });
             case BLOCK:
+                if(token == ""){
+                    filteredTokens.addAll(blockSearchTokens);
+                    return;
+                }
                 blockSearchTokens.forEach((s) ->{
                     if(s.getName().getString().contains(token)){
                         filteredTokens.add(s);
                     }
                 });
             case PLAYERKILL:
+                if(token == ""){
+                    filteredTokens.addAll(playerSearchTokens);
+                    return;
+                }
                 playerSearchTokens.forEach((s) -> {
                     if(s.contains(token)){
                         filteredTokens.add(s);
                     }
                 });
             case COLLECT:
-                filteredTokens.addAll(itemSearch.search(token));
-
-
+                if(token == ""){
+                    filteredTokens.addAll(itemSearchTokens);
+                }
+                itemSearchTokens.forEach((i) -> {
+                    if(i.getDescription().getString().contains(token)){
+                        filteredTokens.add(i);
+                    }
+                });
         }
 
     }
