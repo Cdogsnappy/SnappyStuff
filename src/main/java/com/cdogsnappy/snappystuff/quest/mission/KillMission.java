@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class KillMission extends Mission {
-    public static List<EntityType<?>> entities = Arrays.asList();//Place possible mob targets in this list
     protected EntityType toKill;
     protected int numKills;
     protected int numToKill;
@@ -52,8 +51,6 @@ public class KillMission extends Mission {
         int numKills = tag.getInt("numKills");
         int numToKill = tag.getInt("numToKill");
         boolean complete = tag.getBoolean("complete");
-
         return new KillMission(e,numToKill,numKills,complete);
-
     }
 }

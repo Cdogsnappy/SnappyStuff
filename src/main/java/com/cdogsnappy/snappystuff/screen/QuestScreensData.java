@@ -3,10 +3,13 @@ package com.cdogsnappy.snappystuff.screen;
 import com.cdogsnappy.snappystuff.court.CitizenData;
 import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
 import com.cdogsnappy.snappystuff.quest.Quest;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.SearchRegistry;
 import net.minecraft.client.searchtree.SearchTree;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -41,13 +44,21 @@ public class QuestScreensData {
      */
     public static void init(){
         ForgeRegistries.ENTITY_TYPES.getValues().stream().forEach((e) -> {
-            entitySearchTokens.add(e);
+            if(e.getCategory() != MobCategory.MISC) {
+                entitySearchTokens.add(e);
+            }
         });
+        entitySearchTokens.add(EntityType.VILLAGER);
+        entitySearchTokens.add(EntityType.IRON_GOLEM);
         ForgeRegistries.BLOCKS.getValues().stream().forEach((b) -> {
-            blockSearchTokens.add(b);
+            if (b.asItem().getItemCategory() != null) {
+                blockSearchTokens.add(b);
+            }
         });
         ForgeRegistries.ITEMS.getValues().stream().forEach((i) -> {
-            itemSearchTokens.add(i);
+            if(i.getItemCategory() != null) {
+                itemSearchTokens.add(i);
+            }
         });
 
 
@@ -62,7 +73,7 @@ public class QuestScreensData {
      * @param type marker letting us know which list we are searching in.
      */
     public static void refreshList(String token, ButtonType type){
-        filteredTokens = new ArrayList<>();
+        filteredTokens = Lists.newArrayList();
         switch(type){
             case KILL:
                 if(token == ""){
@@ -80,7 +91,7 @@ public class QuestScreensData {
                     return;
                 }
                 blockSearchTokens.forEach((s) ->{
-                    if(s.getName().getString().contains(token)){
+                    if(s.getName().contains(Component.literal(token))){
                         filteredTokens.add(s);
                     }
                 });

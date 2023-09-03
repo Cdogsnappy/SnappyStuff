@@ -1,15 +1,9 @@
 package com.cdogsnappy.snappystuff.court;
 
 import com.cdogsnappy.snappystuff.network.AvailablePlayersPacket;
-import com.cdogsnappy.snappystuff.network.QuestNetwork;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
+import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.storage.DimensionDataStorage;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +43,7 @@ public class CitizenData implements Serializable {
         if(!citizenRegistry.containsKey(p.getName().getString())){
             citizenRegistry.put(p.getName().getString(),new CitizenData(p));
             citizenNames.add(p.getName().getString());
-            QuestNetwork.sendToAllPlayers(new AvailablePlayersPacket(citizenNames));
+            SnappyNetwork.sendToAllPlayers(new AvailablePlayersPacket(citizenNames));
         }
     }
 

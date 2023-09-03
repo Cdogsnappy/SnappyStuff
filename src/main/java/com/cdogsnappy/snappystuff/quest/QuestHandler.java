@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class QuestHandler extends SavedData {
+public class QuestHandler{
     /**
      * This data is only kept up to date on the server side, if you need to access it on the client side
      * for any reason you'll have to ask the server through a packet.
@@ -27,36 +27,14 @@ public class QuestHandler extends SavedData {
     public static List<ClosedContractQuest> unacceptedQuests = new ArrayList<>();
     public static List<OpenContractQuest> openContractQuests = new ArrayList<>();
     public static HashMap<UUID, List<ClosedContractQuest>> acceptedQuests = new HashMap<>();
-    public static QuestHandler q;
     public static HashMap<UUID,List<ItemStack>> rewardRegistry = new HashMap<>();
-
-    /**
-     * @author Cdogsnappy
-     * retrieves the questlog data from the level
-     * @param level the level to get the data from (OVERWORLD)
-     * @return the dummy QuestHandler instance
-     */
-    public static QuestHandler get(Level level){
-        if(level.isClientSide){
-            throw new RuntimeException("CANNOT SAVE GLOBAL DATA ON CLIENT SIDE");
-        }
-        DimensionDataStorage dataStorage = ((ServerLevel)level).getDataStorage();
-        return q =  dataStorage.computeIfAbsent(QuestHandler::load,QuestHandler::new,"questhandler");
-
-    }
-
-    /**
-     * Called if no questlog data is found, creates empty questlog
-     */
-    public QuestHandler(){q = this;}
 
     /**
      * Writes the entire global questlog to NBT data and saves it to the overworld data
      * @param tag the tag to save the questlog to
      * @return the tag with the questlog saved to it
      */
-    @Override
-    public CompoundTag save(CompoundTag tag) {
+    public static CompoundTag save(CompoundTag tag) {
         ListTag acceptedQuestsTag = new ListTag();
         ListTag unacceptedQuestsTag = new ListTag();
         ListTag openContractQuestsTag = new ListTag();
@@ -95,7 +73,7 @@ public class QuestHandler extends SavedData {
      * @param tag the tag with the questlog
      * @return the QuestHandler dummy instance
      */
-    public static QuestHandler load(CompoundTag tag){
+    public static void load(CompoundTag tag){
         ListTag acceptedQuestsTag = (ListTag)tag.get("acceptedquests");
         ListTag unacceptedQuestsTag = (ListTag)tag.get("unacceptedquests");
         ListTag openContractQuestsTag = (ListTag)tag.get("opencontractquests");
@@ -131,16 +109,7 @@ public class QuestHandler extends SavedData {
             }
             rewardRegistry.put(playerTag.getUUID("player"),items);
         }
-        return new QuestHandler();
     }
-    /**
-     * @author Cdogsnappy
-     * called on server death to tell the server to save the questlog
-     */
-    public static void setQuestsDirty(){
-        q.setDirty();
-    }
-
     /**
      * @author Cdogsnappy
      * Handles all open contract quests, no client side handling required, once the quest is completed it will remove itself and

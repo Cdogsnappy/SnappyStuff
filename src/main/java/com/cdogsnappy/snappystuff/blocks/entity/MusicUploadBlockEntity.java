@@ -139,7 +139,6 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             inv.setItem(i, itemHandler.getStackInSlot(i));
         }
-
         Containers.dropContents(this.level, this.worldPosition, inv);
     }
     private static void uploadSong(RecordItem song){

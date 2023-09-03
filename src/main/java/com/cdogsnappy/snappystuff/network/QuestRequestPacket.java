@@ -1,10 +1,7 @@
 package com.cdogsnappy.snappystuff.network;
 
-import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
-import com.cdogsnappy.snappystuff.quest.OpenContractQuest;
 import com.cdogsnappy.snappystuff.quest.Quest;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
-import com.cdogsnappy.snappystuff.screen.QuestScreensData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -53,7 +50,7 @@ public class QuestRequestPacket {
                 }
             }
             // HERE WE ARE ON THE SERVER!
-            QuestNetwork.sendToPlayer(new QuestAcceptPacket(q), context.getSender());//SENDS THE NEXT QUEST TO DISPLAY
+            SnappyNetwork.sendToPlayer(new QuestAcceptPacket(q), context.getSender());//SENDS THE NEXT QUEST TO DISPLAY
         });
         return true;
     }

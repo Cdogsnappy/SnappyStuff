@@ -1,6 +1,5 @@
 package com.cdogsnappy.snappystuff.network;
 
-import com.cdogsnappy.snappystuff.quest.Quest;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -24,7 +23,7 @@ public class PlayerQuestRequestPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             //HERE WE ARE ON SERVER
-            QuestNetwork.sendToPlayer(new PlayerQuestPacket(QuestHandler.acceptedQuests.get(context.getSender().getUUID()),context.getSender().getUUID()),context.getSender());
+            SnappyNetwork.sendToPlayer(new PlayerQuestPacket(QuestHandler.acceptedQuests.get(context.getSender().getUUID()),context.getSender().getUUID()),context.getSender());
         });
         return true;
     }

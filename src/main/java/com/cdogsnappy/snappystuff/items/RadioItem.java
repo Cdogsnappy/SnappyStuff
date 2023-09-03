@@ -1,7 +1,11 @@
 package com.cdogsnappy.snappystuff.items;
 
+import com.cdogsnappy.snappystuff.network.SnappyNetwork;
+import com.cdogsnappy.snappystuff.network.SoundStopPacketS2C;
+import com.cdogsnappy.snappystuff.network.StandbyResetPacket;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +26,7 @@ public class RadioItem extends Item implements ICurioItem {
      */
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        RadioHandler.listeners.add((Player) slotContext.getWearer());
+        RadioHandler.standbyListeners.add((Player) slotContext.getWearer());
 
     }
 
@@ -34,8 +38,10 @@ public class RadioItem extends Item implements ICurioItem {
      */
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        RadioHandler.listeners.remove((Player) slotContext.getWearer());
-        RadioHandler.playingSounds.remove((Player) slotContext.getWearer());
-        Minecraft.getInstance().getSoundManager().stop(RadioHandler.playingSounds.remove((Player) slotContext.getWearer()));
+        Player p = (Player) slotContext.getWearer();
+        RadioHandler.standbyListeners.remove(p);
+        RadioHandler.listeners.remove(p);
+        SnappyNetwork.sendToPlayer(new StandbyResetPacket(),(ServerPlayer) p);
+        SnappyNetwork.sendToNearbyPlayers(new SoundStopPacketS2C(p.getUUID()),p.position(),p.level.dimension());
     }
 }

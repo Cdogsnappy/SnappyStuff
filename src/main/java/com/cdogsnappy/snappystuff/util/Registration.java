@@ -1,4 +1,4 @@
-package com.cdogsnappy.snappystuff;
+package com.cdogsnappy.snappystuff.util;
 
 import com.cdogsnappy.snappystuff.blocks.ModBlocks;
 import com.cdogsnappy.snappystuff.blocks.ModEntityBlocks;

@@ -1,56 +1,62 @@
 package com.cdogsnappy.snappystuff.radio;
 
 import com.cdogsnappy.snappystuff.items.ModItems;
-import com.cdogsnappy.snappystuff.sounds.SSSoundRegistry;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
+import com.cdogsnappy.snappystuff.network.*;
+import com.cdogsnappy.snappystuff.quest.QuestHandler;
+import com.google.common.collect.Lists;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
-import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Mod.EventBusSubscriber
-public class RadioHandler {
-    public static List<Player> listeners = new ArrayList<Player>();
-    public static List<SoundInfo> musicLocations = new ArrayList<>();
-    public static List<CustomSoundEvent> music = new ArrayList<CustomSoundEvent>();
-    public static List<CustomSoundEvent> casts = new ArrayList<CustomSoundEvent>();
-    public static Map<Player, SoundInstance> playingSounds = new ConcurrentHashMap<Player, SoundInstance>();
+public class RadioHandler{
+    public static List<Entity> listeners = Lists.newArrayList();
+    public static List<Entity> standbyListeners = Lists.newArrayList();
+    public static List<SoundInfo> musicLocations = Lists.newArrayList();
+    public static List<CustomSoundEvent> uploadableMusic = Lists.newArrayList();
+    public static List<CustomSoundEvent> music = Lists.newArrayList();
+    public static List<CustomSoundEvent> casts = Lists.newArrayList();
     static Random rand = new Random();
     static int currentAudioTime = 0;
     static int audioLength = 0;
     static boolean audioPlaying = false;
     static boolean justPlayedMusic = false;
-
-
     /**
      * @author Cdogsnappy
      * runs every tick, keeping track of how far along the radio is in playing a song.
      */
-    public static void onTick(){
-        if(!audioPlaying){
-            playSomething();
-            return;
-        }
-        currentAudioTime++;
-        if(currentAudioTime >= audioLength){
+    public static void onTick(TickEvent.ServerTickEvent event){
+        if(++currentAudioTime >= audioLength){
             audioPlaying = false;
             currentAudioTime = 0;
+            onloadListeners();
+            playSomething();
         }
-
-
+        else if(audioLength - currentAudioTime <= 80){
+            //Send standbyListeners a warning that they can listen to music soon
+            standbyListeners.forEach((e) -> {
+                if(e instanceof Player){
+                    SnappyNetwork.sendToNearbyPlayers(new MusicWarningPacket(e.getUUID()),e.position(),e.level.dimension());
+                }
+            });
+        }
     }
 
     //We don't want phantom listeners
@@ -58,58 +64,71 @@ public class RadioHandler {
     public static void onPlayerLogOff(PlayerEvent.PlayerLoggedOutEvent event){
         Player p = event.getEntity();
             listeners.remove(p);
-            playingSounds.remove(p);
+            standbyListeners.remove(p);
+            SnappyNetwork.sendToPlayer(new StandbyResetPacket(),(ServerPlayer)p);
+            SnappyNetwork.sendToNearbyPlayers(new SoundStopPacketS2C(p.getUUID()),p.position(),p.level.dimension());
+            //REMEMBER TO CLEAR PLAYERS SOUNDMANAGER
     }
 
     //Radio users should still be active on the radio when they relog
-    @SubscribeEvent
     public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event){
         Player p = event.getEntity();
         Optional<SlotResult> radStack = CuriosApi.getCuriosHelper().findFirstCurio(p, ModItems.RADIO.get());//Look for an equipped radio
         if(!radStack.isEmpty()){//If radio is equipped
-            listeners.add(p);
+            standbyListeners.add(p);
         }
     }
-
-    /**
-     * @author Cdogsnappy
-     * runs if nothing is currently playing on the radio; Plays a song if a cast just played, plays a cast if a song just played
-     */
-    public static void playSomething(){
-        playingSounds.clear();
-        List<CustomSoundEvent> toPlay;
-        int nextAudio;
-        if(justPlayedMusic){//Determine from what list of sounds to grab from
-            toPlay = casts;
-            nextAudio = rand.nextInt(casts.size());
-        }
-        else{
-            toPlay = music;
-            nextAudio = rand.nextInt(music.size());
-        }
-        for(Player p : listeners){//Iterate through each player that is actively listening to the radio and create the sound for them.
-            EntityBoundSoundInstance sound = new EntityBoundSoundInstance(toPlay.get(nextAudio).getSound(), SoundSource.RECORDS, 2, 1, p, 1);
-            playingSounds.put(p,sound);
-            Minecraft.getInstance().getSoundManager().play(sound);
-
-        }
-        audioLength = toPlay.get(nextAudio).getTickLength();
-        justPlayedMusic = !justPlayedMusic;
-        audioPlaying = true;
-    }
-
     /**
      * @author Cdogsnappy
      * Loads the uploadable songs into the list of music
      */
     public static void init(){
-        List<RegistryObject<SoundEvent>> sounds = SSSoundRegistry.SOUNDS.getEntries().stream().toList();
-        for(SoundInfo info : musicLocations){
-            music.add(new CustomSoundEvent(sounds.get(info.index).get(),info.lengthInTicks));
+        ForgeRegistries.ITEMS.getValues().forEach((i) -> {
+            if(i instanceof RecordItem){
+                uploadableMusic.add(new CustomSoundEvent(((RecordItem) i).getSound(),((RecordItem) i).getLengthInTicks()));
+            }
+        });
+    }
+    /**
+     * Run when a song ends, we want the standby listeners to start listening to music.
+     */
+    public static void onloadListeners(){
+        listeners.addAll(standbyListeners);
+        standbyListeners.clear();
+    }
+    public static void playSomething(){
+        CustomSoundEvent e;
+        if(justPlayedMusic){
+            e = casts.get(rand.nextInt(casts.size()));
         }
+        else{
+            e = music.get(rand.nextInt(music.size()));
+        }
+        justPlayedMusic = !justPlayedMusic;
+        audioLength = e.tickLength;
+        listeners.forEach((en) -> {
+            SnappyNetwork.sendToNearbyPlayers(new SoundStartPacketS2C(en.getUUID(),e.sound,en.getId()),en.position(),en.level.dimension());
+        });
+
     }
 
-
-
+    public static CompoundTag save(CompoundTag p_77763_) {
+        ListTag tag = new ListTag();
+        music.forEach((m) -> {
+            CompoundTag cTag = new CompoundTag();
+            cTag.putString("re",m.sound.getLocation().toString());
+            cTag.putInt("ticks",m.tickLength);
+            tag.add(cTag);
+        });
+        p_77763_.put("music",tag);
+        return p_77763_;
+    }
+    public static void load(CompoundTag tag) {
+        ListTag lTag = (ListTag)tag.get("music");
+        for(int j = 0; j<lTag.size(); ++j){
+            CompoundTag cTag = (CompoundTag)lTag.get(j);
+            music.add(new CustomSoundEvent(ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.tryParse(cTag.getString("re"))),cTag.getInt("ticks")));
+        }
+    }
 }
 

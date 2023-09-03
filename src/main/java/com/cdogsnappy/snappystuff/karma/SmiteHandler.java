@@ -38,21 +38,6 @@ public class SmiteHandler {
     static Graces[] graces = {Graces.GOLDEN_APPLE,Graces.HUNGER_FILL,Graces.POSITIVE_BUFF};
     static MobEffect[] effects = {MobEffects.ABSORPTION,MobEffects.REGENERATION,MobEffects.DAMAGE_BOOST};
     protected static Random rand = new Random();
-
-    /**
-     * Counts up ticks until a threshold is met and then calls a judge event and updates endorsement cooldowns
-     * @author Cdogsnappy
-     * @param event ServerTickEvent
-     */
-    public static void onTick(TickEvent.ServerTickEvent event){
-        ticks++;
-        if (ticks >= 36000) {
-            SmiteHandler.judge(event.getServer());
-            EndorsementHandler.updateCooldowns(event.getServer());
-            ticks = 0;
-        }
-
-    }
     /**
      * Takes all players and rolls a random chance to judge them. If their karma is negative they are smited and if positive they are
      * graced.

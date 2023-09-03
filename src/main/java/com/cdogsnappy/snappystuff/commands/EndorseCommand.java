@@ -1,23 +1,16 @@
 package com.cdogsnappy.snappystuff.commands;
 
-import com.cdogsnappy.snappystuff.SnappyStuff;
-import com.cdogsnappy.snappystuff.court.CitizenData;
 import com.cdogsnappy.snappystuff.karma.EndorsementHandler;
 import com.cdogsnappy.snappystuff.karma.EndorsementInfo;
-import com.cdogsnappy.snappystuff.network.AvailablePlayersPacket;
-import com.cdogsnappy.snappystuff.network.QuestNetwork;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import org.apache.commons.lang3.ArrayUtils;
 import com.cdogsnappy.snappystuff.karma.Karma;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 import static net.minecraft.commands.arguments.EntityArgument.getPlayer;

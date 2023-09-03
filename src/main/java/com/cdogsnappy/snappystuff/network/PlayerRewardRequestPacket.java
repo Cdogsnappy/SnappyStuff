@@ -20,7 +20,7 @@ public class PlayerRewardRequestPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             //HERE WE ARE ON SERVER
-            QuestNetwork.sendToPlayer(new PlayerRewardPacket(QuestHandler.rewardRegistry.get(context.getSender().getUUID()),context.getSender().getUUID()), context.getSender());
+            SnappyNetwork.sendToPlayer(new PlayerRewardPacket(QuestHandler.rewardRegistry.get(context.getSender().getUUID()),context.getSender().getUUID()), context.getSender());
         });
         return true;
     }

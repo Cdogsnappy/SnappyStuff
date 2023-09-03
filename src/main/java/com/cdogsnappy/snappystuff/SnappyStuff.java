@@ -3,18 +3,22 @@ package com.cdogsnappy.snappystuff;
 import com.cdogsnappy.snappystuff.commands.CommandRegistration;
 import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
-import com.cdogsnappy.snappystuff.network.QuestNetwork;
+import com.cdogsnappy.snappystuff.data.SnappyData;
+import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.mission.MissionJSONHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.*;
+import com.cdogsnappy.snappystuff.spawn.PlayerSpawn;
+import com.cdogsnappy.snappystuff.util.Registration;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -28,6 +32,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
@@ -54,7 +59,9 @@ public class SnappyStuff
          */
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::imcSend);
-        modEventBus.addListener(this::stitch);
+        if(FMLEnvironment.dist == Dist.CLIENT){
+            modEventBus.addListener(this::stitch);
+        }
         // Register the Deferred Register to the mod event bus so blocks get registered
 
         // Register ourselves for server and other game events we are interested in
@@ -67,7 +74,7 @@ public class SnappyStuff
     }
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        QuestNetwork.setup();
+        SnappyNetwork.setup();
         // Some common setup code
         LOGGER.info("HELLO FROM COMMON SETUP");
 
@@ -82,7 +89,7 @@ public class SnappyStuff
         try {
             ServerBirth.readData();
             RadioHandler.init();
-            QuestHandler.get(event.getServer().getLevel(Level.OVERWORLD));
+            SnappyData.get(event.getServer().getLevel(Level.OVERWORLD));
             MissionJSONHandler.init();
             MissionJSONHandler.readDailies();
         }
@@ -93,10 +100,6 @@ public class SnappyStuff
     @SubscribeEvent
     public void imcSend(InterModEnqueueEvent event){
         InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.CHARM.getMessageBuilder().icon(new ResourceLocation("snappystuff:curios/radio_slot")).build());
-    }
-    @SubscribeEvent
-    public void stitch(TextureStitchEvent.Pre event){
-        event.addSprite(new ResourceLocation("snappystuff:curios/radio_slot"));
     }
 
     @SubscribeEvent
@@ -111,8 +114,13 @@ public class SnappyStuff
         catch(IOException e){
             LOGGER.info("FATAL ERROR SAVING KARMA LOGS");
         }
-        QuestHandler.setQuestsDirty();
+        SnappyData.setDataDirty();//We assume data has been changed, it is extremely unlikely that it hasn't.
         MissionHandler.dailyMissionList = new ArrayList<>();
+    }
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public void stitch(TextureStitchEvent.Pre event){
+        event.addSprite(new ResourceLocation("snappystuff:curios/radio_slot"));
     }
 
     @SubscribeEvent

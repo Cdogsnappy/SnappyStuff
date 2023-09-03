@@ -44,8 +44,6 @@ public class MissionJSONHandler {
             JsonObject obj = o.getAsJsonObject();
             MissionHandler.dailyMissionList.add(deserialize(obj));
         });
-
-
     }
         public static JsonElement serialize(DailyMission src) {
             JsonObject res = new JsonObject();
@@ -106,4 +104,3 @@ public class MissionJSONHandler {
             return new DailyMission(mission,rewardList);
         }
     }
-
