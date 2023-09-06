@@ -155,6 +155,14 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
         int y = (height - imageHeight) / 2;
         this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
         if(isSearching){
+            searchButtons.forEach((b) ->{
+                b.x = HIDDEN_POS;
+                b.y = HIDDEN_POS;
+            });
+            playerSearchButtons.forEach((b) -> {
+                b.x = HIDDEN_POS;
+                b.y = HIDDEN_POS;
+            });
             if(searchBox.isChanged()){
                 QuestScreensData.refreshList(searchBox.currString,currentSearchMenu);
             }
@@ -166,6 +174,7 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
                     renderEntity(pPoseStack);
                     break;
                 case PLAYERKILL:
+                    renderPlayerButtonSymbols();
                     break;
                 default:
                     break;
@@ -198,10 +207,6 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
         Lighting.setupFor3DItems();
     }
     private void renderPlayerButtonSymbols(){
-        playerSearchButtons.forEach((b) -> {
-            b.x = HIDDEN_POS;
-            b.y = HIDDEN_POS;
-        });
         for(int j = 0; j < 8; ++j){
             if(j+8*page >= QuestScreensData.filteredTokens.size()){
                 return;
@@ -216,10 +221,6 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
 
     }
     private void renderButtonSymbols(){
-        searchButtons.forEach((b) ->{
-            b.x = HIDDEN_POS;
-            b.y = HIDDEN_POS;
-        });
         for(int j = 0; j < 5; ++j){
             for(int i = 0; i < 8; ++i){
                 if(((j*8)+i + (40*page)) >= QuestScreensData.filteredTokens.size()){

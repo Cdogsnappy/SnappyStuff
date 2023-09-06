@@ -12,7 +12,6 @@ import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
-import com.cdogsnappy.snappystuff.spawn.PlayerSpawn;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
@@ -50,7 +49,6 @@ public class Handlers {
         if(event.getEntity().level.isClientSide){
             return;
         }
-        PlayerSpawn.onPlayerJoin(event.getEntity());
         CitizenData.onPlayerJoin(event.getEntity());
         Karma.playerCheck(event);
         KarmaLog.onPlayerJoin(event.getEntity());
@@ -69,7 +67,6 @@ public class Handlers {
         if(event.getEntity().level.isClientSide){
             return;
         }
-        PlayerSpawn.onPlayerSpawn((ServerPlayer) event.getEntity());
         DivineFruitItem.updateDivineHealth(event.getEntity());
         Karma.playerCheck(event);
     }

@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "snappystuff:floating_island",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 1642134697,
+    "spacing": 10,
+    "separation": 6,
+    "type": "minecraft:random_spread"
+  }
+}

@@ -13,9 +13,6 @@ public class CommandRegistration {
         LogCrimeCommand.register(builder);
         CreateCollectMissionCommand.register(builder,e.getBuildContext());
         CreateBlockMissionCommand.register(builder,e.getBuildContext());
-        AddCustomSpawnCommand.register(builder);
-        RemoveCustomSpawnCommand.register(builder);
-        RerollCustomSpawnsCommand.register(builder);
         e.getDispatcher().register(builder);
     }
 }

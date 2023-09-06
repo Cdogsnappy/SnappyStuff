@@ -48,8 +48,8 @@ public class QuestScreensData {
                 entitySearchTokens.add(e);
             }
         });
-        entitySearchTokens.add(EntityType.VILLAGER);
-        entitySearchTokens.add(EntityType.IRON_GOLEM);
+        entitySearchTokens.add(EntityType.VILLAGER);//In the MISC category for some reason...
+        entitySearchTokens.add(EntityType.IRON_GOLEM);//^^^
         ForgeRegistries.BLOCKS.getValues().stream().forEach((b) -> {
             if (b.asItem().getItemCategory() != null) {
                 blockSearchTokens.add(b);
@@ -76,27 +76,27 @@ public class QuestScreensData {
         filteredTokens = Lists.newArrayList();
         switch(type){
             case KILL:
-                if(token == ""){
+                if(token.equals("")){
                     filteredTokens.addAll(entitySearchTokens);
                     return;
                 }
                 entitySearchTokens.forEach((s) ->{
-                    if(s.getCategory().getName().contains(token) || s.getDescription().getString().contains(token)){
+                    if(s.toString().contains(token)){
                         filteredTokens.add(s);
                     }
                 });
             case BLOCK:
-                if(token == ""){
+                if(token.equals("")){
                     filteredTokens.addAll(blockSearchTokens);
                     return;
                 }
                 blockSearchTokens.forEach((s) ->{
-                    if(s.getName().contains(Component.literal(token))){
+                    if(s.toString().contains(token)){
                         filteredTokens.add(s);
                     }
                 });
             case PLAYERKILL:
-                if(token == ""){
+                if(token.equals("")){
                     filteredTokens.addAll(playerSearchTokens);
                     return;
                 }
@@ -106,11 +106,11 @@ public class QuestScreensData {
                     }
                 });
             case COLLECT:
-                if(token == ""){
+                if(token.equals("")){
                     filteredTokens.addAll(itemSearchTokens);
                 }
                 itemSearchTokens.forEach((i) -> {
-                    if(i.getDescription().getString().contains(token)){
+                    if(i.toString().contains(token)){
                         filteredTokens.add(i);
                     }
                 });
