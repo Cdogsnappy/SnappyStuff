@@ -4,8 +4,6 @@ import com.cdogsnappy.snappystuff.SnappyStuff;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkDirection;
@@ -44,10 +42,10 @@ public class SnappyNetwork {
 
         INSTANCE = net;
 
-        INSTANCE.messageBuilder(QuestAcceptPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(QuestAcceptPacket::new)
-                .encoder(QuestAcceptPacket::toBytes)
-                .consumerMainThread(QuestAcceptPacket::handle)
+        INSTANCE.messageBuilder(QuestScreenPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(QuestScreenPacket::new)
+                .encoder(QuestScreenPacket::toBytes)
+                .consumerMainThread(QuestScreenPacket::handle)
                 .add();
         INSTANCE.messageBuilder(QuestRequestPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(QuestRequestPacket::new)
@@ -108,6 +106,11 @@ public class SnappyNetwork {
                 .decoder(SoundStartPacketS2C::new)
                 .encoder(SoundStartPacketS2C::toBytes)
                 .consumerMainThread(SoundStartPacketS2C::handle)
+                .add();
+        INSTANCE.messageBuilder(QuestCreatePacket.class,++id,NetworkDirection.PLAY_TO_SERVER)
+                .decoder(QuestCreatePacket::new)
+                .encoder(QuestCreatePacket::toBytes)
+                .consumerMainThread(QuestCreatePacket::handle)
                 .add();
 
     }

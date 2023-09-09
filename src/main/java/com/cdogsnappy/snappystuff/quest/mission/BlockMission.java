@@ -10,30 +10,22 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class BlockMission extends Mission implements Serializable {
-    protected Block toBreak;
-    protected UUID player;
-    protected int numToBreak;
+    public Block toBreak;
+    public int numToBreak;
     protected int numBroken = 0;
     protected boolean complete;
+
 
     public BlockMission(Block block, int numToBreak){
         this.missionType = Type.BLOCK;
         this.toBreak = block;
         this.numToBreak = numToBreak;
-    }
-
-    public BlockMission(Block block,UUID questor, int numToBreak){
-        this.missionType = Type.BLOCK;
-        this.toBreak = block;
-        this.player = questor;
-        this.numToBreak = numToBreak;
         this.complete = false;
 
     }
-    public BlockMission(Block block, UUID questor, int numToBreak, int numBroken, boolean complete){
+    public BlockMission(Block block, int numToBreak, int numBroken, boolean complete){
         this.missionType = Type.BLOCK;
         this.toBreak = block;
-        this.player = questor;
         this.numToBreak = numToBreak;
         this.numBroken = numBroken;
         this.complete = complete;
@@ -52,7 +44,6 @@ public class BlockMission extends Mission implements Serializable {
     public CompoundTag save(CompoundTag tag){
         tag.putInt("type",1);
         tag.putString("block", Registry.BLOCK.getKey(toBreak).toString());
-        tag.putUUID("id", player);
         tag.putInt("numToBreak", numToBreak);
         tag.putInt("numBroken", numBroken);
         tag.putBoolean("complete", complete);
@@ -60,11 +51,10 @@ public class BlockMission extends Mission implements Serializable {
     }
     public static BlockMission load(CompoundTag tag){
         Block toBreak = ForgeRegistries.BLOCKS.getValue(ResourceLocation.tryParse(tag.getString("block")));
-        UUID player = tag.getUUID("id");
         int numToBreak = tag.getInt("numToBreak");
         int numBroken = tag.getInt("numBroken");
         boolean complete = tag.getBoolean("complete");
-        return new BlockMission(toBreak,player,numToBreak,numBroken,complete);
+        return new BlockMission(toBreak,numToBreak,numBroken,complete);
     }
 
 }

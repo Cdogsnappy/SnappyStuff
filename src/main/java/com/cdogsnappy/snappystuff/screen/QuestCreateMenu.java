@@ -18,6 +18,7 @@ public class QuestCreateMenu extends AbstractContainerMenu {
     private final ContainerData data;
     private final Inventory playerInventory;
 
+
     public QuestCreateMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(5));
     }
@@ -108,5 +109,10 @@ public class QuestCreateMenu extends AbstractContainerMenu {
     }
     public Inventory getPlayerInventory(){
         return playerInventory;
+    }
+    public void clearRewardSlots(){
+        for(int i = 0; i < 5; ++i){
+            this.slots.get(i).set(ItemStack.EMPTY);
+        }
     }
 }

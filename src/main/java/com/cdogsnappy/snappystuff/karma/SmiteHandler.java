@@ -23,7 +23,6 @@ import java.util.Random;
 @Mod.EventBusSubscriber
 public class SmiteHandler {
     public static double threshold = .0053333;
-    static int ticks = 0;
     enum Wraths{
         FIRE,
         LIGHTNING,
@@ -36,7 +35,7 @@ public class SmiteHandler {
     }
     static Wraths[] wraths = {Wraths.FIRE,Wraths.LIGHTNING,Wraths.FAMINE};
     static Graces[] graces = {Graces.GOLDEN_APPLE,Graces.HUNGER_FILL,Graces.POSITIVE_BUFF};
-    static MobEffect[] effects = {MobEffects.ABSORPTION,MobEffects.REGENERATION,MobEffects.DAMAGE_BOOST};
+    static MobEffect[] effects = {MobEffects.ABSORPTION,MobEffects.REGENERATION,MobEffects.DAMAGE_BOOST,MobEffects.MOVEMENT_SPEED};
     protected static Random rand = new Random();
     /**
      * Takes all players and rolls a random chance to judge them. If their karma is negative they are smited and if positive they are

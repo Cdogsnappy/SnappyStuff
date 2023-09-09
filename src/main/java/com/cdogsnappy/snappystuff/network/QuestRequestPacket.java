@@ -50,7 +50,7 @@ public class QuestRequestPacket {
                 }
             }
             // HERE WE ARE ON THE SERVER!
-            SnappyNetwork.sendToPlayer(new QuestAcceptPacket(q), context.getSender());//SENDS THE NEXT QUEST TO DISPLAY
+            SnappyNetwork.sendToPlayer(new QuestScreenPacket(q), context.getSender());//SENDS THE NEXT QUEST TO DISPLAY
         });
         return true;
     }

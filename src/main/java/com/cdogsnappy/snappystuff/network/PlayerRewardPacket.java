@@ -31,7 +31,7 @@ public class PlayerRewardPacket {
     public void toBytes(FriendlyByteBuf buf) {
         CompoundTag tag = new CompoundTag();
         ListTag rewardList = new ListTag();
-        List<ItemStack> rewards = QuestHandler.rewardRegistry.get(player);
+        List<ItemStack> rewards = QuestHandler.playerQuestData.get(player).rewards;
         rewards.forEach((i) -> {
             rewardList.add(i.save(new CompoundTag()));
         });

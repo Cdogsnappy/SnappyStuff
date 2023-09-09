@@ -5,7 +5,9 @@ import net.minecraft.world.level.saveddata.SavedData;
 
 import java.io.Serializable;
 
-public class Mission extends SavedData implements IMission, Serializable {
+public class Mission implements IMission{
+
+    public Type missionType;
     @Override
     public boolean isComplete() {
         return false;
@@ -47,5 +49,4 @@ public class Mission extends SavedData implements IMission, Serializable {
         BLOCK,
         KILL_PLAYER
     }
-    Type missionType;
 }

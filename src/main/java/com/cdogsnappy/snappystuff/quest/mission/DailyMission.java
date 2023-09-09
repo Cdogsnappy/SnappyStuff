@@ -6,9 +6,9 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DailyMission extends Mission {
-
     public List<DailyReward> rewards;
     public Mission mission;
     public DailyMission(Mission mission, List<DailyReward> rewards){

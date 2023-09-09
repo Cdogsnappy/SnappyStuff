@@ -1,6 +1,7 @@
 package com.cdogsnappy.snappystuff.quest;
 
 import com.cdogsnappy.snappystuff.quest.mission.PlayerKillMission;
+import com.google.common.collect.Lists;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
@@ -55,8 +56,6 @@ public class OpenContractQuest extends Quest{
     }
 
     public void distributeRewards(Player murderer) {
-        for(int j = 0; j<this.rewards.size(); ++j){
-            murderer.getInventory().add(this.rewards.get(j));
-        }
+        QuestHandler.playerQuestData.get(murderer).rewards.addAll(this.rewards);
     }
 }

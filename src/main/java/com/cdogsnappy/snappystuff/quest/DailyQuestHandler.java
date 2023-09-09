@@ -70,7 +70,7 @@ public class DailyQuestHandler {
     public static List<ItemStack> coalesceRewards(List<DailyMission> missions){
         List<ItemStack> res = new ArrayList<>();
         List<DailyReward> rewards = new ArrayList<>();
-        missions.forEach((m) ->{
+        missions.forEach((m) -> {
             rewards.addAll(m.rewards);
         });
         /**
@@ -80,7 +80,7 @@ public class DailyQuestHandler {
             final int[] min = new int[1];
             final int[] max = new int[1];
             Item i = m.rewards.remove(0).reward;
-            rewards.forEach((r) ->{
+            rewards.forEach((r) -> {
                 if(r.reward == i){
                     min[0] = min[0] + r.minPay;
                     max[0] = max[0] + r.maxPay;

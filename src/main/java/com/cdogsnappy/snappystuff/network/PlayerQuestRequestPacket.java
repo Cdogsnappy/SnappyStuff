@@ -23,7 +23,7 @@ public class PlayerQuestRequestPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             //HERE WE ARE ON SERVER
-            SnappyNetwork.sendToPlayer(new PlayerQuestPacket(QuestHandler.acceptedQuests.get(context.getSender().getUUID()),context.getSender().getUUID()),context.getSender());
+            SnappyNetwork.sendToPlayer(new PlayerQuestPacket(QuestHandler.playerQuestData.get(context.getSender().getUUID()).acceptedQuests,context.getSender().getUUID()),context.getSender());
         });
         return true;
     }

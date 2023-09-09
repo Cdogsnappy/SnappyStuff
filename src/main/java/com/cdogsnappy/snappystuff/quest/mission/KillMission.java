@@ -9,9 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class KillMission extends Mission {
-    protected EntityType toKill;
-    protected int numKills;
-    protected int numToKill;
+    public EntityType toKill;
+    public int numKills;
+    public int numToKill;
     protected boolean complete = false;
     public KillMission(EntityType mob, int num){
         missionType = Type.KILL;

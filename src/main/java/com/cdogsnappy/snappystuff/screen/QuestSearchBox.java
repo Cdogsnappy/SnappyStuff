@@ -3,6 +3,7 @@ package com.cdogsnappy.snappystuff.screen;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 
@@ -18,10 +19,18 @@ public class QuestSearchBox extends EditBox {
 
     protected boolean isChanged(){
         if(currString.equals(this.getValue())){
-            return true;
+            return false;
         }
         currString = this.getValue();
-        return false;
+        return true;
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers){
+        if (super.keyPressed(keyCode, scanCode, modifiers)) {
+            return true;
+        }
+        return isFocused() && canConsumeInput() && keyCode != GLFW.GLFW_KEY_TAB && keyCode != GLFW.GLFW_KEY_ESCAPE;
     }
 
 

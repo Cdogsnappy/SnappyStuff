@@ -3,6 +3,7 @@ package com.cdogsnappy.snappystuff.quest;
 import com.cdogsnappy.snappystuff.quest.mission.IMission;
 import com.cdogsnappy.snappystuff.quest.mission.Mission;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
+import com.google.common.collect.Lists;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class ClosedContractQuest extends Quest{
-
     protected UUID questor;//Player who has accepted quest
     protected List<Mission> missions;
     public ClosedContractQuest(List<Mission> missions, List<ItemStack> rewards, UUID requestor, QuestType type){
@@ -38,15 +38,9 @@ public class ClosedContractQuest extends Quest{
         this.questor = player.getUUID();
         QuestHandler.unacceptedQuests.remove(this);
         List<ClosedContractQuest> quests;
-        if(QuestHandler.acceptedQuests.containsKey(player.getUUID())){
-            quests = QuestHandler.acceptedQuests.get(this.questor);
-            quests.add(this);
-        }
-        else{
-            quests = new ArrayList<>();
-            quests.add(this);
-        }
-        QuestHandler.acceptedQuests.put(this.questor, quests);
+        quests = QuestHandler.playerQuestData.get(this.questor).acceptedQuests;
+        quests.add(this);
+        QuestHandler.playerQuestData.get(this.questor).acceptedQuests = quests;
     }
     public boolean isComplete(){
         for(IMission mission : missions){
@@ -59,7 +53,7 @@ public class ClosedContractQuest extends Quest{
 
     /**
      * @author Cdogsnappy
-     * Saves converts a quest into NBT data and returns it
+     * Converts a quest into NBT data and returns it
      * @param tag the tag to save the quest to
      * @param q the quest to save
      * @return the tag with the quest saved to it
@@ -76,7 +70,9 @@ public class ClosedContractQuest extends Quest{
         }
         if(q.questor != null) {
             tag.putUUID("questor", q.questor);
+            tag.putBoolean("accepted",true);
         }
+        else{tag.putBoolean("accepted",false);}
         if(q.type == QuestType.PLAYER) {
             tag.putInt("type", 0);
         }
@@ -94,8 +90,7 @@ public class ClosedContractQuest extends Quest{
      * Given a tag with a quest saved to it, rebuild the quest
      * @param tag the tag with the quest on it
      */
-    public static ClosedContractQuest load(CompoundTag tag, boolean accepted) {
-
+    public static ClosedContractQuest load(CompoundTag tag) {
         UUID requestor = tag.getUUID("requestor");
         List<Mission> missions = new ArrayList<>();
         List<ItemStack> rewards = new ArrayList<>();
@@ -112,14 +107,28 @@ public class ClosedContractQuest extends Quest{
             case 1 -> QuestType.DAILY;
             default -> throw new IllegalStateException("Unexpected value: " + tag.getInt("type"));
         };
-        if(accepted) {
+        if(tag.getBoolean("accepted")) {
             UUID player = tag.getUUID("questor");
-            MissionHandler.loadMissions(missions, player);
             return new ClosedContractQuest(missions, rewards, requestor, player, type);
         }
         else{
             return new ClosedContractQuest(missions, rewards, requestor, type);
         }
+    }
+
+    public void attemptFinishQuest(){
+        if(!(this.isComplete()) || this.questor == null){//Should never be called on a quest that is unaccepted, but you never know.
+            return;
+        }
+        List<ClosedContractQuest> currQuests = QuestHandler.playerQuestData.get(this.questor).acceptedQuests;
+        currQuests.remove(this);
+        QuestHandler.playerQuestData.get(this.questor).acceptedQuests = currQuests;
+        distributeRewards();
+    }
+    public void distributeRewards(){
+        List<ItemStack> rewards = QuestHandler.playerQuestData.get(this.questor).rewards;
+        rewards.addAll(this.rewards);
+        QuestHandler.playerQuestData.get(this.questor).rewards = rewards;
     }
 
 

@@ -68,7 +68,7 @@ public class DivineFruitItem extends Item{
      */
     public static void updateDivineHealth(Player player){
         player.getAttribute(Attributes.MAX_HEALTH).removePermanentModifier(divineModifier);
-        if(Karma.getScore(player.getUUID()) <= 0){
+        if(Karma.getScore(player.getUUID()) <= 20){
             return;
         }
         player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(divineModifier,"divine_fruit.health",

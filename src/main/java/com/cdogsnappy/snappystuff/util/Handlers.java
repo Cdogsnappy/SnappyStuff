@@ -8,6 +8,7 @@ import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
 import com.cdogsnappy.snappystuff.network.AvailablePlayersPacket;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;
+import com.cdogsnappy.snappystuff.quest.QuestData;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
@@ -46,9 +47,7 @@ public class Handlers {
      */
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
-        if(event.getEntity().level.isClientSide){
-            return;
-        }
+        if(event.getEntity().level.isClientSide){return;}
         CitizenData.onPlayerJoin(event.getEntity());
         Karma.playerCheck(event);
         KarmaLog.onPlayerJoin(event.getEntity());
@@ -56,6 +55,7 @@ public class Handlers {
         DivineFruitItem.updateDivineHealth(event.getEntity());
         SnappyNetwork.sendToPlayer(new AvailablePlayersPacket(CitizenData.citizenNames),(ServerPlayer)event.getEntity());
         RadioHandler.onPlayerLogIn(event);
+        QuestHandler.playerQuestData.computeIfAbsent(event.getEntity().getUUID(), k -> new QuestData());
     }
 
     /**

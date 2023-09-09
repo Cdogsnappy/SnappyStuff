@@ -1,6 +1,11 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
+import com.cdogsnappy.snappystuff.network.QuestAcceptPacket;
+import com.cdogsnappy.snappystuff.network.QuestScreenPacket;
+import com.cdogsnappy.snappystuff.network.SnappyNetwork;
+import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
+import com.cdogsnappy.snappystuff.quest.Quest;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -8,7 +13,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,7 +25,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestAcceptScreen extends AbstractContainerScreen<QuestAcceptMenu> {
+public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_accept_block_gui.png");
     private final int verticalPadding = 7;
     private final int horizontalPadding = 9;
@@ -31,6 +35,7 @@ public class QuestAcceptScreen extends AbstractContainerScreen<QuestAcceptMenu> 
     private final boolean playTurnSound = true;
     private int currentPage = 0;
     private ArrayList<String> temp;
+    private Quest q;
     private final List<QuestAcceptScreen.QuestButtons> buttonList = Lists.newArrayList();
     public QuestAcceptScreen(QuestAcceptMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
@@ -137,6 +142,7 @@ public class QuestAcceptScreen extends AbstractContainerScreen<QuestAcceptMenu> 
             super(x, y, 90, 220, CommonComponents.GUI_DONE);
         }
         public void onPress() {
+            SnappyNetwork.sendToServer(new QuestAcceptPacket((ClosedContractQuest)q));
             //Send packets
             QuestAcceptScreen.this.minecraft.player.closeContainer();
         }

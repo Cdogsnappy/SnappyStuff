@@ -1,5 +1,6 @@
 package com.cdogsnappy.snappystuff.commands;
 
+import com.cdogsnappy.snappystuff.quest.Quest;
 import com.cdogsnappy.snappystuff.quest.mission.*;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -64,7 +65,7 @@ public class CreateCollectMissionCommand {
             }
             List<DailyReward> rewards = new ArrayList<>();
             rewards.add(new DailyReward(item.getItem(),min,max));
-            DailyMission mission = new DailyMission(new CollectMission(new ItemStack(toCollect,amount)), rewards);
+            DailyMission mission = new DailyMission(new CollectMission(new ItemStack(toCollect), amount, Quest.radiantID), rewards);
             MissionJSONHandler.writeMission(mission);
             MissionHandler.dailyMissionList.add(mission);
             c.getSource().sendSuccess(Component.literal("Successfully wrote mission to quest system."), false);

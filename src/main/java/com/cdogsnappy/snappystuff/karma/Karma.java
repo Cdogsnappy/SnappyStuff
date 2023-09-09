@@ -67,7 +67,9 @@ public class Karma{
      * @param player the player whose karma value has changed
      */
     public static void onKarmaUpdate(Player player){
+
         DivineFruitItem.updateDivineHealth(player);
+        updateHealth(player.getUUID());
     }
 
     /**
@@ -118,6 +120,11 @@ public class Karma{
         i.playersEndorsed[ArrayUtils.indexOf(i.playersEndorsed,null)] = new EndorsementInfo(reid);
         i.numEndorsed++;
         karmaScores.put(seid,i);
+    }
+    public static void updateHealth(UUID id){
+        KarmaPlayerInfo i = karmaScores.get(id);
+        i.health = (float)Math.pow(i.score,.45)*(i.score/Math.abs(i.score));
+        karmaScores.put(id,i);
     }
     public static void setKarmaInfo(UUID id, KarmaPlayerInfo info){karmaScores.put(id,info);}
     public static float getHealth(UUID id){

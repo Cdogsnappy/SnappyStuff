@@ -5,34 +5,36 @@ import net.minecraft.nbt.CompoundTag;
 import java.util.UUID;
 
 public class PlayerKillMission extends Mission {
-    protected UUID toKill;
-    protected UUID hitman;
+    public UUID toKill;
+    public String player;
     protected boolean complete = false;
-    public PlayerKillMission(UUID toKill) {
+    public PlayerKillMission(UUID toKill, String player) {
         this.missionType = Type.KILL_PLAYER;
         this.toKill = toKill;
+        this.player = player;
     }
-    public PlayerKillMission(UUID toKill, UUID hitman, boolean complete){
+    public PlayerKillMission(UUID toKill, String name, boolean complete){
         this.missionType = Type.KILL_PLAYER;
         this.toKill = toKill;
-        this.hitman = hitman;
+        this.player = name;
+        this.complete = complete;
     }
     public boolean completeMission(){return complete = true;}
     public boolean isComplete(){return complete;}
     public UUID getTarget(){return toKill;}
-
     @Override
     public CompoundTag save(CompoundTag tag){
         tag.putInt("type",3);
         tag.putUUID("toKill",toKill);
-        tag.putUUID("hitman",hitman);
         tag.putBoolean("complete",complete);
+        tag.putString("name",player);
         return tag;
     }
     public static PlayerKillMission load(CompoundTag tag){
         UUID toKill = tag.getUUID("toKill");
-        UUID hitman = tag.getUUID("hitman");
+        UUID hitman = null;
         boolean complete = tag.getBoolean("complete");
-        return new PlayerKillMission(toKill,hitman,complete);
+        String player = tag.getString("name");
+        return new PlayerKillMission(toKill, player, complete);
     }
 }

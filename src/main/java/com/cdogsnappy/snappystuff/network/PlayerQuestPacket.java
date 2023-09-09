@@ -27,7 +27,7 @@ public class PlayerQuestPacket {
         playerQuests = new ArrayList<>();
         ListTag quests = (ListTag)tag.get("quests");
         for(int j = 0; j < quests.size(); ++j){
-            playerQuests.add(ClosedContractQuest.load(quests.getCompound(j), true));
+            playerQuests.add(ClosedContractQuest.load(quests.getCompound(j)));
         }
     }
     public PlayerQuestPacket(List<ClosedContractQuest> playerQuests, UUID player) {
@@ -38,7 +38,7 @@ public class PlayerQuestPacket {
     public void toBytes(FriendlyByteBuf buf) {
         CompoundTag tag = new CompoundTag();
         tag.putUUID("player",player);
-        List<ClosedContractQuest> quests = QuestHandler.acceptedQuests.get(player);
+        List<ClosedContractQuest> quests = QuestHandler.playerQuestData.get(player).acceptedQuests;
         ListTag questTag = new ListTag();
         quests.forEach((q) -> {
             questTag.add(ClosedContractQuest.save(new CompoundTag(),q));

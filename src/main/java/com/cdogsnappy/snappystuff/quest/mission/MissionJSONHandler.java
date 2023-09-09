@@ -1,5 +1,6 @@
 package com.cdogsnappy.snappystuff.quest.mission;
 
+import com.cdogsnappy.snappystuff.quest.Quest;
 import com.cdogsnappy.snappystuff.quest.mission.DailyMission;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.google.gson.*;
@@ -59,7 +60,7 @@ public class MissionJSONHandler {
                     break;
                 case COLLECT:
                     res.addProperty("target", ForgeRegistries.ITEMS.getKey(((CollectMission) src.mission).toCollect.getItem()).toString());
-                    res.addProperty("amount", ((CollectMission) src.mission).toCollect.getCount());
+                    res.addProperty("amount", ((CollectMission) src.mission).numToCollect);
                     break;
                 default:
                     break;
@@ -95,7 +96,7 @@ public class MissionJSONHandler {
                     mission = new BlockMission(ForgeRegistries.BLOCKS.getValue(ResourceLocation.tryParse(target)),count);
                     break;
                 case "COLLECT":
-                    mission = new CollectMission(new ItemStack(ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(target)),count));
+                    mission = new CollectMission(new ItemStack(ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(target))),count, Quest.radiantID);
                     break;
                 default:
                     mission = null;

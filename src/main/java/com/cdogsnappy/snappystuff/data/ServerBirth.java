@@ -1,6 +1,7 @@
 package com.cdogsnappy.snappystuff.data;
 
 import com.cdogsnappy.snappystuff.court.CitizenData;
+import com.cdogsnappy.snappystuff.court.ClientCitizenData;
 import com.cdogsnappy.snappystuff.court.CourtCase;
 import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.SnappyStuff;
@@ -45,7 +46,7 @@ public class ServerBirth {
                 else{Karma.init();}
                 if(serverData.containsKey("citizens")){
                     CitizenData.citizenRegistry =(HashMap<String,CitizenData>)serverData.get("citizens");
-                    CitizenData.citizenNames = (List<String>)serverData.get("citizenNames");
+                    CitizenData.citizenNames = (List<ClientCitizenData>)serverData.get("citizenNames");
                 }
                 if(serverData.containsKey("cases")){
                     CourtCase.caseArchive = (HashMap<Integer, CourtCase>)serverData.get("cases");

@@ -1,59 +1,41 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
+import com.cdogsnappy.snappystuff.court.CitizenData;
+import com.cdogsnappy.snappystuff.court.ClientCitizenData;
+import com.cdogsnappy.snappystuff.network.QuestCreatePacket;
+import com.cdogsnappy.snappystuff.network.SnappyNetwork;
+import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
 import com.cdogsnappy.snappystuff.quest.Quest;
-import com.cdogsnappy.snappystuff.quest.mission.BlockMission;
-import com.cdogsnappy.snappystuff.quest.mission.CollectMission;
-import com.cdogsnappy.snappystuff.quest.mission.Mission;
-import com.mojang.blaze3d.platform.Lighting;
+import com.cdogsnappy.snappystuff.quest.mission.*;
+import com.cdogsnappy.snappystuff.util.ClientEntityCache;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
+import java.util.UUID;
 import com.google.common.collect.Lists;
-
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-
-import com.cdogsnappy.snappystuff.screen.QuestScreensData;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
-
-import javax.swing.text.html.parser.Entity;
-
 import static com.cdogsnappy.snappystuff.screen.QuestScreensData.ButtonType.*;
-
-
-public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> {
-    private static final Logger LOGGER = LogUtils.getLogger();
+public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
     private ResourceLocation MAIN_TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_create_block_gui.png");
-    private List<AbstractButton> editButtons = Lists.newArrayList();
+    private final List<AbstractButton> editButtons = Lists.newArrayList();
     private int page = 0;
     private int numPages = 0;
-    private int count = 1;
-    private static final int HIDDEN_POS = 9999;
     private Object selectedObject;
     private int editingMission = 0;
     private boolean isSearching = false;
@@ -62,6 +44,8 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
     private QuestScreensData.ButtonType currentSearchMenu = COLLECT;
     private PageButton prevButton;
     private PageButton nextButton;
+    private Button createQuestButton;
+    private PageButton backButton;
     private List<Button> missionTypeButtons;
     private QuestSearchBox searchBox;
     private NumberBox numberBox;
@@ -82,54 +66,55 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
     protected void init() {
         QuestScreensData.refreshList("",COLLECT);
         super.init();
-        editButtons.add(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 26,27,13,Component.literal("EDIT"),this));
-        editButtons.add(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 66,27,13,Component.literal("EDIT"),this));
-        editButtons.add(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 105,27,13, Component.literal("EDIT"),this));
-        this.editButtons.forEach((b) ->{
-            this.addRenderableWidget(b);
-        });
-        for(int j = 0; j<40; ++j){
-            searchButtons.add(new ObjectSelectButton(HIDDEN_POS,HIDDEN_POS,18,18, null, this));
+        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 26,27,13,Component.literal("EDIT"),this, 0)));
+        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 66,27,13,Component.literal("EDIT"),this, 1)));
+        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 105,27,13, Component.literal("EDIT"),this, 2)));
+        for(int j = 0; j < 5; ++j){
+            for(int i = 0; i < 8; ++i) {
+                searchButtons.add(this.addRenderableWidget(new ObjectSelectButton(this.leftPos + 30 + 18*i,this.topPos + 32 + 18*j, 18, 18, null, this)));
+                searchButtons.get((j*8)+i).visible = false;
+            }
         }
-        searchButtons.forEach((b) ->{
-            this.addRenderableWidget(b);
-        });
+
         for(int i = 0; i<8; ++i){
-            playerSearchButtons.add(new ObjectSelectButton(HIDDEN_POS,HIDDEN_POS,80,18,null,this));
+            playerSearchButtons.add(this.addRenderableWidget(new ObjectSelectButton(this.leftPos + 20,this.topPos + 40 + (18*i),80,18,null,this)));
+            playerSearchButtons.get(i).visible = false;
         }
-        playerSearchButtons.forEach((b) -> {
-            this.addRenderableWidget(b);
-        });
-        this.nextButton = this.addRenderableWidget(new PageButton(HIDDEN_POS, HIDDEN_POS, true, (p_98297_) -> {
+        this.nextButton = this.addRenderableWidget(new PageButton(this.leftPos + 219, this.topPos + 138, true, (p_98297_) -> {
             this.pageForward();
         }, true));
-        this.prevButton = this.addRenderableWidget(new PageButton(HIDDEN_POS, HIDDEN_POS, false, (p_98287_) -> {
+        this.prevButton = this.addRenderableWidget(new PageButton(this.leftPos + 195, this.topPos + 138, false, (p_98287_) -> {
             this.pageBack();
         }, true));
         missionTypeButtons = Lists.newArrayList();
-        missionTypeButtons.add(new Button(HIDDEN_POS,HIDDEN_POS,20,20,Component.literal("B"),(b) -> {
+        missionTypeButtons.add(this.addRenderableWidget(new Button(this.leftPos + 187,this.topPos + 31,20,20,Component.literal("B"),(b) -> {
             this.currentSearchMenu = QuestScreensData.ButtonType.BLOCK;
             this.resetSearchMenu();
         }
-        ));
-        missionTypeButtons.add(new Button(HIDDEN_POS,HIDDEN_POS,20,20,Component.literal("C"),(b) -> {
+        )));
+        missionTypeButtons.add(this.addRenderableWidget(new Button(this.leftPos + 187,this.topPos + 31 + 22,20,20,Component.literal("C"),(b) -> {
             this.currentSearchMenu = QuestScreensData.ButtonType.COLLECT;
             this.resetSearchMenu();
         }
-        ));
-        missionTypeButtons.add(new Button(HIDDEN_POS,HIDDEN_POS,20,20,Component.literal("K"),(b) -> {
+        )));
+        missionTypeButtons.add(this.addRenderableWidget(new Button(this.leftPos + 187,this.topPos + 31 + 44,20,20,Component.literal("K"),(b) -> {
             this.currentSearchMenu = KILL;
             this.resetSearchMenu();
         }
-        ));
-        missionTypeButtons.add(new Button(HIDDEN_POS,HIDDEN_POS,20,20,Component.literal("PK"),(b) -> {
+        )));
+        missionTypeButtons.add(this.addRenderableWidget(new Button(this.leftPos + 187,this.topPos + 31 + 66,20,20,Component.literal("PK"),(b) -> {
             this.currentSearchMenu = PLAYERKILL;
             this.resetSearchMenu();
         }
-        ));
-        missionTypeButtons.forEach((b) ->{
-            this.addRenderableWidget(b);
-        });
+        )));
+
+        createQuestButton = this.addRenderableWidget(new Button(this.leftPos + 201,this.topPos + 197,40,16,Component.literal("CREATE"),(b) ->{
+            if(isSearching){createMission();}
+            else{attemptCreateQuest();}
+        }));
+        backButton = this.addRenderableWidget(new PageButton(this.leftPos + 201, this.topPos + 215, false, (p) -> {
+            switchBackToMainMenu();
+        },true));
         this.searchBox = new QuestSearchBox(this.font, this.leftPos + 30, this.topPos + 21, 80, 9, Component.literal("Search..."));
         this.searchBox.setMaxLength(50);
         this.searchBox.setBordered(true);
@@ -143,9 +128,9 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
         this.numberBox.setTextColor(15777215);
         this.addWidget(numberBox);
         minecraft = Minecraft.getInstance();
+        this.isSearching = false;
+        makeInvisible(missionTypeButtons);
     }
-
-
     @Override
     protected void renderBg(PoseStack pPoseStack, float fr, int mx, int my) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -155,23 +140,27 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
         int y = (height - imageHeight) / 2;
         this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
         if(isSearching){
-            searchButtons.forEach((b) ->{
-                b.x = HIDDEN_POS;
-                b.y = HIDDEN_POS;
-            });
-            playerSearchButtons.forEach((b) -> {
-                b.x = HIDDEN_POS;
-                b.y = HIDDEN_POS;
-            });
+            makeInvisible(searchButtons);
+            makeInvisible(playerSearchButtons);
+            makeVisible(missionTypeButtons);
+            nextButton.visible = true;
+            prevButton.visible = true;
             if(searchBox.isChanged()){
                 QuestScreensData.refreshList(searchBox.currString,currentSearchMenu);
+                refreshPageNum(this);
+                page = 0;
             }
             switch(currentSearchMenu){
-                case BLOCK,COLLECT:
+                case BLOCK:
                     renderButtonSymbols();
+                    if(selectedObject != null){drawItem(this.leftPos + 211, this.topPos + 175, new ItemStack(((Block)selectedObject).asItem()));}
+                    break;
+                case COLLECT:
+                    renderButtonSymbols();
+                    if(selectedObject != null){drawItem(this.leftPos + 211, this.topPos + 175,(ItemStack)selectedObject);}
                     break;
                 case KILL:
-                    renderEntity(pPoseStack);
+                    renderEntityInInventory(this.leftPos + 98f,this.topPos + 115f, 40,0,0);
                     break;
                 case PLAYERKILL:
                     renderPlayerButtonSymbols();
@@ -181,30 +170,21 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
             }
             this.searchBox.render(pPoseStack,mx,my,fr);
             this.numberBox.render(pPoseStack,mx,my,fr);
-            this.nextButton.x = this.leftPos + 219;
-            this.nextButton.y = this.topPos + 138;
-            this.prevButton.x = this.leftPos + 195;
-            this.prevButton.y = this.topPos + 138;
-            for(int j = 0; j < 4; ++j){
-                this.missionTypeButtons.get(j).x = this.leftPos + 187;
-                this.missionTypeButtons.get(j).y = this.topPos + 31 + 22*j;
+        }
+        else{
+            for(int j = 0; j < 3; ++j){
+                renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),110,21,missions[j]);
             }
         }
     }
-    private void renderEntity(PoseStack matrixStack){
-        matrixStack.pushPose();
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        matrixStack.translate(20, 24, 50F);
-        EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-        try {
-            MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-            dispatcher.setRenderShadow(false);
-            dispatcher.render(((EntityType<?>)QuestScreensData.filteredTokens.get(page)).create(Minecraft.getInstance().level), 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, buffer, 15728880);
-            buffer.endBatch();
-        } catch (Exception e) {
-        }
-        dispatcher.setRenderShadow(true);
-        Lighting.setupFor3DItems();
+    @SuppressWarnings("deprecation")
+    /**
+     * CREDIT: Shadows-of-Fire
+     * https://github.com/Shadows-of-Fire/Hostile-Neural-Networks/blob/1.19/src/main/java/shadows/hostilenetworks
+     */
+    public void renderEntityInInventory(float pPosX, float pPosY, float pScale, float pMouseX, float pMouseY) {
+        LivingEntity pLivingEntity = ClientEntityCache.computeIfAbsent((EntityType)QuestScreensData.filteredTokens.get(page),minecraft.level);
+        renderEntityInInventory(pPosX, pPosY, pScale, pMouseX,pMouseY,pLivingEntity);
     }
     private void renderPlayerButtonSymbols(){
         for(int j = 0; j < 8; ++j){
@@ -212,11 +192,9 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
                 return;
             }
             ObjectSelectButton b = playerSearchButtons.get(j);
-            b.x = this.leftPos + 20;
-            b.y = this.topPos + 40 + (18*j);
+            b.visible = true;
             b.target = QuestScreensData.filteredTokens.get(j + 8*page);
-            b.setMessage(Component.literal((String)b.target));
-
+            b.setMessage(Component.literal(((ClientCitizenData)b.target).name));
         }
 
     }
@@ -227,8 +205,7 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
                     return;
                 }
                 ObjectSelectButton b = searchButtons.get((j*8)+i);
-                b.x = this.leftPos + 30 + 18*i;
-                b.y = this.topPos + 32 + 18*j;
+                b.visible = true;
                 switch(this.currentSearchMenu){
                     case COLLECT:
                         ItemStack item = new ItemStack((Item)QuestScreensData.filteredTokens.get(((j*8)+i) + (40*page)));
@@ -240,11 +217,7 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
                         ItemStack block = new ItemStack(((Block)QuestScreensData.filteredTokens.get(((j*8)+i) + (40*page))).asItem());
                         drawItem((this.leftPos+30+18*i) + 1, (this.topPos + 32 + 18*j) + 1, block);
                         break;
-
-
                 }
-
-
             }
         }
     }
@@ -256,23 +229,22 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
 
         private boolean selected;
         private QuestCreateScreen qcs;
-        public QuestCreateMissionButton(int x, int y, int w, int l, Component text, QuestCreateScreen qcs) {
+        private int num;
+        public QuestCreateMissionButton(int x, int y, int w, int l, Component text, QuestCreateScreen qcs, int num) {
             super(x,y,w,l,text);
             this.qcs = qcs;
+            this.num = num;
         }
         @Override
         public void onPress() {
-            this.qcs.editButtons.forEach((b) ->{
-                b.x = HIDDEN_POS;
-                b.y = HIDDEN_POS;
-            });
+            makeInvisible(editButtons);
             this.qcs.MAIN_TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/mission_create_gui.png");
-            if(this.qcs.currentSearchMenu == COLLECT || this.qcs.currentSearchMenu == QuestScreensData.ButtonType.BLOCK){
-                QuestScreensData.refreshList("", this.qcs.currentSearchMenu);
-                refreshPageNum(this.qcs);
-                this.qcs.isSearching = true;
-                this.qcs.renderButtonSymbols();
-            }
+            this.qcs.isSearching = true;
+            editingMission = num;
+            QuestScreensData.refreshList("", this.qcs.currentSearchMenu);
+            refreshPageNum(this.qcs);
+            updateButtonVisibility();
+            makeInvisible(editButtons);
         }
 
         public boolean isSelected() { return this.selected; }
@@ -280,10 +252,9 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
 
         @Override
         public void updateNarration(NarrationElementOutput p_169152_) {
-
         }
     }
-    private static void refreshPageNum(QuestCreateScreen qcs){
+    private void refreshPageNum(QuestCreateScreen qcs){
         switch(qcs.currentSearchMenu){
             case COLLECT, BLOCK:
                 qcs.numPages = QuestScreensData.filteredTokens.size()/40;
@@ -304,17 +275,13 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
     }
 
     public class ObjectSelectButton extends AbstractButton {
-
         private Object target;
         private QuestCreateScreen qcs;
-
-
         public ObjectSelectButton(int p_93365_, int p_93366_, int p_93367_, int p_93368_, Object obj, QuestCreateScreen qcs) {
             super(p_93365_, p_93366_, p_93367_, p_93368_, Component.empty());
             this.target = obj;
             this.qcs = qcs;
         }
-
         @Override
         public void onPress() {
             this.qcs.selectedObject = this.target;
@@ -337,23 +304,16 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
             }
         }
     }
-    public void drawItem(int x, int y, ItemStack is) {
-        this.itemRenderer.blitOffset = 100.0F;
-        this.itemRenderer.renderAndDecorateItem(is, x, y);
-        this.itemRenderer.blitOffset = 0.0F;
-    }
     protected void pageForward() {
         if (this.page < this.numPages - 1) {
             ++this.page;
         }
-
         this.updateButtonVisibility();
     }
     protected void pageBack() {
         if (this.page > 0) {
             --this.page;
         }
-
         this.updateButtonVisibility();
     }
     protected void updateButtonVisibility() {
@@ -362,18 +322,67 @@ public class QuestCreateScreen extends AbstractContainerScreen<QuestCreateMenu> 
     }
     protected void resetSearchMenu(){
         page = 0;
-        refreshPageNum(this);
         QuestScreensData.refreshList("",this.currentSearchMenu);
+        refreshPageNum(this);
         this.searchBox.setValue("");
+        selectedObject = null;
+        numberBox.setValue("");
+        makeInvisible(searchButtons);
     }
     protected void createMission(){
+        if((selectedObject == null && currentSearchMenu != KILL) || (numberBox.getValue().equals("") && currentSearchMenu != PLAYERKILL)){return;}
         switch(currentSearchMenu){
             case COLLECT:
-                ItemStack itemStack = new ItemStack(((ItemStack)selectedObject).getItem(),count);
-                missions[editingMission] = new CollectMission(itemStack);
+                ItemStack itemStack = new ItemStack(((ItemStack)selectedObject).getItem());
+                missions[editingMission] = new CollectMission(itemStack, Integer.parseInt(numberBox.getValue()), minecraft.player.getUUID());
                 break;
             case BLOCK:
-                missions[editingMission] = new BlockMission((Block)selectedObject, count);
+                missions[editingMission] = new BlockMission((Block)selectedObject, Integer.parseInt(numberBox.getValue()));
+                break;
+            case KILL:
+                missions[editingMission] = new KillMission((EntityType)QuestScreensData.filteredTokens.get(page),Integer.parseInt(numberBox.getValue()));
+                break;
+            case PLAYERKILL:
+                missions[editingMission] = new PlayerKillMission(((ClientCitizenData)selectedObject).playerID, ((ClientCitizenData)selectedObject).name);
+                break;
         }
+        switchBackToMainMenu();
+    }
+    protected void attemptCreateQuest(){
+        List<Mission> missions = Lists.newArrayList();
+        List<ItemStack> rewards = Lists.newArrayList();
+        for(Mission m : this.missions){
+            if(m != null){
+                missions.add(m);
+            }
+        }
+        if(missions.isEmpty()){return;}//quest must have at least one mission
+        for(int j = 0; j<5; ++j){//quests could technically be pro-bono, not sure why but go off
+            rewards.add(this.menu.slots.get(36 + j).getItem());
+            this.menu.slots.get(36 + j).set(ItemStack.EMPTY);
+        }
+        this.menu.blockEntity.clearRewardSlots();
+        SnappyNetwork.sendToServer(new QuestCreatePacket(new ClosedContractQuest(missions,rewards,minecraft.player.getUUID(), Quest.QuestType.PLAYER),this.menu.blockEntity.getBlockPos()));
+        this.missions = new Mission[3];
+    }
+    private static void makeInvisible(List<? extends AbstractButton> buttons){
+        buttons.forEach((b) -> {
+            b.visible = false;
+        });
+    }
+    private static void makeVisible(List<? extends AbstractButton> buttons){
+        buttons.forEach((b) -> {
+            b.visible = true;
+        });
+    }
+    public void switchBackToMainMenu(){
+        makeInvisible(searchButtons);
+        makeInvisible(playerSearchButtons);
+        makeInvisible(missionTypeButtons);
+        makeVisible(editButtons);
+        selectedObject = null;
+        numberBox.setValue("");
+        isSearching = false;
+        MAIN_TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_create_block_gui.png");
     }
 }

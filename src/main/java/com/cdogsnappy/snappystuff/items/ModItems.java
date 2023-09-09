@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -17,7 +18,7 @@ public class ModItems {
     public static final RegistryObject<RecordItem> DREAM_SWEET = makeRecord("dream_sweet", SSSoundRegistry.DREAM_SWEET,420);
     public static final RegistryObject<Item> RADIO = ITEMS.register("radio", () -> new RadioItem(new Item.Properties().stacksTo(1).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)));
     public static final RegistryObject<Item> DIVINE_FRUIT = ITEMS.register("divine_fruit", () -> new DivineFruitItem(new Item.Properties().stacksTo(64).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)
-            .rarity(Rarity.EPIC).food(new FoodProperties.Builder().nutrition(0).alwaysEat().build())));
+            .rarity(ModRarities.DIVINE).food(new FoodProperties.Builder().nutrition(0).alwaysEat().build())));
     /*
     public static final RegistryObject<Item> DIVINE_ARMOR_HELMET = ITEMS.register("divine_armor_helmet", () -> new DivineArmorItem(ArmorMaterials.NETHERITE,
             EquipmentSlot.HEAD, new ArmorItem.Properties()));
@@ -35,7 +36,7 @@ public class ModItems {
     public static final RegistryObject<Item> DEMONIC_NUGGET = ITEMS.register("demonic_nugget", () -> new Item(new Item.Properties().rarity(ModRarities.DEMONIC).fireResistant().stacksTo(64).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)));
     public static final RegistryObject<Item> NEUTRALIUM_INGOT = ITEMS.register("neutralium_ingot", () -> new Item(new Item.Properties().rarity(ModRarities.LEGENDARY).fireResistant().stacksTo(64).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)));
     public static final RegistryObject<Item> NEUTRALIUM_NUGGET = ITEMS.register("neutralium_nugget", () -> new Item(new Item.Properties().rarity(ModRarities.LEGENDARY).fireResistant().stacksTo(64).tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)));
-    public static final RegistryObject<Item> DEMON_BLADE = ITEMS.register("demon_blade", () -> new DemonBladeItem(ModTiers.DEMON,2,3f, new Item.Properties().rarity(ModRarities.DEMONIC).fireResistant().tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)));
+    public static final RegistryObject<Item> DEMON_BLADE = ITEMS.register("demon_blade", () -> new DemonBladeItem(ModTiers.DEMON,2,-3.2f, new Item.Properties().rarity(ModRarities.DEMONIC).fireResistant().tab(SnappyStuffTabs.SNAPPY_STUFF_TAB)));
 
 
     public static RegistryObject<RecordItem> makeRecord(String name, RegistryObject<SoundEvent> sound, int seconds){

@@ -1,6 +1,7 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.court.CitizenData;
+import com.cdogsnappy.snappystuff.court.ClientCitizenData;
 import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
 import com.cdogsnappy.snappystuff.quest.Quest;
 import com.google.common.collect.Lists;
@@ -32,7 +33,7 @@ public class QuestScreensData {
     public static List<Object> filteredTokens = new ArrayList<>();//Player will only ever be looking at one menu, block menu or entity menu, so only need one filtered list.
     public static List<EntityType<?>> entitySearchTokens = new ArrayList<>();
     public static List<Block> blockSearchTokens = new ArrayList<>();
-    public static List<String> playerSearchTokens = new ArrayList<>();
+    public static List<ClientCitizenData> playerSearchTokens = CitizenData.citizenNames;
     public static List<Item> itemSearchTokens = new ArrayList<>();
     public static Quest questAcceptScreenDisplay = null;
     public static List<ClosedContractQuest> playerQuests = null;//Player instanced quests, sent all in one packet so as not to require a packet every time the player move to the next quest.
@@ -61,9 +62,6 @@ public class QuestScreensData {
             }
         });
 
-
-
-
     }
 
     /**
@@ -85,6 +83,7 @@ public class QuestScreensData {
                         filteredTokens.add(s);
                     }
                 });
+                break;
             case BLOCK:
                 if(token.equals("")){
                     filteredTokens.addAll(blockSearchTokens);
@@ -95,16 +94,18 @@ public class QuestScreensData {
                         filteredTokens.add(s);
                     }
                 });
+                break;
             case PLAYERKILL:
                 if(token.equals("")){
                     filteredTokens.addAll(playerSearchTokens);
                     return;
                 }
                 playerSearchTokens.forEach((s) -> {
-                    if(s.contains(token)){
+                    if(s.name.contains(token)){
                         filteredTokens.add(s);
                     }
                 });
+                break;
             case COLLECT:
                 if(token.equals("")){
                     filteredTokens.addAll(itemSearchTokens);
@@ -114,6 +115,7 @@ public class QuestScreensData {
                         filteredTokens.add(i);
                     }
                 });
+                break;
         }
 
     }

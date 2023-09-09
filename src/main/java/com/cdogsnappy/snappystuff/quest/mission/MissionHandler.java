@@ -32,7 +32,7 @@ public class MissionHandler {
         if(playerKillMissionList.containsKey(murderer.getUUID())){
             List<PlayerKillMission> missions = playerKillMissionList.get(murderer.getUUID());
             for(PlayerKillMission mission : missions){
-                if(mission.hitman == murderer.getUUID() && mission.toKill == murdered.getUUID()){
+                if(mission.toKill == murdered.getUUID()){
                     mission.completeMission();
                     missions.remove(mission);
                     if(missions.isEmpty()){
@@ -86,7 +86,7 @@ public class MissionHandler {
         if(blockMissionList.containsKey(player.getUUID())){
             List<BlockMission> missions = blockMissionList.get(player.getUUID());
             for(BlockMission mission : missions){
-                if(player.getUUID() == mission.player && event.getState().getBlock() == mission.toBreak){
+                if(event.getState().getBlock() == mission.toBreak){
                     mission.numBroken++;
                     if(mission.attemptComplete()){
                         missions.remove(mission);
@@ -131,11 +131,7 @@ public class MissionHandler {
                     default:
                         break;
                 }
-
             }
-
         });
     }
-
-
 }

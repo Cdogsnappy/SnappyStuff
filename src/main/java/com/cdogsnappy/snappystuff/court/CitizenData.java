@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class CitizenData implements Serializable {
     public static HashMap<String, CitizenData> citizenRegistry = new HashMap<String, CitizenData>();
-    public static List<String> citizenNames = new ArrayList<>();
+    public static List<ClientCitizenData> citizenNames = new ArrayList<>();
 
     protected UUID id;
     protected String name;
@@ -42,11 +42,10 @@ public class CitizenData implements Serializable {
     public static void onPlayerJoin(Player p){
         if(!citizenRegistry.containsKey(p.getName().getString())){
             citizenRegistry.put(p.getName().getString(),new CitizenData(p));
-            citizenNames.add(p.getName().getString());
+            citizenNames.add(new ClientCitizenData(p.getScoreboardName(),p.getUUID()));
             SnappyNetwork.sendToAllPlayers(new AvailablePlayersPacket(citizenNames));
         }
     }
-
 
 }
 

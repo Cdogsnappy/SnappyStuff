@@ -32,8 +32,18 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
         this.data = data;
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
-
+        addRewardSlots();
         addDataSlots(data);
+    }
+
+    public void addRewardSlots(){
+        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+            this.addSlot(new DisplaySlot(handler, 0, 210, 29));
+            this.addSlot(new DisplaySlot(handler,1,210,47));
+            this.addSlot(new DisplaySlot(handler,2,210,65));
+            this.addSlot(new DisplaySlot(handler,3,210,83));
+            this.addSlot(new DisplaySlot(handler,4,210,101));
+        });
     }
 
     private static final int HOTBAR_SLOT_COUNT = 9;
