@@ -18,12 +18,9 @@ import java.util.UUID;
 @Mod.EventBusSubscriber
 public class DivineFruitItem extends Item{
     private static UUID divineModifier = UUID.fromString("e4bac0b0-77e0-4303-a286-f886e9316b7a");
-
     public DivineFruitItem(Properties p_41383_) {
         super(p_41383_);
     }
-
-
     /**
      * Need to check if the fruit was eaten, if so then update the health of the player
      * @param event the event
@@ -33,10 +30,7 @@ public class DivineFruitItem extends Item{
         if(!event.getEntity().level.isClientSide && event.getItem().is(ModItems.DIVINE_FRUIT.get())){
             attemptAugmentHealth((Player)event.getEntity());
         }
-
     }
-
-
     /**
      * Attempts to augment a players health, will always increment the player's health but will only have impact with high enough karma
      * @param player the player
@@ -56,10 +50,8 @@ public class DivineFruitItem extends Item{
             player.sendSystemMessage(Component.literal("A blissful taste fills your mouth. ACCEPT THIS GIFT."));
             player.level.playSound((ServerPlayer)null, player.position().x, player.position().y, player.position().z, SoundEvents.EVOKER_CAST_SPELL, SoundSource.HOSTILE, 10000.0F, 0.8F);
         }
-
             tag.putInt("divine_fruit",tag.getInt("divine_fruit")+2);
             updateDivineHealth(player);
-
     }
 
     /**

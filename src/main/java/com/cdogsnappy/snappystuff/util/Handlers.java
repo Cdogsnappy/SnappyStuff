@@ -80,7 +80,8 @@ public class Handlers {
         if(event.getEntity().level.isClientSide){
             return;
         }
-        if(event.getEntity().getKillCredit() instanceof Player murderer){
+        if(event.getEntity().getKillCredit() instanceof Player){
+            Player murderer = (Player)event.getEntity().getKillCredit();
             if(event.getEntity() instanceof Player){//All murder related events
                 QuestHandler.onMurder((Player)event.getEntity(), murderer);
                 MissionHandler.onPlayerMurder((Player)event.getEntity(),murderer);

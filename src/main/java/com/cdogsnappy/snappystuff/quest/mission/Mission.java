@@ -2,11 +2,13 @@ package com.cdogsnappy.snappystuff.quest.mission;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
 
 public class Mission implements IMission{
 
+    @NonNull
     public Type missionType;
     @Override
     public boolean isComplete() {

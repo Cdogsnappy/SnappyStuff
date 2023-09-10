@@ -112,6 +112,11 @@ public class SnappyNetwork {
                 .encoder(QuestCreatePacket::toBytes)
                 .consumerMainThread(QuestCreatePacket::handle)
                 .add();
+        INSTANCE.messageBuilder(QuestAcceptPacket.class,++id,NetworkDirection.PLAY_TO_SERVER)
+                .decoder(QuestAcceptPacket::new)
+                .encoder(QuestAcceptPacket::toBytes)
+                .consumerMainThread(QuestAcceptPacket::handle)
+                .add();
 
     }
     public static <MSG> void sendToServer(MSG message) {

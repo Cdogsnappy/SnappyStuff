@@ -48,9 +48,7 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
             setChanged();
         }
     };
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-
     public MusicUploadBlockEntity(BlockPos pos, BlockState state) {
         super(ModEntityBlocks.MUSIC_UPLOAD_BLOCK.get(), pos, state);
         data = new ContainerData(){
@@ -64,13 +62,10 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
 
                 };
             }
-
             @Override
             public void set(int index, int val) {
                 MusicUploadBlockEntity.this.progress = val;
             }
-
-
             @Override
             public int getCount() {
                 return 2;
@@ -78,7 +73,6 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         };
 
     }
-
     @Override
     public Component getDisplayName() {
         return Component.literal("Music Uploader");
@@ -90,7 +84,6 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         super.saveAdditional(tag);
 
     }
-
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
@@ -101,7 +94,6 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         if(cap == ForgeCapabilities.ITEM_HANDLER) {
             return lazyItemHandler.cast();
         }
-
         return super.getCapability(cap, side);
     }
     @Override
@@ -109,14 +101,11 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         super.onLoad();
         lazyItemHandler = LazyOptional.of(() -> itemHandler);
     }
-
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
     }
-
-
     public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, MusicUploadBlockEntity e) {
         if(e.itemHandler.getStackInSlot(0).getItem() instanceof RecordItem){
             e.isProcessing = true;

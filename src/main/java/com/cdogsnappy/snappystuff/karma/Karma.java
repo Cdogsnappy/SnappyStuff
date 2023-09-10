@@ -21,8 +21,6 @@ public class Karma{
 
     public static void init() {
         karmaScores = new HashMap<>();
-
-
         karmaScores.put(UUID.fromString("3af72133-2a77-4ddc-8ed8-b6379c7900cd"), new KarmaPlayerInfo(-20.0f, -5.0f));
         karmaScores.put(UUID.fromString("1e80636b-9665-4e4f-a1b5-e3ecd74a7bcc"), new KarmaPlayerInfo(-5.0f, -1.0f));
         karmaScores.put(UUID.fromString("82a7ffbe-7b11-4015-a124-9ecb07a78223"), new KarmaPlayerInfo(-21.0f, -5.0f));
@@ -36,31 +34,25 @@ public class Karma{
         karmaScores.put(UUID.fromString("4c08423e-ddbf-4105-889e-abbe5101c9c7"), new KarmaPlayerInfo(10.0f, 3.0f));
         karmaScores.put(UUID.fromString("f3e63fb6-8491-4bf2-b7e7-34bb4b292750"), new KarmaPlayerInfo(-1.0f, 0.0f));
     }
-
     /**
      * @author Cdogsnappy
-     * Called when a player's health may be reset, i.e. on login or respawn, also used to initialize karma data for a player that
+     * Called when a player's health may be reset, e.g. on login or respawn, also used to initialize karma data for a player that
      * hasn't joined before.
      * @param event the event that caused this check
      */
-
     public static void playerCheck(PlayerEvent event){
         Player player = event.getEntity();
         AttributeInstance attr = player.getAttribute(Attributes.MAX_HEALTH);
         if (!(attr.getModifier(id) == null)) {
             attr.removePermanentModifier(id);
         }
-
         if (!karmaScores.containsKey(player.getUUID())) {
             karmaScores.put(player.getUUID(), new KarmaPlayerInfo());
         }
         attr.addPermanentModifier(new AttributeModifier(id, "karma.healthModifier",
                 karmaScores.get(player.getUUID()).getHealth(), AttributeModifier.Operation.ADDITION));
         player.setHealth(player.getMaxHealth());
-
-
     }
-
     /**
      * @author Cdogsnappy
      * Every time an object(item, block, attribute, etc.) relies on karma value, call the method that updates it from here.
@@ -71,7 +63,6 @@ public class Karma{
         DivineFruitItem.updateDivineHealth(player);
         updateHealth(player.getUUID());
     }
-
     /**
      * @author Cdogsnappy
      * Adds resistance to karma gain for players (PROBABLY NEEDS TINKERING)
@@ -86,7 +77,6 @@ public class Karma{
         info.health = newHealth;
         karmaScores.put(id, info);
     }
-
     /**
      * @author Cdogsnappy
      * Updates the karma score of a player, ALL KARMA SCORE CHANGES SHOULD BE DONE THROUGH THIS, DO NOT CHANGE THEM DIRECTLY

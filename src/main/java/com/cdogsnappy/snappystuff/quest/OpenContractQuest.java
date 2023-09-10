@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class OpenContractQuest extends Quest{
-    protected PlayerKillMission mission;
+    public PlayerKillMission mission;
 
     public OpenContractQuest(PlayerKillMission mission, List<ItemStack> rewards, UUID requestor, QuestType type){
         this.mission = mission;

@@ -1,14 +1,19 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
+import com.cdogsnappy.snappystuff.court.CitizenData;
+import com.cdogsnappy.snappystuff.items.ModItems;
 import com.cdogsnappy.snappystuff.network.QuestAcceptPacket;
+import com.cdogsnappy.snappystuff.network.QuestRequestPacket;
 import com.cdogsnappy.snappystuff.network.QuestScreenPacket;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
+import com.cdogsnappy.snappystuff.quest.OpenContractQuest;
 import com.cdogsnappy.snappystuff.quest.Quest;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -19,14 +24,18 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_accept_block_gui.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_create_block_gui.png");
     private final int verticalPadding = 7;
     private final int horizontalPadding = 9;
     private Font font1;
@@ -34,8 +43,8 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     private PageButton nextButton;
     private final boolean playTurnSound = true;
     private int currentPage = 0;
-    private ArrayList<String> temp;
-    private Quest q;
+    private Tab[] TABS = new Tab[2];
+
     private final List<QuestAcceptScreen.QuestButtons> buttonList = Lists.newArrayList();
     public QuestAcceptScreen(QuestAcceptMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
@@ -45,16 +54,16 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
         this.titleLabelY = 8;
         this.inventoryLabelX = 22;
         this.inventoryLabelY = this.imageHeight - 104;
-        temp = new ArrayList<String>();
-        temp.add("Quest 1");
-        temp.add("Quest 2");
     }
 
     @Override
     protected void init() {
         super.init();
         createPageControlButtons();
-        this.addButton(new QuestAcceptScreen.QuestAcceptConfirmButton(this.width / 2, this.height / 2));
+        this.addButton(new QuestAcceptScreen.QuestAcceptConfirmButton(this.leftPos + 195, this.topPos + 198));
+        SnappyNetwork.sendToServer(new QuestRequestPacket(0,false));
+        TABS[0] = this.addWidget(new Tab(this.leftPos + this.imageWidth-7,this.topPos + 30,null,0, new ItemStack(Items.IRON_PICKAXE), this));
+        TABS[1] = this.addWidget(new Tab(this.leftPos + this.imageWidth-11,this.topPos+60,null,1, new ItemStack(ModItems.DEMON_BLADE.get()), this));
     }
 
     private <T extends AbstractWidget & QuestAcceptScreen.QuestButtons> void addButton(T button) {
@@ -75,11 +84,11 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
             super(x, y, 22, 22, CommonComponents.EMPTY); //22,22 is width,height
         }
         protected QuestAcceptScreenButton(int x, int y, Component component) {
-            super(x, y, 22, 22, component);
+            super(x, y, 44, 22, component);
         }
         public void renderButton(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, new ResourceLocation("textures/gui/quest_accept_block_gui"));
+            RenderSystem.setShaderTexture(0, new ResourceLocation(SnappyStuff.MODID,"textures/gui/button_texture.png"));
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int i = 219;
             int j = 0;
@@ -90,9 +99,9 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
             } else if (this.isHoveredOrFocused()) {
                 j += this.width * 3;
             }
-
             this.blit(pPoseStack, this.x, this.y, j, 219, this.width, this.height);
             this.renderIcon(pPoseStack);
+            drawCenteredString(pPoseStack, Minecraft.getInstance().font, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | colorTranslate(Color.WHITE));
         }
 
         protected abstract void renderIcon(PoseStack pPoseStack);
@@ -117,34 +126,17 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
             QuestAcceptScreen.this.renderTooltip(pPoseStack, QuestAcceptScreen.this.title, mouseX, mouseY);
         }
     }
-    class QuestAcceptMenuButton extends QuestAcceptScreenButton {
-        private TextureAtlasSprite sprite;
-        private Component tooltip;
-        QuestAcceptMenuButton(int x, int y) {
-            super(x, y);
-        }
-        public void onPress() {
-            //change menus
-        }
-        public void renderToolTip(PoseStack pPoseStack, int mouseX, int mouseY) {
-            QuestAcceptScreen.this.renderTooltip(pPoseStack, this.tooltip, mouseX, mouseY);
-        }
-        protected void renderIcon(PoseStack pPoseStack) {
-            RenderSystem.setShaderTexture(0, this.sprite.atlas().location());
-            blit(pPoseStack, this.x + 2, this.y + 2, this.getBlitOffset(), 18, 18, this.sprite);
-        }
-        public void updateStatus(int status) {
-            //set menu button to active
-        }
-    }
+
     class QuestAcceptConfirmButton extends QuestAcceptScreen.QuestAcceptSpriteScreenButton {
         public QuestAcceptConfirmButton(int x, int y) {
-            super(x, y, 90, 220, CommonComponents.GUI_DONE);
+            super(x, y, 90, 220, Component.literal("ACCEPT"));
         }
         public void onPress() {
-            SnappyNetwork.sendToServer(new QuestAcceptPacket((ClosedContractQuest)q));
+            if(QuestScreensData.questScreenDisplay == null){return;}
+            SnappyNetwork.sendToServer(new QuestAcceptPacket((ClosedContractQuest)QuestScreensData.questScreenDisplay));
+            if(currentPage >= getNumPages()-1){--currentPage;}//Weird code here, but we just removed a quest from the list of quests, so there is now length-1-1 quests.
+            else{++currentPage;}
             //Send packets
-            QuestAcceptScreen.this.minecraft.player.closeContainer();
         }
         public void updateStatus(int status) {
             //Remove quest from thinger
@@ -152,43 +144,41 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     }
     @Override
     protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
+        int x = (width - imageWidth) / 2;
+        int y = (height - imageHeight) / 2;
+        TABS[0].render(pPoseStack,pMouseX,pMouseY,pPartialTick);
+        TABS[1].render(pPoseStack,pMouseX,pMouseY,pPartialTick);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
-        int x = (width - imageWidth) / 2;
-        int y = (height - imageHeight) / 2;
         this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
+        if ((QuestScreensData.numOpenQuests == 0 && currTab == 1) || (QuestScreensData.numClosedQuests == 0 && currTab == 0)) {
+            this.font.draw(pPoseStack, "No Quests!", x + 80 - (float) (this.font.width("No Quests!") / 2), y + 40, 0);
+        }
+        else {
+            this.font.draw(pPoseStack, "Quest # " + (currentPage+1), this.leftPos + 192, this.topPos + 132, 0);
+            switch(currTab){
+                case 0:
+                    this.font.draw(pPoseStack, "From " + CitizenData.getPlayerName(QuestScreensData.questScreenDisplay.requestor), this.leftPos + 192, this.topPos + 140, 0);
+                    for(int j = 0; j < 3; ++j){renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),110,21,((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.get(j));}
+                    break;
+                case 1:
+                    renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43,110,21,((OpenContractQuest)QuestScreensData.questScreenDisplay).mission);
+                    break;
+            }
+        }
     }
+
 
     //use PoseStack.scale -> PoseStack.scale(float x, float y, float z) to scale the text
     // Font.draw to render the text needed -> this.font.draw(PoseStack, float x, float y, int color)
-    @Override
-    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
-        renderBackground(pPoseStack);
-        super.render(pPoseStack, mouseX, mouseY, delta);
-        renderTooltip(pPoseStack, mouseX, mouseY);
-        Font font1 = this.font;
-        int fontHeight = this.font.lineHeight + 1;
-        int containerWidth = 236;
-        int containerHeight = 74;
-        int x = this.width / 2 - containerWidth;
-        int y = this.height / 2 - containerHeight;
-        guiInit(pPoseStack, x, y);
-        this.font.draw(pPoseStack, mouseX + ", " + mouseY, mouseX, mouseY, 0); //shows mouse coordinate position
-        if (temp.isEmpty())
-            this.font.draw(pPoseStack, "No Quests!", x + 80 - (float)(this.font.width("No Quests!")/2), y + 40, 0);
-        else {
-            this.font.draw(pPoseStack, temp.get(currentPage), x + 120- (float)(this.font.width("Quest #")/2), y + 50, 0);
-        }
-    }
 
     private void guiInit(PoseStack pPoseStack, float x, float y) {
         pPoseStack.scale(.8f, .8f, .8f);
         this.font.draw(pPoseStack, "Quest Type: ", 1.25F*(x + 124), 1.25F*(y + this.font.lineHeight + 1), colorTranslate(Color.CYAN));
         pPoseStack.scale(1.25f, 1.25f, 1.25f);
     }
-
-    private int colorTranslate (Color color) {
+    private static int colorTranslate (Color color) {
         int alpha = color.getAlpha();
         int red = color.getRed();
         int green = color.getGreen();
@@ -200,12 +190,10 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
         return rgb;
     }
     protected void createPageControlButtons() {
-        int i = this.width/2;
-        int j = this.height/2 - 30;
-        this.nextButton = this.addRenderableWidget(new PageButton(i + 50, j, true, (p_98297_) -> {
+        this.nextButton = this.addRenderableWidget(new PageButton(this.leftPos + 224, this.topPos + 144, true, (p_98297_) -> {
             this.pageForward();
         }, this.playTurnSound));
-        this.prevButton = this.addRenderableWidget(new PageButton(i - 74, j, false, (p_98287_) -> {
+        this.prevButton = this.addRenderableWidget(new PageButton(this.leftPos + 198, this.topPos + 144, false, (p_98287_) -> {
             this.pageBack();
         }, this.playTurnSound));
         this.updateButtonVisibility();
@@ -214,7 +202,6 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
         if (this.currentPage < this.getNumPages() - 1) {
             ++this.currentPage;
         }
-
         this.updateButtonVisibility();
     }
     protected void pageBack() {
@@ -229,6 +216,19 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
         this.prevButton.visible = this.currentPage > 0;
     }
     protected int getNumPages() {
-        return temp.size();
+        switch(currTab){
+            case 0:
+                return QuestScreensData.numClosedQuests;
+            case 1:
+                return QuestScreensData.numOpenQuests;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    public void tabChanged(int id){
+        TABS[currTab].x-=4;
+        TABS[id].x+=4;
     }
 }

@@ -20,13 +20,10 @@ public class QuestRequestPacket {
         this.open = tag.getBoolean("open");
     }
 
-
-    public QuestRequestPacket(int ind, Boolean type) {
+    public QuestRequestPacket(int ind,boolean open) {
         this.ind = ind;
-        this.open = type;
+        this.open = open;
     }
-
-
 
     public void toBytes(FriendlyByteBuf buf) {
         CompoundTag tag = new CompoundTag();
@@ -40,14 +37,10 @@ public class QuestRequestPacket {
         context.enqueueWork(() -> {
             Quest q = null;
             if(open){
-                if(ind < QuestHandler.openContractQuests.size()){
-                    q = QuestHandler.openContractQuests.get(ind);
-                }
+                q = QuestHandler.openContractQuests.get(ind);
             }
             else{
-                if(ind < QuestHandler.unacceptedQuests.size()) {
-                    q = QuestHandler.unacceptedQuests.get(ind);
-                }
+                q = QuestHandler.unacceptedQuests.get(ind);
             }
             // HERE WE ARE ON THE SERVER!
             SnappyNetwork.sendToPlayer(new QuestScreenPacket(q), context.getSender());//SENDS THE NEXT QUEST TO DISPLAY

@@ -62,8 +62,5 @@ public class EndorseCommand {
         EndorsementHandler.checkEndorsements(praised);
         c.getSource().sendSystemMessage(Component.literal("Endorsed " + praised.getName().getString() + "!"));
         return 0;
-
-
-
     }
 }

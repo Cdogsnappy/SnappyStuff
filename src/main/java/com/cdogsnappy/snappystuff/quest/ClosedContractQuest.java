@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class ClosedContractQuest extends Quest{
-    protected UUID questor;//Player who has accepted quest
-    protected List<Mission> missions;
+    public UUID questor;//Player who has accepted quest
+    public List<Mission> missions;
     public ClosedContractQuest(List<Mission> missions, List<ItemStack> rewards, UUID requestor, QuestType type){
         this.missions = missions;
         this.rewards = rewards;

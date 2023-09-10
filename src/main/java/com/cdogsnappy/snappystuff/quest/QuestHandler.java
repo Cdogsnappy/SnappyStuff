@@ -87,4 +87,14 @@ public class QuestHandler{
 
     }
 
+    public static void acceptQuest(ClosedContractQuest q, UUID player){
+        for(ClosedContractQuest c : unacceptedQuests){
+            if(c.equals(q)){
+                unacceptedQuests.remove(c);
+                playerQuestData.get(player).acceptedQuests.add(q);//We add the quest to accepted if we find it in the unaccepted list. Should cover the case where two players attempt to accept a quest at the same time.
+                break;
+            }
+        }
+    }
+
 }

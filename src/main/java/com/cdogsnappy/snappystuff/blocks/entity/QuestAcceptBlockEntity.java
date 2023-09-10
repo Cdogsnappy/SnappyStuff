@@ -26,13 +26,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 
 public class QuestAcceptBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(0) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(5) {
         @Override
         protected void onContentsChanged (int slot) {
             setChanged();
         }
     };
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     protected final ContainerData data;
     public QuestAcceptBlockEntity (BlockPos pos, BlockState state) {
@@ -47,7 +46,6 @@ public class QuestAcceptBlockEntity extends BlockEntity implements MenuProvider 
             public void set(int p_39285_, int p_39286_) {
 
             }
-
             @Override
             public int getCount() {
                 return 0;

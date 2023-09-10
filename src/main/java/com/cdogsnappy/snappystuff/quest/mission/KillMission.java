@@ -20,6 +20,7 @@ public class KillMission extends Mission {
         numKills = 0;
     }
     public KillMission(EntityType mob, int numToKill, int numKills, boolean complete){
+        missionType = Type.KILL;
         this.toKill = mob;
         this.numToKill = numToKill;
         this.numKills = numKills;

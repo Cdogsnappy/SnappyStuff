@@ -3,6 +3,8 @@ package com.cdogsnappy.snappystuff.network;
 import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
 import com.cdogsnappy.snappystuff.quest.OpenContractQuest;
 import com.cdogsnappy.snappystuff.quest.Quest;
+import com.cdogsnappy.snappystuff.quest.QuestHandler;
+import com.cdogsnappy.snappystuff.screen.QuestScreen;
 import com.cdogsnappy.snappystuff.screen.QuestScreensData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,9 +17,13 @@ import java.util.function.Supplier;
  */
 public class QuestScreenPacket {
     Quest q;
+    private int unaccepted;
+    private int open;
     public QuestScreenPacket(FriendlyByteBuf buf){
         CompoundTag tag = buf.readNbt();
         int questType = tag.getInt("type");
+        unaccepted = tag.getInt("unaccepted");
+        open = tag.getInt("open");
         this.q = switch(questType){
             case 0 -> ClosedContractQuest.load(tag.getCompound("quest"));
             case 1 -> OpenContractQuest.load(tag.getCompound("quest"));
@@ -30,6 +36,8 @@ public class QuestScreenPacket {
 
     public QuestScreenPacket(Quest q) {
         this.q = q;
+        unaccepted = QuestHandler.unacceptedQuests.size();
+        open = QuestHandler.openContractQuests.size();
     }
 
 
@@ -47,6 +55,8 @@ public class QuestScreenPacket {
             tag.put("quest",ClosedContractQuest.save(new CompoundTag(), (ClosedContractQuest) q));
             tag.putInt("type",0);
         }
+        tag.putInt("unaccepted",unaccepted);
+        tag.putInt("open",open);
         buf.writeNbt(tag);
 
     }
@@ -55,7 +65,9 @@ public class QuestScreenPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             // HERE WE ARE ON THE CLIENT!
-            QuestScreensData.questAcceptScreenDisplay = q;
+            QuestScreensData.questScreenDisplay = q;
+            QuestScreensData.numClosedQuests = unaccepted;
+            QuestScreensData.numOpenQuests = open;
         });
         return true;
     }

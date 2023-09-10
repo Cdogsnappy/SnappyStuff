@@ -46,6 +46,12 @@ public class CitizenData implements Serializable {
             SnappyNetwork.sendToAllPlayers(new AvailablePlayersPacket(citizenNames));
         }
     }
+    public static String getPlayerName(UUID id){
+        for(ClientCitizenData c : citizenNames){
+            if(id==c.playerID){return c.name;}
+        }
+        return "";
+    }
 
 }
 

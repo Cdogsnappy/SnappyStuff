@@ -17,10 +17,12 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
 public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
-    private int spin = 65;
+    protected int currTab = 0;
+    protected int spin = 65;
     public QuestScreen(AbstractContainerMenu p_97741_, Inventory p_97742_, Component p_97743_) {
         super((T) p_97741_, p_97742_, p_97743_);
     }
@@ -109,4 +111,6 @@ public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContai
     public void containerTick(){
         spin++;
     }
+
+    public void tabChanged(int id){}
 }

@@ -119,6 +119,7 @@ public class SnappyStuff
     @OnlyIn(Dist.CLIENT)
     public void stitch(TextureStitchEvent.Pre event){
         event.addSprite(new ResourceLocation("snappystuff:curios/radio_slot"));
+        //event.addSprite(new ResourceLocation("snappystuff:textures/gui/button_texture"));
     }
 
     @SubscribeEvent

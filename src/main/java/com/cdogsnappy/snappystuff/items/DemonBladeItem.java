@@ -57,17 +57,24 @@ public class DemonBladeItem extends SwordItem {
         if(!(player instanceof Player)){return super.hurtEnemy(pStack,pTarget,player);}
         float karma = 0;
         float newKarma = 0;
+        int numSwings = 0;
         if((newKarma = Karma.getScore(player.getUUID())) >= -20){
             return true;
         }
         if(pStack.getTag().contains("demon_modifier")){
             CompoundTag dTag = pStack.getTagElement("demon_modifier");
             karma = dTag.getFloat("karma");
+            numSwings = dTag.getInt("swings");
+        }
+        if(numSwings > 50 && numSwings/700 > player.getRandom().nextDouble()){
+            punishWielder(player);
+            numSwings = 0;
         }
         if(karma != newKarma){
             CompoundTag tag = new CompoundTag();
             tag.putFloat("karma",newKarma);
             tag.putFloat("damage",calculateDamage(newKarma));
+            tag.putInt("swings",numSwings++);
             pStack.addTagElement("demon_modifier",tag);
         }
         /**
@@ -84,6 +91,14 @@ public class DemonBladeItem extends SwordItem {
          */
         return super.hurtEnemy(pStack,pTarget,player);
     }
+
+    private void punishWielder(LivingEntity player) {
+        for(int j = 0; j < 4; ++j){//All possible bad effects of the blade reflect back onto the attacker, and they are withered.
+            player.addEffect(new MobEffectInstance(demonicEffects[j],200), player);
+        }
+        player.addEffect(new MobEffectInstance(MobEffects.WITHER,80));
+    }
+
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack) {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
