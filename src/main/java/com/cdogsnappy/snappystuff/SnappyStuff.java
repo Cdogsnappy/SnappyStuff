@@ -1,7 +1,6 @@
 package com.cdogsnappy.snappystuff;
 
 import com.cdogsnappy.snappystuff.commands.CommandRegistration;
-import com.cdogsnappy.snappystuff.data.ServerBirth;
 import com.cdogsnappy.snappystuff.data.ServerDeath;
 import com.cdogsnappy.snappystuff.data.SnappyData;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;

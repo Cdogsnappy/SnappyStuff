@@ -8,9 +8,7 @@ public class CommandRegistration {
         var builder = Commands.literal("snappy");
         EndorseCommand.register(builder);
         ChangeKarmaCommand.register(builder);
-        CourtCreateCommand.register(builder);
         CreateKillMissionCommand.register(builder, e.getBuildContext());
-        LogCrimeCommand.register(builder);
         CreateCollectMissionCommand.register(builder,e.getBuildContext());
         CreateBlockMissionCommand.register(builder,e.getBuildContext());
         GetKarmaCommand.register(builder);

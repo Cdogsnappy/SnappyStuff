@@ -54,7 +54,7 @@ public class CitizenData implements Serializable {
     }
     public static String getPlayerName(UUID id){
         for(ClientCitizenData c : citizenNames){
-            if(id==c.playerID){return c.name;}
+            if(id.equals(c.playerID)){return c.name;}
         }
         return "";
     }
@@ -63,7 +63,6 @@ public class CitizenData implements Serializable {
         tag.putUUID("id",id);
         tag.putString("name",name);
         tag.putIntArray("services",services);
-        tag.put("crimes",crimeTag);
         return tag;
     }
     public static CitizenData load(CompoundTag tag){

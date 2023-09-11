@@ -19,7 +19,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber
 public class Karma{
     public static UUID id = UUID.fromString("c0bef565-35f6-4dc5-bb4c-3644c382e6ce");
-    public static HashMap<UUID, KarmaPlayerInfo> karmaScores;
+    public static HashMap<UUID, KarmaPlayerInfo> karmaScores = new HashMap<>();
 
     public static void init() {
         karmaScores = new HashMap<>();

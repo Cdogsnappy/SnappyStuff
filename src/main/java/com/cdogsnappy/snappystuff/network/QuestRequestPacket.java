@@ -37,10 +37,16 @@ public class QuestRequestPacket {
         context.enqueueWork(() -> {
             Quest q = null;
             if(open){
-                q = QuestHandler.openContractQuests.get(ind);
+                int currSize = QuestHandler.openContractQuests.size();
+                if(currSize == 0){}
+                else if(currSize - 1 < ind){q = QuestHandler.openContractQuests.get(currSize-1);}
+                else{q = QuestHandler.openContractQuests.get(ind);}
             }
             else{
-                q = QuestHandler.unacceptedQuests.get(ind);
+                int currSize = QuestHandler.unacceptedQuests.size();
+                if(currSize == 0){}
+                else if(currSize - 1< ind){q = QuestHandler.unacceptedQuests.get(currSize-1);}
+                else{q = QuestHandler.unacceptedQuests.get(ind);}
             }
             // HERE WE ARE ON THE SERVER!
             SnappyNetwork.sendToPlayer(new QuestScreenPacket(q), context.getSender());//SENDS THE NEXT QUEST TO DISPLAY

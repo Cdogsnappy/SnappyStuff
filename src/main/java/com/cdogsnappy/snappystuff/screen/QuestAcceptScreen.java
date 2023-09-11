@@ -43,6 +43,7 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     private PageButton nextButton;
     private final boolean playTurnSound = true;
     private int currentPage = 0;
+    private QuestAcceptConfirmButton confirmButton;
     private Tab[] TABS = new Tab[2];
 
     private final List<QuestAcceptScreen.QuestButtons> buttonList = Lists.newArrayList();
@@ -60,16 +61,18 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     protected void init() {
         super.init();
         currTab = 0;
-        this.addButton(new QuestAcceptScreen.QuestAcceptConfirmButton(this.leftPos + 195, this.topPos + 198, this));
+        confirmButton = this.addRenderableWidget(new QuestAcceptScreen.QuestAcceptConfirmButton(this.leftPos + 195, this.topPos + 198, this));
         SnappyNetwork.sendToServer(new QuestRequestPacket(0,false));
         TABS[0] = this.addWidget(new Tab(this.leftPos + this.imageWidth-7,this.topPos + 30,null,0, new ItemStack(Items.IRON_PICKAXE), this));
         TABS[1] = this.addWidget(new Tab(this.leftPos + this.imageWidth-11,this.topPos+60,null,1, new ItemStack(ModItems.DEMON_BLADE.get()), this));
         createPageControlButtons();
+        updateButtonVisibility();
     }
 
-    private <T extends AbstractWidget & QuestAcceptScreen.QuestButtons> void addButton(T button) {
+    private <T extends AbstractWidget & QuestAcceptScreen.QuestButtons> AbstractWidget addButton(T button) {
         this.addRenderableWidget(button);
         this.buttonList.add(button);
+        return button;
     }
 
     interface QuestButtons {
@@ -136,10 +139,11 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
         }
         public void onPress() {
             if(QuestScreensData.questScreenDisplay == null){return;}
-            SnappyNetwork.sendToServer(new QuestAcceptPacket((ClosedContractQuest)QuestScreensData.questScreenDisplay));
-            if(currentPage >= getNumPages()-1 && currentPage != 0){--currentPage;}//Weird code here, but we just removed a quest from the list of quests, so there is now length-1-1 quests.
-            SnappyNetwork.sendToServer(new QuestRequestPacket(this.q.currentPage,this.q.currTab == 1));
+            Quest q = QuestScreensData.questScreenDisplay;
+            QuestScreensData.questScreenDisplay = null;
             clearRewards();
+            SnappyNetwork.sendToServer(new QuestAcceptPacket((ClosedContractQuest)q));
+            if(currentPage >= getNumPages()-1 && currentPage != 0){--currentPage;}//Weird code here, but we just removed a quest from the list of quests, so there is now length-1-1 quests.
             //Send packets
         }
         @Override
@@ -161,14 +165,15 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
-        if ((QuestScreensData.numOpenQuests == 0 && currTab == 1) || (QuestScreensData.numClosedQuests == 0 && currTab == 0)) {
+        if ((QuestScreensData.numOpenQuests == 0 && currTab == 1) || (QuestScreensData.numClosedQuests == 0 && currTab == 0) || QuestScreensData.questScreenDisplay == null) {
             this.font.draw(pPoseStack, "No Quests!", x + 80 - (float) (this.font.width("No Quests!") / 2), y + 40, 0);
         }
         else {
             this.font.draw(pPoseStack, "Quest # " + (currentPage+1), this.leftPos + 192, this.topPos + 132, 0);
             switch(currTab){
                 case 0:
-                    this.font.draw(pPoseStack, "From " + CitizenData.getPlayerName(QuestScreensData.questScreenDisplay.requestor), this.leftPos + 192, this.topPos + 140, 0);
+                    this.font.draw(pPoseStack, "Requestor:", this.leftPos + 192, this.topPos + 140, 0);
+                    this.font.draw(pPoseStack, CitizenData.getPlayerName(QuestScreensData.questScreenDisplay.requestor), this.leftPos + 192, this.topPos + 146,0);
                     for(int j = 0; j < ((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.size(); ++j){renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),110,21,((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.get(j));}
                     break;
                 case 1:
@@ -209,10 +214,10 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
         return rgb;
     }
     protected void createPageControlButtons() {
-        this.nextButton = this.addRenderableWidget(new PageButton(this.leftPos + 224, this.topPos + 144, true, (p_98297_) -> {
+        this.nextButton = this.addRenderableWidget(new PageButton(this.leftPos + 214, this.topPos + 154, true, (p_98297_) -> {
             this.pageForward();
         }, this.playTurnSound));
-        this.prevButton = this.addRenderableWidget(new PageButton(this.leftPos + 198, this.topPos + 144, false, (p_98287_) -> {
+        this.prevButton = this.addRenderableWidget(new PageButton(this.leftPos + 188, this.topPos + 154, false, (p_98287_) -> {
             this.pageBack();
         }, this.playTurnSound));
         this.updateButtonVisibility();
@@ -237,6 +242,16 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     protected void updateButtonVisibility() {
         this.nextButton.visible = this.currentPage < this.getNumPages() - 1;
         this.prevButton.visible = this.currentPage > 0;
+        /*
+        if(QuestScreensData.questScreenDisplay == null || QuestScreensData.questScreenDisplay.requestor.equals(minecraft.player.getUUID())){
+            this.confirmButton.visible = false;
+        }
+        else{this.confirmButton.visible = true;}
+
+         */
+    }
+    protected void syncPageNumber(){
+        if(currentPage > getNumPages() - 1){currentPage = getNumPages() - 1;}//Handles desync due to other players accepting quests and changing the quest pool while you are viewing the final quest.
     }
     protected int getNumPages() {
         switch(currTab){

@@ -1,11 +1,15 @@
 package com.cdogsnappy.snappystuff.quest;
 
 
+import com.cdogsnappy.snappystuff.network.QuestRequestPacket;
+import com.cdogsnappy.snappystuff.network.QuestScreenPacket;
+import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
@@ -88,12 +92,18 @@ public class QuestHandler{
 
     }
 
-    public static void acceptQuest(ClosedContractQuest q,Player player){
-        player.sendSystemMessage(Component.literal(q.questID.toString()));
+    public static void acceptQuest(ClosedContractQuest q, ServerPlayer player){
         for(ClosedContractQuest c : unacceptedQuests){
-            player.sendSystemMessage(Component.literal(c.questID.toString()));
-            if(c.questID == q.questID){
+            if(c.questID.equals(q.questID)){
+                int ind = unacceptedQuests.indexOf(c);
                 unacceptedQuests.remove(c);
+                if(unacceptedQuests.size() == 0){SnappyNetwork.sendToPlayer(new QuestScreenPacket((Quest)null), player);}
+                else if(ind > unacceptedQuests.size() && ind != 0){
+                    SnappyNetwork.sendToPlayer(new QuestScreenPacket(unacceptedQuests.get(ind-1)),player);
+                }
+                else{
+                    SnappyNetwork.sendToPlayer(new QuestScreenPacket(unacceptedQuests.get(ind)),player);
+                }
                 q.questor = player.getUUID();
                 playerQuestData.get(player.getUUID()).acceptedQuests.add(q);
             }

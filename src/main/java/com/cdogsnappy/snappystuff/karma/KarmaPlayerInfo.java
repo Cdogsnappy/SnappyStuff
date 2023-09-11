@@ -57,7 +57,7 @@ public class KarmaPlayerInfo implements Serializable {
         tag.putInt("numEndorsed",numEndorsed);
         ListTag playersEndorsedTag = new ListTag();
         for(EndorsementInfo i : this.playersEndorsed){
-            playersEndorsedTag.add(i.save(new CompoundTag()));
+            if(i!=null){playersEndorsedTag.add(i.save(new CompoundTag()));}
         }
         tag.put("playersEndorsed", playersEndorsedTag);
         return tag;
