@@ -15,7 +15,9 @@ public class Quest {
     }
     @NonNull
     protected QuestType type;
-    protected List<ItemStack> rewards;
+    public List<ItemStack> rewards;
+    @NonNull
+    public UUID questID;//UNIQUE IDENTIFIER
     @NonNull
     public UUID requestor;//Player who created quest(NON-NULLABLE)
     public static final UUID radiantID = UUID.fromString("558d5358-75c9-4a7a-a5e7-e4ccbd7ccf4c");//USE THIS FOR NON PLAYER CREATED QUESTS

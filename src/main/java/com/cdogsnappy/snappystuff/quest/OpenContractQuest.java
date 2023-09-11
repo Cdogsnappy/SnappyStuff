@@ -19,6 +19,14 @@ public class OpenContractQuest extends Quest{
         this.rewards = rewards;
         this.requestor = requestor;
         this.type = type;
+        this.questID = UUID.randomUUID();
+    }
+    public OpenContractQuest(PlayerKillMission mission, List<ItemStack> rewards, UUID requestor, QuestType type, UUID id){
+        this.mission = mission;
+        this.rewards = rewards;
+        this.requestor = requestor;
+        this.type = type;
+        this.questID = id;
     }
 
     public static CompoundTag save(CompoundTag tag, OpenContractQuest q){
@@ -35,6 +43,7 @@ public class OpenContractQuest extends Quest{
         }
         tag.put("mission", q.mission.save(new CompoundTag()));
         tag.put("rewards", rewards);
+        tag.putUUID("id", q.questID);
         return tag;
     }
     public static OpenContractQuest load(CompoundTag tag) {
@@ -51,7 +60,7 @@ public class OpenContractQuest extends Quest{
             rewards.add(ItemStack.of(rewardsTag.getCompound(j)));
         }
 
-            return new OpenContractQuest(mission, rewards, requestor, type);
+        return new OpenContractQuest(mission, rewards,tag.getUUID("requestor"), type, tag.getUUID("id"));
 
     }
 

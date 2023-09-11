@@ -59,11 +59,12 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     @Override
     protected void init() {
         super.init();
-        createPageControlButtons();
-        this.addButton(new QuestAcceptScreen.QuestAcceptConfirmButton(this.leftPos + 195, this.topPos + 198));
+        currTab = 0;
+        this.addButton(new QuestAcceptScreen.QuestAcceptConfirmButton(this.leftPos + 195, this.topPos + 198, this));
         SnappyNetwork.sendToServer(new QuestRequestPacket(0,false));
         TABS[0] = this.addWidget(new Tab(this.leftPos + this.imageWidth-7,this.topPos + 30,null,0, new ItemStack(Items.IRON_PICKAXE), this));
         TABS[1] = this.addWidget(new Tab(this.leftPos + this.imageWidth-11,this.topPos+60,null,1, new ItemStack(ModItems.DEMON_BLADE.get()), this));
+        createPageControlButtons();
     }
 
     private <T extends AbstractWidget & QuestAcceptScreen.QuestButtons> void addButton(T button) {
@@ -128,15 +129,23 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     }
 
     class QuestAcceptConfirmButton extends QuestAcceptScreen.QuestAcceptSpriteScreenButton {
-        public QuestAcceptConfirmButton(int x, int y) {
+        private QuestAcceptScreen q;
+        public QuestAcceptConfirmButton(int x, int y, QuestAcceptScreen q) {
             super(x, y, 90, 220, Component.literal("ACCEPT"));
+            this.q = q;
         }
         public void onPress() {
             if(QuestScreensData.questScreenDisplay == null){return;}
             SnappyNetwork.sendToServer(new QuestAcceptPacket((ClosedContractQuest)QuestScreensData.questScreenDisplay));
-            if(currentPage >= getNumPages()-1){--currentPage;}//Weird code here, but we just removed a quest from the list of quests, so there is now length-1-1 quests.
-            else{++currentPage;}
+            if(currentPage >= getNumPages()-1 && currentPage != 0){--currentPage;}//Weird code here, but we just removed a quest from the list of quests, so there is now length-1-1 quests.
+            SnappyNetwork.sendToServer(new QuestRequestPacket(this.q.currentPage,this.q.currTab == 1));
+            clearRewards();
             //Send packets
+        }
+        @Override
+        public void renderButton(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
+            if(this.q.currTab == 1){return;}
+            super.renderButton(pPoseStack,mouseX,mouseY,delta);
         }
         public void updateStatus(int status) {
             //Remove quest from thinger
@@ -160,14 +169,24 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
             switch(currTab){
                 case 0:
                     this.font.draw(pPoseStack, "From " + CitizenData.getPlayerName(QuestScreensData.questScreenDisplay.requestor), this.leftPos + 192, this.topPos + 140, 0);
-                    for(int j = 0; j < 3; ++j){renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),110,21,((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.get(j));}
+                    for(int j = 0; j < ((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.size(); ++j){renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),110,21,((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.get(j));}
                     break;
                 case 1:
                     renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43,110,21,((OpenContractQuest)QuestScreensData.questScreenDisplay).mission);
                     break;
             }
+            renderRewards();
         }
     }
+
+    private void renderRewards(){
+        List<ItemStack> rewards = QuestScreensData.questScreenDisplay.rewards;
+        if(rewards.size() == 0){return;}
+        for(int i = 0; i < rewards.size(); ++i){
+            this.menu.slots.get(i+36).set(rewards.get(i));
+        }
+    }
+    private void clearRewards(){for(int j = 0; j < 5; ++j){this.menu.slots.get(j+36).set(ItemStack.EMPTY);}}
 
 
     //use PoseStack.scale -> PoseStack.scale(float x, float y, float z) to scale the text
@@ -201,12 +220,16 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     protected void pageForward() {
         if (this.currentPage < this.getNumPages() - 1) {
             ++this.currentPage;
+            SnappyNetwork.sendToServer(new QuestRequestPacket(currentPage,this.currTab == 1));
+            clearRewards();
         }
         this.updateButtonVisibility();
     }
     protected void pageBack() {
         if (this.currentPage > 0) {
             --this.currentPage;
+            SnappyNetwork.sendToServer(new QuestRequestPacket(currentPage,this.currTab == 1));
+            clearRewards();
         }
 
         this.updateButtonVisibility();
@@ -230,5 +253,6 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     public void tabChanged(int id){
         TABS[currTab].x-=4;
         TABS[id].x+=4;
+        clearRewards();
     }
 }

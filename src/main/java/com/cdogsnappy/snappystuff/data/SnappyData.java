@@ -1,5 +1,8 @@
 package com.cdogsnappy.snappystuff.data;
 
+import com.cdogsnappy.snappystuff.court.CitizenData;
+import com.cdogsnappy.snappystuff.karma.Karma;
+import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +18,9 @@ public class SnappyData extends SavedData {
     public CompoundTag save(CompoundTag tag) {
         tag.put("QuestData", QuestHandler.save(new CompoundTag()));
         tag.put("RadioData", RadioHandler.save(new CompoundTag()));
+        tag.put("KarmaData", Karma.save(new CompoundTag()));
+        tag.put("CitizenData", CitizenData.saveRegistry(new CompoundTag()));
+        tag.put("DailyTime", DailyQuestHandler.saveTime(new CompoundTag()));
         return tag;
     }
 
@@ -29,6 +35,9 @@ public class SnappyData extends SavedData {
     public static SnappyData load(CompoundTag tag){
         QuestHandler.load(tag.getCompound("QuestData"));
         RadioHandler.load(tag.getCompound("RadioData"));
+        Karma.load(tag.getCompound("KarmaData"));
+        CitizenData.loadRegistry(tag.getCompound("CitizenData"));
+        DailyQuestHandler.loadTime(tag.getCompound("DailyTime"));
         return new SnappyData();
     }
     public static void setDataDirty(){

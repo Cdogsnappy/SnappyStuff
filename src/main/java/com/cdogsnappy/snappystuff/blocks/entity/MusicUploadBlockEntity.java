@@ -3,7 +3,6 @@ package com.cdogsnappy.snappystuff.blocks.entity;
 import com.cdogsnappy.snappystuff.blocks.ModEntityBlocks;
 import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
-import com.cdogsnappy.snappystuff.radio.SoundInfo;
 import com.cdogsnappy.snappystuff.screen.MusicUploadMenu;
 import com.cdogsnappy.snappystuff.sounds.SSSoundRegistry;
 import net.minecraft.core.BlockPos;
@@ -139,7 +138,6 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         List<RegistryObject<SoundEvent>> sounds = SSSoundRegistry.SOUNDS.getEntries().stream().toList();
         for(int i = 0; i<sounds.size(); i++){
             if(sounds.get(i).get() == song.getSound()){
-                RadioHandler.musicLocations.add(new SoundInfo(i,song.getLengthInTicks()));
                 RadioHandler.music.add(new CustomSoundEvent(song.getSound(), song.getLengthInTicks()));
                 break;
             }

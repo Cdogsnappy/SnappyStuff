@@ -85,7 +85,6 @@ public class SnappyStuff
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
         try {
-            ServerBirth.readData();
             RadioHandler.init();
             SnappyData.get(event.getServer().getLevel(Level.OVERWORLD));
             MissionJSONHandler.init();
@@ -102,7 +101,6 @@ public class SnappyStuff
 
     @SubscribeEvent
     public void onServerDeath(ServerStoppingEvent event){
-        ServerDeath.generateData(LOGGER);
         try {
             //if(event.getServer().isDedicatedServer()) { THIS WILL FIX THE INTEGRATED SERVER ISSUE, KARMALOGS DO NOT WORK ON
             //INTEGRATED SERVERS
@@ -121,7 +119,6 @@ public class SnappyStuff
         event.addSprite(new ResourceLocation("snappystuff:curios/radio_slot"));
         //event.addSprite(new ResourceLocation("snappystuff:textures/gui/button_texture"));
     }
-
     @SubscribeEvent
     public void cmds(RegisterCommandsEvent e){
         CommandRegistration.registerCommands(e);

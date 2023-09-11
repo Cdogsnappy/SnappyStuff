@@ -1,52 +1,12 @@
 package com.cdogsnappy.snappystuff.data;
-
-import com.cdogsnappy.snappystuff.court.CitizenData;
-import com.cdogsnappy.snappystuff.court.CourtCase;
-import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaLog;
-import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
-import com.cdogsnappy.snappystuff.quest.QuestHandler;
-import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.util.*;
 
 public class ServerDeath {
-    /**
-     * @author bus7ed
-     * Generates a file that stores all global persistent server data
-     */
-    public static void generateData(Logger logger){
-        try {
-            File snappyData = new File("snappystuff/snappydata.dat");
-            if (snappyData.exists()) {
-                snappyData.delete();
-            }
-            snappyData.createNewFile();
-            FileOutputStream fos = new FileOutputStream(snappyData);
-            ObjectOutputStream objWriter = new ObjectOutputStream(fos);
-            HashMap<String,Object> serverData = new HashMap<String,Object>();//FILL THIS HASHMAP WITH THE INFO WE WANT TO SAVE
-            serverData.put("karma", Karma.karmaScores);
-            serverData.put("citizens", CitizenData.citizenRegistry);
-            serverData.put("cases", CourtCase.caseArchive);
-            serverData.put("music", RadioHandler.musicLocations);
-            serverData.put("dailytime", DailyQuestHandler.lastRefresh);
-            serverData.put("citizenNames",CitizenData.citizenNames);
-            objWriter.writeObject(serverData);
-            objWriter.flush();
-            objWriter.close();
-        }
-        catch(IOException e){
-            logger.info("FATAL ERROR SAVING SNAPPY DATA");
-        }
-
-    }
 
     /**
      * @author Cdogsnappy

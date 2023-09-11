@@ -4,6 +4,7 @@ import com.cdogsnappy.snappystuff.quest.mission.DailyMission;
 import com.cdogsnappy.snappystuff.quest.mission.DailyReward;
 import com.cdogsnappy.snappystuff.quest.mission.Mission;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -113,6 +114,14 @@ public class DailyQuestHandler {
             res.add(new ItemStack(i,rand.nextInt(max[0]-min[0]) + min[0] + 1));
         }
         return res;
+    }
+
+    public static CompoundTag saveTime(CompoundTag tag){
+        tag.putString("time",lastRefresh.toString());
+        return tag;
+    }
+    public static void loadTime(CompoundTag tag){
+        lastRefresh = LocalDateTime.parse(tag.getString("time"));
     }
 
 }

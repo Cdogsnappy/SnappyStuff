@@ -17,22 +17,21 @@ public class ClosedContractQuest extends Quest{
     public UUID questor;//Player who has accepted quest
     public List<Mission> missions;
     public ClosedContractQuest(List<Mission> missions, List<ItemStack> rewards, UUID requestor, QuestType type){
-        this.missions = missions;
-        this.rewards = rewards;
-        this.questor = null;
-        this.requestor = requestor;
-        this.type = type;
-
-
+        this(missions,rewards,requestor,null,type,UUID.randomUUID());
+    }
+    public ClosedContractQuest(List<Mission> missions, List<ItemStack> rewards, UUID requestor, QuestType type, UUID id){
+        this(missions,rewards,requestor,null,type,id);
     }
     public ClosedContractQuest(List<Mission> missions, List<ItemStack> rewards, UUID requestor, UUID questor, QuestType type){
+        this(missions,rewards,requestor,questor,type,UUID.randomUUID());
+    }
+    public ClosedContractQuest(List<Mission> missions, List<ItemStack> rewards, UUID requestor, UUID questor, QuestType type, UUID id){
         this.missions = missions;
         this.rewards = rewards;
         this.questor = questor;
         this.requestor = requestor;
         this.type = type;
-
-
+        this.questID = id;
     }
     public void acceptQuest(Player player){
         this.questor = player.getUUID();
@@ -82,6 +81,7 @@ public class ClosedContractQuest extends Quest{
             tag.putUUID("requestor", q.requestor);
             tag.put("missions", missions);
             tag.put("rewards", rewards);
+            tag.putUUID("id",q.questID);
             return tag;
     }
 
@@ -109,10 +109,10 @@ public class ClosedContractQuest extends Quest{
         };
         if(tag.getBoolean("accepted")) {
             UUID player = tag.getUUID("questor");
-            return new ClosedContractQuest(missions, rewards, requestor, player, type);
+            return new ClosedContractQuest(missions, rewards, requestor, player, type, tag.getUUID("id"));
         }
         else{
-            return new ClosedContractQuest(missions, rewards, requestor, type);
+            return new ClosedContractQuest(missions, rewards, requestor, type, tag.getUUID("id"));
         }
     }
 
@@ -130,6 +130,8 @@ public class ClosedContractQuest extends Quest{
         rewards.addAll(this.rewards);
         QuestHandler.playerQuestData.get(this.questor).rewards = rewards;
     }
+
+
 
 
 }

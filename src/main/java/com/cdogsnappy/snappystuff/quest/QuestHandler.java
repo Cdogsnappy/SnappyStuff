@@ -5,6 +5,7 @@ import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
@@ -87,12 +88,14 @@ public class QuestHandler{
 
     }
 
-    public static void acceptQuest(ClosedContractQuest q, UUID player){
+    public static void acceptQuest(ClosedContractQuest q,Player player){
+        player.sendSystemMessage(Component.literal(q.questID.toString()));
         for(ClosedContractQuest c : unacceptedQuests){
-            if(c.equals(q)){
+            player.sendSystemMessage(Component.literal(c.questID.toString()));
+            if(c.questID == q.questID){
                 unacceptedQuests.remove(c);
-                playerQuestData.get(player).acceptedQuests.add(q);//We add the quest to accepted if we find it in the unaccepted list. Should cover the case where two players attempt to accept a quest at the same time.
-                break;
+                q.questor = player.getUUID();
+                playerQuestData.get(player.getUUID()).acceptedQuests.add(q);
             }
         }
     }

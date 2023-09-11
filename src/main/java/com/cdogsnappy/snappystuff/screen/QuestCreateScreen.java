@@ -183,6 +183,7 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
      * https://github.com/Shadows-of-Fire/Hostile-Neural-Networks/blob/1.19/src/main/java/shadows/hostilenetworks
      */
     public void renderEntityInInventory(float pPosX, float pPosY, float pScale, float pMouseX, float pMouseY) {
+        if(QuestScreensData.filteredTokens.size() == 0){return;}
         LivingEntity pLivingEntity = ClientEntityCache.computeIfAbsent((EntityType)QuestScreensData.filteredTokens.get(page),minecraft.level);
         renderEntityInInventory(pPosX, pPosY, pScale, pMouseX,pMouseY,pLivingEntity);
     }

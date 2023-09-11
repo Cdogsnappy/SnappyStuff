@@ -13,6 +13,8 @@ import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.QuestHandler;
 import com.cdogsnappy.snappystuff.quest.DailyQuestHandler;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
+import com.cdogsnappy.snappystuff.screen.QuestScreensData;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
@@ -92,6 +94,14 @@ public class Handlers {
             }
 
 
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event){
+        if(event.getEntity().level.isClientSide && event.getEntity().getUUID() == Minecraft.getInstance().player.getUUID()){
+            QuestScreensData.questScreenDisplay = null;
+            QuestScreensData.numClosedQuests = QuestScreensData.numOpenQuests = 0;
         }
     }
 }

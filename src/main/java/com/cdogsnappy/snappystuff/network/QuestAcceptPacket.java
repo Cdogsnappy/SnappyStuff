@@ -25,7 +25,7 @@ public class QuestAcceptPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             // HERE WE ARE ON THE SERVER!
-            QuestHandler.acceptQuest(q,context.getSender().getUUID());
+            QuestHandler.acceptQuest(q,context.getSender());
         });
         return true;
     }

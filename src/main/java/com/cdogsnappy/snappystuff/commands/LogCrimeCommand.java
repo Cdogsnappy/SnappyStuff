@@ -38,11 +38,11 @@ public class LogCrimeCommand {
         }
         CourtCase courtCase = CourtCase.caseArchive.get(id);
         if(victim == null){
-            courtCase.addCrime(new Crime(offense, courtCase.getSeverity(), null, courtCase.getParticipant(1)));
+            courtCase.addCrime(new Crime(offense, courtCase.getSeverity(), null, courtCase.getParticipant(1).getUUID()));
             return 0;
         }
         if(CitizenData.citizenRegistry.containsKey(victim)) {
-            courtCase.addCrime(new Crime(offense, courtCase.getSeverity(), CitizenData.citizenRegistry.get(victim), courtCase.getParticipant(1)));
+            courtCase.addCrime(new Crime(offense, courtCase.getSeverity(), CitizenData.citizenRegistry.get(victim).getUUID(), courtCase.getParticipant(1).getUUID()));
             return 0;
         }
         c.getSource().sendFailure(Component.literal("This victim doesn't exist!"));

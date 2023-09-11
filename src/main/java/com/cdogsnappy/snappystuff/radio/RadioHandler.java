@@ -29,7 +29,6 @@ import java.util.*;
 public class RadioHandler{
     public static List<Entity> listeners = Lists.newArrayList();
     public static List<Entity> standbyListeners = Lists.newArrayList();
-    public static List<SoundInfo> musicLocations = Lists.newArrayList();
     public static List<CustomSoundEvent> uploadableMusic = Lists.newArrayList();
     public static List<CustomSoundEvent> music = Lists.newArrayList();
     public static List<CustomSoundEvent> casts = Lists.newArrayList();
@@ -121,6 +120,7 @@ public class RadioHandler{
             tag.add(cTag);
         });
         p_77763_.put("music",tag);
+
         return p_77763_;
     }
     public static void load(CompoundTag tag) {

@@ -1,5 +1,7 @@
 package com.cdogsnappy.snappystuff.karma;
 import com.cdogsnappy.snappystuff.items.DivineFruitItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -125,6 +127,23 @@ public class Karma{
     public static int getEndorsed(UUID id){return karmaScores.get(id).numEndorsed;}
     public static KarmaPlayerInfo getKarmaInfo(UUID id){
         return karmaScores.get(id);
+    }
+
+    public static CompoundTag save(CompoundTag tag){
+        ListTag karmaScoreTag = new ListTag();
+        karmaScores.forEach((id,info) -> {
+            CompoundTag ks = new CompoundTag();
+            ks.putUUID("id",id);
+            ks.put("karmaScore",info.save(new CompoundTag()));
+        });
+        tag.put("karmaMap", karmaScoreTag);
+        return tag;
+    }
+    public static void load(CompoundTag tag){
+        ListTag karmaScoreTag = (ListTag)tag.get("karmaMap");
+        for(int i = 0; i < karmaScoreTag.size(); ++i){
+            karmaScores.put(karmaScoreTag.getCompound(i).getUUID("id"),KarmaPlayerInfo.load(karmaScoreTag.getCompound(i).getCompound("karmaScore")));
+        }
     }
 }
 

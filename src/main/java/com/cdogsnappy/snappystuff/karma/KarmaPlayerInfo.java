@@ -1,5 +1,7 @@
 package com.cdogsnappy.snappystuff.karma;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.Serializable;
@@ -46,5 +48,26 @@ public class KarmaPlayerInfo implements Serializable {
     public EndorsementInfo[] getPlayersEndorsed(){return playersEndorsed;}
     public String toString(){
         return "Score: " + this.score + ", Health: " + this.health;
+    }
+
+    public CompoundTag save(CompoundTag tag){
+        tag.putFloat("score",score);
+        tag.putFloat("health",health);
+        tag.putInt("numEndorsements",numEndorsements);
+        tag.putInt("numEndorsed",numEndorsed);
+        ListTag playersEndorsedTag = new ListTag();
+        for(EndorsementInfo i : this.playersEndorsed){
+            playersEndorsedTag.add(i.save(new CompoundTag()));
+        }
+        tag.put("playersEndorsed", playersEndorsedTag);
+        return tag;
+    }
+    public static KarmaPlayerInfo load(CompoundTag tag){
+        EndorsementInfo[] eI = new EndorsementInfo[3];
+        ListTag playersEndorsedTag = (ListTag)tag.get("playersEndorsed");
+        for(int i = 0; i < playersEndorsedTag.size(); ++i){
+            eI[i] = EndorsementInfo.load(playersEndorsedTag.getCompound(i));
+        }
+        return new KarmaPlayerInfo(tag.getFloat("score"),tag.getFloat("health"),tag.getInt("numEndorsements"),tag.getInt("numEndorsed"),eI);
     }
 }
