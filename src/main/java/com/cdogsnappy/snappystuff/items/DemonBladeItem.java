@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -54,13 +56,11 @@ public class DemonBladeItem extends SwordItem {
 
     @Override
     public boolean hurtEnemy(ItemStack pStack, LivingEntity pTarget, LivingEntity player) {
-        if(!(player instanceof Player)){return super.hurtEnemy(pStack,pTarget,player);}
+        if(pTarget.level.isClientSide || !(player instanceof Player)){return super.hurtEnemy(pStack,pTarget,player);}
         float karma = 0;
         float newKarma = 0;
         int numSwings = 0;
-        if((newKarma = Karma.getScore(player.getUUID())) >= -20){
-            return true;
-        }
+        if((newKarma = Karma.getScore(player.getUUID())) >= -20){return false;}
         if(pStack.getTag().contains("demon_modifier")){
             CompoundTag dTag = pStack.getTagElement("demon_modifier");
             karma = dTag.getFloat("karma");
@@ -84,11 +84,7 @@ public class DemonBladeItem extends SwordItem {
         for(int j = 0; j < numEffects; ++j){//We add a new effect at each "tier" of bad karma: -30, -60, -90,...
             pTarget.addEffect(new MobEffectInstance(demonicEffects[j],200), player);
         }
-        /*
-        if(karma < -100 && Math.random() >= 0 && pTarget.getLevel().dimension() != Level.NETHER){
-            pTarget.changeDimension(pAttacker.getServer().getLevel(Level.NETHER));
-        }
-         */
+
         return super.hurtEnemy(pStack,pTarget,player);
     }
 

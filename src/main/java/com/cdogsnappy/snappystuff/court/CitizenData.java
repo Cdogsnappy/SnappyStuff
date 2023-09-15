@@ -23,21 +23,18 @@ public class CitizenData implements Serializable {
 
     protected UUID id;
     protected String name;
-    protected int[] services = new int[5];//Map, 0 = Judge, 1 = Jury, 2 = Defendant, 3 = Plaintiff, 4 = Lawyer
 
     public CitizenData(Player p){
         id = p.getUUID();
         name = p.getName().getString();
     }
-    public CitizenData(UUID id, String name, int[] services){
+    public CitizenData(UUID id, String name){
         this.id = id;
         this.name = name;
-        this.services = services;
     }
 
     public String getName(){return name;}
     public UUID getUUID(){return id;}
-    public int[] getServices(){return services;}
 
     /**
      * @author Cdogsnappy
@@ -62,11 +59,10 @@ public class CitizenData implements Serializable {
     public CompoundTag save(CompoundTag tag){
         tag.putUUID("id",id);
         tag.putString("name",name);
-        tag.putIntArray("services",services);
         return tag;
     }
     public static CitizenData load(CompoundTag tag){
-        return new CitizenData(tag.getUUID("id"),tag.getString("name"),tag.getIntArray("services"));
+        return new CitizenData(tag.getUUID("id"),tag.getString("name"));
     }
 
     public static CompoundTag saveRegistry(CompoundTag tag){

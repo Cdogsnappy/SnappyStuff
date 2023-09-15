@@ -36,8 +36,6 @@ import java.util.List;
 
 public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_create_block_gui.png");
-    private final int verticalPadding = 7;
-    private final int horizontalPadding = 9;
     private Font font1;
     private PageButton prevButton;
     private PageButton nextButton;
@@ -193,15 +191,6 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     }
     private void clearRewards(){for(int j = 0; j < 5; ++j){this.menu.slots.get(j+36).set(ItemStack.EMPTY);}}
 
-
-    //use PoseStack.scale -> PoseStack.scale(float x, float y, float z) to scale the text
-    // Font.draw to render the text needed -> this.font.draw(PoseStack, float x, float y, int color)
-
-    private void guiInit(PoseStack pPoseStack, float x, float y) {
-        pPoseStack.scale(.8f, .8f, .8f);
-        this.font.draw(pPoseStack, "Quest Type: ", 1.25F*(x + 124), 1.25F*(y + this.font.lineHeight + 1), colorTranslate(Color.CYAN));
-        pPoseStack.scale(1.25f, 1.25f, 1.25f);
-    }
     private static int colorTranslate (Color color) {
         int alpha = color.getAlpha();
         int red = color.getRed();
@@ -242,13 +231,13 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     protected void updateButtonVisibility() {
         this.nextButton.visible = this.currentPage < this.getNumPages() - 1;
         this.prevButton.visible = this.currentPage > 0;
-        /*
+
         if(QuestScreensData.questScreenDisplay == null || QuestScreensData.questScreenDisplay.requestor.equals(minecraft.player.getUUID())){
             this.confirmButton.visible = false;
         }
         else{this.confirmButton.visible = true;}
 
-         */
+
     }
     protected void syncPageNumber(){
         if(currentPage > getNumPages() - 1){currentPage = getNumPages() - 1;}//Handles desync due to other players accepting quests and changing the quest pool while you are viewing the final quest.

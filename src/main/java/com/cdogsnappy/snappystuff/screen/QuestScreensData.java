@@ -30,15 +30,16 @@ public class QuestScreensData {
         KILL,
         PLAYERKILL
     }
-    public static List<Object> filteredTokens = new ArrayList<>();//Player will only ever be looking at one menu, block menu or entity menu, so only need one filtered list.
-    public static List<EntityType<?>> entitySearchTokens = new ArrayList<>();
-    public static List<Block> blockSearchTokens = new ArrayList<>();
+    public static List<Object> filteredTokens = Lists.newArrayList();//Player will only ever be looking at one menu, block menu or entity menu, so only need one filtered list.
+    public static List<EntityType<?>> entitySearchTokens = Lists.newArrayList();
+    public static List<Block> blockSearchTokens = Lists.newArrayList();
     public static List<ClientCitizenData> playerSearchTokens = CitizenData.citizenNames;
-    public static List<Item> itemSearchTokens = new ArrayList<>();
+    public static List<Item> itemSearchTokens = Lists.newArrayList();
     public static Quest questScreenDisplay = null;
-    public static List<ClosedContractQuest> playerQuests = null;//Player instanced quests, sent all in one packet so as not to require a packet every time the player move to the next quest.
+    public static List<ClosedContractQuest> playerQuests = Lists.newArrayList();//Player instanced quests, sent all in one packet so as not to require a packet every time the player move to the next quest.
     public static boolean playerQuestsStale = true;//If the player has accepted or completed quests at any point, the client will mark this true so that it knows to request the player quests again.
-    public static List<ItemStack> playerRewards = new ArrayList<>();
+    public static List<ItemStack> playerRewards = Lists.newArrayList();
+    public static List<ClosedContractQuest> playerCreatedQuests = Lists.newArrayList();
     public static int numClosedQuests = 0;
     public static int numOpenQuests = 0;
 

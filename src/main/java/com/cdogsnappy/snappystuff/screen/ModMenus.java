@@ -21,6 +21,8 @@ public class ModMenus {
             registerMenuType(QuestAcceptMenu::new, "quest_accept_menu");
     public static final RegistryObject<MenuType<QuestCreateMenu>> QUEST_CREATE_MENU =
             registerMenuType(QuestCreateMenu::new, "quest_create_menu");
+    public static final RegistryObject<MenuType<QuestOverviewMenu>> QUEST_OVERVIEW_MENU =
+            MENUS.register("quest_overview_menu", () -> new MenuType(QuestOverviewMenu::new));
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(IContainerFactory<T> factory,
                                                                                                   String name) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));

@@ -13,5 +13,7 @@
   "itemGroup.snappymusic": "Snappy Music",
   "block.snappystuff.music_upload_block" : "Music Uploader",
   "block.snappystuff.quest_accept_block" : "Quest Viewer",
-  "block.snappystuff.quest_create_block" : "Quest Creator"
+  "block.snappystuff.quest_create_block" : "Quest Creator",
+  "key.category.snappystuff.quest" : "Snappystuff",
+  "key.snappystuff.open_questbook" : "Questbook"
 }

@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
@@ -38,12 +39,12 @@ public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContai
             case COLLECT:
                 CollectMission cm = (CollectMission)m;
                 msg = msg + "Collect " + (cm.numToCollect-cm.numCollected);
-                drawItem(x+8 + this.font.width(msg), y - 24,cm.toCollect);
+                drawItem(x+8 + this.font.width(msg), y - 26,cm.toCollect);
                 break;
             case BLOCK:
                 BlockMission bm = (BlockMission)m;
                 msg = msg + "Break " + bm.numToBreak;
-                drawItem(x+8 + this.font.width(msg), y - 24,new ItemStack(bm.toBreak.asItem()));
+                drawItem(x+8 + this.font.width(msg), y - 26,new ItemStack(bm.toBreak.asItem()));
                 break;
             case KILL:
                 KillMission km = (KillMission)m;
@@ -113,4 +114,5 @@ public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContai
     }
 
     public void tabChanged(int id){}
+
 }

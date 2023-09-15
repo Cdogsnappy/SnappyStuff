@@ -56,9 +56,6 @@ public class SnappyStuff
          */
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::imcSend);
-        if(FMLEnvironment.dist == Dist.CLIENT){
-            modEventBus.addListener(this::stitch);
-        }
         // Register the Deferred Register to the mod event bus so blocks get registered
 
         // Register ourselves for server and other game events we are interested in
@@ -111,12 +108,6 @@ public class SnappyStuff
         }
         SnappyData.setDataDirty();//We assume data has been changed, it is extremely unlikely that it hasn't.
         MissionHandler.dailyMissionList = new ArrayList<>();
-    }
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void stitch(TextureStitchEvent.Pre event){
-        event.addSprite(new ResourceLocation("snappystuff:curios/radio_slot"));
-        //event.addSprite(new ResourceLocation("snappystuff:textures/gui/button_texture"));
     }
     @SubscribeEvent
     public void cmds(RegisterCommandsEvent e){
