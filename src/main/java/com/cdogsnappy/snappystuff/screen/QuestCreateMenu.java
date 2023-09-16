@@ -35,16 +35,15 @@ public class QuestCreateMenu extends AbstractContainerMenu {
         addDataSlots(data);
         this.playerInventory = inv;
     }
-    private void addRewardSlots(){
+    private void addRewardSlots() {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
             this.addSlot(new SlotItemHandler(handler, 0, 210, 29));
-            this.addSlot(new SlotItemHandler(handler,1,210,47));
-            this.addSlot(new SlotItemHandler(handler,2,210,65));
-            this.addSlot(new SlotItemHandler(handler,3,210,83));
-            this.addSlot(new SlotItemHandler(handler,4,210,101));
+            this.addSlot(new SlotItemHandler(handler, 1, 210, 47));
+            this.addSlot(new SlotItemHandler(handler, 2, 210, 65));
+            this.addSlot(new SlotItemHandler(handler, 3, 210, 83));
+            this.addSlot(new SlotItemHandler(handler, 4, 210, 101));
         });
     }
-
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
     private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
@@ -89,12 +88,7 @@ public class QuestCreateMenu extends AbstractContainerMenu {
         return copyOfSourceStack;
     }
 
-    @Override
-    public boolean stillValid(Player player) {
-        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.QUEST_CREATE_BLOCK.get());
-    }
-    //may not need this method because final block should not have an inventory
-    private void addPlayerInventory(Inventory playerInventory) {
+    protected void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
                 this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 24 + l * 18, 141 + i * 18));
@@ -102,17 +96,13 @@ public class QuestCreateMenu extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInventory) {
+    protected void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 24 + i * 18, 199));
         }
     }
-    public Inventory getPlayerInventory(){
-        return playerInventory;
-    }
-    public void clearRewardSlots(){
-        for(int i = 0; i < 5; ++i){
-            this.slots.get(i).set(ItemStack.EMPTY);
-        }
+    @Override
+    public boolean stillValid(Player player) {
+        return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.QUEST_CREATE_BLOCK.get());
     }
 }

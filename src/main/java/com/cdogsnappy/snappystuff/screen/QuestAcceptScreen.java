@@ -53,9 +53,9 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     @Override
     protected void init() {
         super.init();
+        SnappyNetwork.sendToServer(new QuestRequestPacket(0,false));
         currTab = 0;
         confirmButton = this.addRenderableWidget(new QuestAcceptScreen.QuestAcceptConfirmButton(this.leftPos + 195, this.topPos + 198, this));
-        SnappyNetwork.sendToServer(new QuestRequestPacket(0,false));
         TABS[0] = this.addWidget(new Tab(this.leftPos + this.imageWidth-7,this.topPos + 30,null,0, new ItemStack(Items.IRON_PICKAXE), this));
         TABS[1] = this.addWidget(new Tab(this.leftPos + this.imageWidth-11,this.topPos+60,null,1, new ItemStack(ModItems.DEMON_BLADE.get()), this));
         createPageControlButtons();

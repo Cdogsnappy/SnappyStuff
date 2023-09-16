@@ -39,12 +39,12 @@ public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContai
             case COLLECT:
                 CollectMission cm = (CollectMission)m;
                 msg = msg + "Collect " + (cm.numToCollect-cm.numCollected);
-                drawItem(x+8 + this.font.width(msg), y - 26,cm.toCollect);
+                drawItem(x+8 + this.font.width(msg), y - 18,cm.toCollect);
                 break;
             case BLOCK:
                 BlockMission bm = (BlockMission)m;
                 msg = msg + "Break " + bm.numToBreak;
-                drawItem(x+8 + this.font.width(msg), y - 26,new ItemStack(bm.toBreak.asItem()));
+                drawItem(x+8 + this.font.width(msg), y - 18,new ItemStack(bm.toBreak.asItem()));
                 break;
             case KILL:
                 KillMission km = (KillMission)m;

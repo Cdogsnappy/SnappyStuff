@@ -1,6 +1,7 @@
 package com.cdogsnappy.snappystuff.quest;
 
 
+import com.cdogsnappy.snappystuff.network.PlayerQuestDataPacket;
 import com.cdogsnappy.snappystuff.network.QuestRequestPacket;
 import com.cdogsnappy.snappystuff.network.QuestScreenPacket;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;
@@ -12,6 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.server.ServerLifecycleHooks;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,6 +110,19 @@ public class QuestHandler{
                 q.questor = player.getUUID();
                 playerQuestData.get(player.getUUID()).acceptedQuests.add(q);
             }
+        }
+    }
+    public static void removeQuest(ClosedContractQuest cq, ServerPlayer sender){
+        if(cq.questor != null){
+            playerQuestData.get(cq.questor).acceptedQuests.remove(cq);
+            SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(cq.questor),sender);
+        }
+        else{unacceptedQuests.remove(cq);}
+        playerQuestData.get(cq.requestor).createdQuests.remove(cq);
+        playerQuestData.get(cq.requestor).addAllRewards(cq.rewards);
+        ServerPlayer sp = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(cq.requestor);
+        if(sp != null){
+            SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(cq.requestor),sp);
         }
     }
 

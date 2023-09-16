@@ -120,15 +120,11 @@ public class ClosedContractQuest extends Quest{
         if(!(this.isComplete()) || this.questor == null){//Should never be called on a quest that is unaccepted, but you never know.
             return;
         }
-        List<ClosedContractQuest> currQuests = QuestHandler.playerQuestData.get(this.questor).acceptedQuests;
-        currQuests.remove(this);
-        QuestHandler.playerQuestData.get(this.questor).acceptedQuests = currQuests;
+        QuestHandler.playerQuestData.get(this.questor).acceptedQuests.remove(this);
         distributeRewards();
     }
     public void distributeRewards(){
-        List<ItemStack> rewards = QuestHandler.playerQuestData.get(this.questor).rewards;
-        rewards.addAll(this.rewards);
-        QuestHandler.playerQuestData.get(this.questor).rewards = rewards;
+        QuestHandler.playerQuestData.get(this.questor).addAllRewards(rewards);
     }
 
 

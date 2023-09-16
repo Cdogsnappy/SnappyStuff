@@ -12,6 +12,8 @@ public class CommandRegistration {
         CreateCollectMissionCommand.register(builder,e.getBuildContext());
         CreateBlockMissionCommand.register(builder,e.getBuildContext());
         GetKarmaCommand.register(builder);
+        GiveRewardCommand.register(builder, e.getBuildContext());
+        PrintRewardsCommand.register(builder);
         e.getDispatcher().register(builder);
     }
 }

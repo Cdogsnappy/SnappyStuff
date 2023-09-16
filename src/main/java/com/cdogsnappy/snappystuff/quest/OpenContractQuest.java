@@ -61,6 +61,6 @@ public class OpenContractQuest extends Quest{
     }
 
     public void distributeRewards(Player murderer) {
-        QuestHandler.playerQuestData.get(murderer).rewards.addAll(this.rewards);
+        QuestHandler.playerQuestData.get(murderer).addAllRewards(this.rewards);
     }
 }

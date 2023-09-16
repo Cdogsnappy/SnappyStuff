@@ -47,7 +47,7 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
     private PageButton nextButton;
     private QuestCreateButton createQuestButton;
     private PageButton backButton;
-    private List<Button> missionTypeButtons;
+    private List<MissionTypeButton> missionTypeButtons;
     private QuestSearchBox searchBox;
     private NumberBox numberBox;
     private Mission[] missions = new Mission[3];
@@ -88,27 +88,10 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
             this.pageBack();
         }, true));
         missionTypeButtons = Lists.newArrayList();
-        missionTypeButtons.add(this.addRenderableWidget(new Button(this.leftPos + 187,this.topPos + 31,20,20,Component.literal("B"),(b) -> {
-            this.currentSearchMenu = QuestScreensData.ButtonType.BLOCK;
-            this.resetSearchMenu();
-        }
-        )));
-        missionTypeButtons.add(this.addRenderableWidget(new Button(this.leftPos + 187,this.topPos + 31 + 22,20,20,Component.literal("C"),(b) -> {
-            this.currentSearchMenu = QuestScreensData.ButtonType.COLLECT;
-            this.resetSearchMenu();
-        }
-        )));
-        missionTypeButtons.add(this.addRenderableWidget(new Button(this.leftPos + 187,this.topPos + 31 + 44,20,20,Component.literal("K"),(b) -> {
-            this.currentSearchMenu = KILL;
-            this.resetSearchMenu();
-        }
-        )));
-        missionTypeButtons.add(this.addRenderableWidget(new Button(this.leftPos + 187,this.topPos + 31 + 66,20,20,Component.literal("PK"),(b) -> {
-            this.currentSearchMenu = PLAYERKILL;
-            this.resetSearchMenu();
-        }
-        )));
-
+        missionTypeButtons.add(this.addRenderableWidget(new MissionTypeButton(this.leftPos + 187,this.topPos + 31,20,20, BLOCK)));
+        missionTypeButtons.add(this.addRenderableWidget(new MissionTypeButton(this.leftPos + 187,this.topPos + 31 + 22,20,20, COLLECT)));
+        missionTypeButtons.add(this.addRenderableWidget(new MissionTypeButton(this.leftPos + 187,this.topPos + 31 + 44,20,20, KILL)));
+        missionTypeButtons.add(this.addRenderableWidget(new MissionTypeButton(this.leftPos + 187,this.topPos + 31 + 66,20,20,PLAYERKILL)));
         createQuestButton = this.addRenderableWidget(new QuestCreateButton(this.leftPos + 191, this.topPos + 200, 49, 18, Component.empty()));
         backButton = this.addRenderableWidget(new PageButton(this.leftPos + 201, this.topPos + 215, false, (p) -> {
             switchBackToMainMenu();
@@ -247,6 +230,53 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
             this.blit(pPoseStack,this.x,this.y,0,78,49,18);
+        }
+    }
+    public class MissionTypeButton extends AbstractButton{
+        private QuestScreensData.ButtonType missionType;
+
+        public MissionTypeButton(int pX, int pY, int pWidth, int pHeight, QuestScreensData.ButtonType type) {
+            super(pX, pY, pWidth, pHeight, Component.empty());
+            this.missionType = type;
+        }
+
+        @Override
+        public void onPress() {
+            currentSearchMenu = missionType;
+            resetSearchMenu();
+        }
+
+        @Override
+        public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+
+        }
+        @Override
+        public void render(PoseStack pPoseStack, int pX, int pY, float delta){
+            if(!this.visible){return;}
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0,GUITEXTURE);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableDepthTest();
+            int x = 0;
+            int y = 0;
+            switch(missionType){
+                case KILL:
+                    y = 150;
+                    break;
+                case COLLECT:
+                    y = 150;
+                    x = 20;
+                    break;
+                case BLOCK:
+                    y = 170;
+                    x = 20;
+                    break;
+                case PLAYERKILL:
+                    y = 170;
+                    break;
+            }
+            this.blit(pPoseStack,this.x,this.y,x,y,20,20);
         }
     }
 

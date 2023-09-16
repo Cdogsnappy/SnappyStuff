@@ -1,28 +1,77 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.google.common.collect.Lists;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
-import java.util.List;
+import net.minecraftforge.items.SlotItemHandler;
+
 
 public class QuestOverviewMenu extends AbstractContainerMenu {
-    List<RewardSlot> rewardSlots = Lists.newArrayList();
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(65) {
         @Override
-        protected void onContentsChanged (int slot) {
-            updateRewardRegistry(this.getStackInSlot(slot),slot);
-        }
+        protected void onContentsChanged (int slot) {}
     };
+    public QuestOverviewMenu(int id, Inventory inv, FriendlyByteBuf friendlyByteBuf) {
+        super(ModMenus.QUEST_OVERVIEW_MENU.get(),id);
+        addPlayerHotbar(inv);
+        addPlayerInventory(inv);
+        addDisplaySlots();
+    }
     public QuestOverviewMenu(int id, Inventory inv) {
         super(ModMenus.QUEST_ACCEPT_MENU.get(), id);
         addPlayerHotbar(inv);
         addPlayerInventory(inv);
         addDisplaySlots();
+    }
+
+
+    protected void removeRewardSlots(){
+        for(int i = 0; i < 60; ++i){
+            this.slots.remove(36);
+        }
+    }
+    protected void removeDisplaySlots(){
+        for(int j = 0; j < 5; ++j){
+            this.slots.remove(36);
+        }
+    }
+    protected void checkOrAddRewardSlots(){
+        if(!(this.slots.get(36) instanceof RewardSlot)){
+            removeDisplaySlots();
+            for(int j = 0; j < 6; ++j){
+                for(int i = 0; i < 10; ++i){
+                    this.addSlot(new RewardSlot(itemHandler,i + j*10,39 + i*18, 19 + j*18));
+                }
+            }
+        }
+    }
+    protected void checkOrAddDisplaySlots(){
+        if(!(this.slots.get(36) instanceof DisplaySlot)){
+            removeRewardSlots();
+            addDisplaySlots();
+        }
+    }
+    protected void addDisplaySlots(){
+        this.addSlot(new DisplaySlot(itemHandler, 60, 210, 29));
+        this.addSlot(new DisplaySlot(itemHandler,61,210,47));
+        this.addSlot(new DisplaySlot(itemHandler,62,210,65));
+        this.addSlot(new DisplaySlot(itemHandler,63,210,83));
+        this.addSlot(new DisplaySlot(itemHandler,64,210,101));
+    }
+    public class RewardSlot extends SlotItemHandler {
+
+        public RewardSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
     }
 
     private static final int HOTBAR_SLOT_COUNT = 9;
@@ -70,11 +119,11 @@ public class QuestOverviewMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player p_38874_) {
-        return false;
+    public boolean stillValid(Player pPlayer) {
+        return pPlayer.isAlive();
     }
 
-    private void addPlayerInventory(Inventory playerInventory) {
+    protected void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
                 this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 24 + l * 18, 141 + i * 18));
@@ -82,44 +131,15 @@ public class QuestOverviewMenu extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInventory) {
+    protected void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 24 + i * 18, 199));
         }
     }
-    private void updateRewardRegistry(ItemStack stack, int slot){
-    }
-    protected void removeRewardSlots(){
+    protected void clearRewardSlots(){
         for(int i = 0; i < 60; ++i){
-            this.slots.remove(36);
+            this.slots.get(36+i).set(ItemStack.EMPTY);
         }
     }
-    protected void removeDisplaySlots(){
-        for(int j = 0; j < 5; ++j){
-            this.slots.remove(36);
-        }
-    }
-    protected void checkOrAddRewardSlots(){
-        if(!(this.slots.get(36) instanceof RewardSlot)){
-            removeDisplaySlots();
-            for(int j = 0; j < 6; ++j){
-                for(int i = 0; i < 10; ++i){
-                    this.addSlot(new RewardSlot(itemHandler,i,39 + i*18, 19 + j*18));
-                }
-            }
-        }
-    }
-    protected void checkOrAddDisplaySlots(){
-        if(!(this.slots.get(36) instanceof DisplaySlot)){
-            removeRewardSlots();
-            addDisplaySlots();
-        }
-    }
-    protected void addDisplaySlots(){
-        this.addSlot(new DisplaySlot(itemHandler, 60, 210, 29));
-        this.addSlot(new DisplaySlot(itemHandler,61,210,47));
-        this.addSlot(new DisplaySlot(itemHandler,62,210,65));
-        this.addSlot(new DisplaySlot(itemHandler,63,210,83));
-        this.addSlot(new DisplaySlot(itemHandler,64,210,101));
-    }
+
 }

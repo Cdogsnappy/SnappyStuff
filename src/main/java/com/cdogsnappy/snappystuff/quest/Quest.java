@@ -21,4 +21,8 @@ public class Quest {
     @NonNull
     public UUID requestor;//Player who created quest(NON-NULLABLE)
     public static final UUID radiantID = UUID.fromString("558d5358-75c9-4a7a-a5e7-e4ccbd7ccf4c");//USE THIS FOR NON PLAYER CREATED QUESTS
+    @Override
+    public boolean equals(Object o){
+        return o instanceof Quest && ((Quest)o).questID.equals(this.questID);
+    }
 }

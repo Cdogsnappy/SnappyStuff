@@ -128,6 +128,8 @@ public class SnappyStuff
             MenuScreens.register(ModMenus.MUSIC_UPLOAD_MENU.get(), MusicUploadScreen::new);
             MenuScreens.register(ModMenus.QUEST_ACCEPT_MENU.get(), QuestAcceptScreen::new);
             MenuScreens.register(ModMenus.QUEST_CREATE_MENU.get(), QuestCreateScreen::new);
+            MenuScreens.register(ModMenus.QUEST_OVERVIEW_MENU.get(),QuestOverviewScreen::new);
+
         }
     }
 }

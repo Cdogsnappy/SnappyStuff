@@ -14,7 +14,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
-public class QuestAcceptMenu extends AbstractContainerMenu {
+public class QuestAcceptMenu extends AbstractContainerMenu{
     public final QuestAcceptBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
@@ -45,7 +45,6 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
             this.addSlot(new DisplaySlot(handler,4,210,101));
         });
     }
-
     private static final int HOTBAR_SLOT_COUNT = 9;
     private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
     private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
@@ -94,7 +93,8 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, ModBlocks.QUEST_ACCEPT_BLOCK.get());
     }
-    private void addPlayerInventory(Inventory playerInventory) {
+
+    protected void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
                 this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 24 + l * 18, 141 + i * 18));
@@ -102,7 +102,7 @@ public class QuestAcceptMenu extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInventory) {
+    protected void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 24 + i * 18, 199));
         }

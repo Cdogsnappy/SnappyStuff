@@ -57,9 +57,9 @@ public class Handlers {
         KarmaLog.onPlayerJoin(p);
         DivineFruitItem.addTag(p);
         DivineFruitItem.updateDivineHealth(p);
-        SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(p.getUUID()),(ServerPlayer)p);
         RadioHandler.onPlayerLogIn(event);
         QuestHandler.playerQuestData.computeIfAbsent(p.getUUID(), k -> new QuestData());
+        SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(p.getUUID()),(ServerPlayer)p);
         SnappyNetwork.sendToPlayer(new AvailablePlayersPacket(CitizenData.citizenNames),(ServerPlayer)p);
     }
 
