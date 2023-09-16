@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import static com.cdogsnappy.snappystuff.screen.QuestScreensData.ButtonType.*;
 public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
     private ResourceLocation MAIN_TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/quest_create_block_gui.png");
+    private ResourceLocation GUITEXTURE = new ResourceLocation(SnappyStuff.MODID,"textures/gui/custom_gui_stuff.png");
     private final List<AbstractButton> editButtons = Lists.newArrayList();
     private int page = 0;
     private int numPages = 0;
@@ -44,7 +45,7 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
     private QuestScreensData.ButtonType currentSearchMenu = COLLECT;
     private PageButton prevButton;
     private PageButton nextButton;
-    private Button createQuestButton;
+    private QuestCreateButton createQuestButton;
     private PageButton backButton;
     private List<Button> missionTypeButtons;
     private QuestSearchBox searchBox;
@@ -66,9 +67,9 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
     protected void init() {
         QuestScreensData.refreshList("",COLLECT);
         super.init();
-        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 26,27,13,Component.literal("EDIT"),this, 0)));
-        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 66,27,13,Component.literal("EDIT"),this, 1)));
-        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 178,this.topPos + 105,27,13, Component.literal("EDIT"),this, 2)));
+        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 175,this.topPos + 24,30,18,Component.empty(),this, 0)));
+        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 175,this.topPos + 64,30,18,Component.empty(),this, 1)));
+        editButtons.add(this.addRenderableWidget(new QuestCreateMissionButton(this.leftPos + 175,this.topPos + 103,30,18, Component.empty(),this, 2)));
         for(int j = 0; j < 5; ++j){
             for(int i = 0; i < 8; ++i) {
                 searchButtons.add(this.addRenderableWidget(new ObjectSelectButton(this.leftPos + 30 + 18*i,this.topPos + 32 + 18*j, 18, 18, null, this)));
@@ -108,10 +109,7 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
         }
         )));
 
-        createQuestButton = this.addRenderableWidget(new Button(this.leftPos + 201,this.topPos + 197,40,16,Component.literal("CREATE"),(b) ->{
-            if(isSearching){createMission();}
-            else{attemptCreateQuest();}
-        }));
+        createQuestButton = this.addRenderableWidget(new QuestCreateButton(this.leftPos + 191, this.topPos + 200, 49, 18, Component.empty()));
         backButton = this.addRenderableWidget(new PageButton(this.leftPos + 201, this.topPos + 215, false, (p) -> {
             switchBackToMainMenu();
         },true));
@@ -223,6 +221,35 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
         }
     }
 
+    public class QuestCreateButton extends AbstractButton{
+
+
+        public QuestCreateButton(int pX, int pY, int pWidth, int pHeight, Component pMessage) {
+            super(pX, pY, pWidth, pHeight, pMessage);
+        }
+
+        @Override
+        public void onPress() {
+            if(isSearching){createMission();}
+            else{attemptCreateQuest();}
+        }
+
+        @Override
+        public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+
+        }
+        @Override
+        public void render(PoseStack pPoseStack, int pX, int pY, float delta){
+            if(!this.visible){return;}
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0,GUITEXTURE);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableDepthTest();
+            this.blit(pPoseStack,this.x,this.y,0,78,49,18);
+        }
+    }
+
     /**
      * Edit buttons
      */
@@ -253,6 +280,16 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
 
         @Override
         public void updateNarration(NarrationElementOutput p_169152_) {
+        }
+        @Override
+        public void render(PoseStack pPoseStack, int pX, int pY, float delta){
+            if(!this.visible){return;}
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0,GUITEXTURE);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableDepthTest();
+            this.blit(pPoseStack,this.x,this.y,0,114,30,18);
         }
     }
     private void refreshPageNum(QuestCreateScreen qcs){
@@ -303,6 +340,16 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
                 default:
                     break;
             }
+        }
+        @Override
+        public void render(PoseStack pPoseStack, int pX, int pY, float delta){
+            if(!this.visible){return;}
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0,GUITEXTURE);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableDepthTest();
+            this.blit(pPoseStack,this.x,this.y,0,132,18,18);
         }
     }
     protected void pageForward() {

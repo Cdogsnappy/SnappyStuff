@@ -5,7 +5,6 @@ import com.cdogsnappy.snappystuff.court.CitizenData;
 import com.cdogsnappy.snappystuff.items.ModItems;
 import com.cdogsnappy.snappystuff.network.QuestAcceptPacket;
 import com.cdogsnappy.snappystuff.network.QuestRequestPacket;
-import com.cdogsnappy.snappystuff.network.QuestScreenPacket;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
 import com.cdogsnappy.snappystuff.quest.OpenContractQuest;
@@ -20,18 +19,14 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {

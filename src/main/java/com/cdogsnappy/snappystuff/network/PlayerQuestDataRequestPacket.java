@@ -9,11 +9,11 @@ import java.util.function.Supplier;
 /**
  * Empty marker packet, basically just tells the server that a client needs to refresh the player's accepted quests on their end.
  */
-public class PlayerQuestRequestPacket {
-    public PlayerQuestRequestPacket(FriendlyByteBuf buf){}
+public class PlayerQuestDataRequestPacket {
+    public PlayerQuestDataRequestPacket(FriendlyByteBuf buf){}
 
 
-    public PlayerQuestRequestPacket() {}
+    public PlayerQuestDataRequestPacket() {}
 
 
 
@@ -23,7 +23,7 @@ public class PlayerQuestRequestPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             //HERE WE ARE ON SERVER
-            SnappyNetwork.sendToPlayer(new PlayerQuestPacket(QuestHandler.playerQuestData.get(context.getSender().getUUID()).acceptedQuests,context.getSender().getUUID()),context.getSender());
+            SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(context.getSender().getUUID()), context.getSender());
         });
         return true;
     }

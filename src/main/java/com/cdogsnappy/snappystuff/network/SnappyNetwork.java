@@ -52,25 +52,15 @@ public class SnappyNetwork {
                 .encoder(QuestRequestPacket::toBytes)
                 .consumerMainThread(QuestRequestPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(PlayerQuestPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PlayerQuestPacket::new)
-                .encoder(PlayerQuestPacket::toBytes)
-                .consumerMainThread(PlayerQuestPacket::handle)
+        INSTANCE.messageBuilder(PlayerQuestDataPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerQuestDataPacket::new)
+                .encoder(PlayerQuestDataPacket::toBytes)
+                .consumerMainThread(PlayerQuestDataPacket::handle)
                 .add();
-        INSTANCE.messageBuilder(PlayerQuestRequestPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(PlayerQuestRequestPacket::new)
-                .encoder(PlayerQuestRequestPacket::toBytes)
-                .consumerMainThread(PlayerQuestRequestPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(PlayerRewardRequestPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(PlayerRewardRequestPacket::new)
-                .encoder(PlayerRewardRequestPacket::toBytes)
-                .consumerMainThread(PlayerRewardRequestPacket::handle)
-                .add();
-        INSTANCE.messageBuilder(PlayerRewardPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(PlayerRewardPacket::new)
-                .encoder(PlayerRewardPacket::toBytes)
-                .consumerMainThread(PlayerRewardPacket::handle)
+        INSTANCE.messageBuilder(PlayerQuestDataRequestPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerQuestDataRequestPacket::new)
+                .encoder(PlayerQuestDataRequestPacket::toBytes)
+                .consumerMainThread(PlayerQuestDataRequestPacket::handle)
                 .add();
         INSTANCE.messageBuilder(AvailablePlayersPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(AvailablePlayersPacket::new)
@@ -117,7 +107,11 @@ public class SnappyNetwork {
                 .encoder(QuestAcceptPacket::toBytes)
                 .consumerMainThread(QuestAcceptPacket::handle)
                 .add();
-
+        INSTANCE.messageBuilder(QuestCancelPacket.class, ++id, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(QuestCancelPacket::new)
+                .encoder(QuestCancelPacket::toBytes)
+                .consumerMainThread(QuestCancelPacket::handle)
+                .add();
     }
     public static <MSG> void sendToServer(MSG message) {
         INSTANCE.sendToServer(message);

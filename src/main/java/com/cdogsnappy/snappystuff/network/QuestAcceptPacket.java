@@ -19,7 +19,7 @@ public class QuestAcceptPacket {
         this.q = q;
     }
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeNbt(ClosedContractQuest.save(new CompoundTag(),q));
+        buf.writeNbt(q.save(new CompoundTag()));
     }
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();

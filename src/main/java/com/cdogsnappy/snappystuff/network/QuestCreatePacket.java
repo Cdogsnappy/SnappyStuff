@@ -57,11 +57,11 @@ public class QuestCreatePacket {
     public void toBytes(FriendlyByteBuf buf) {
         CompoundTag tag = new CompoundTag();
         if(type == 0){
-            tag.put("quest",ClosedContractQuest.save(new CompoundTag(), cq));
+            tag.put("quest",cq.save(new CompoundTag()));
             tag.putInt("type",0);
         }
         else{
-            tag.put("quest",OpenContractQuest.save(new CompoundTag(),oq));
+            tag.put("quest",oq.save(new CompoundTag()));
             tag.putInt("type",1);
         }
         tag.putInt("x",pos.getX());
@@ -74,8 +74,14 @@ public class QuestCreatePacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             // HERE WE ARE ON THE SERVER!
-            if(type == 0){QuestHandler.unacceptedQuests.add(cq);}
-            else{QuestHandler.openContractQuests.add(oq);}
+            if(type == 0){
+                QuestHandler.unacceptedQuests.add(cq);
+                QuestHandler.playerQuestData.get(cq.requestor).createdQuests.add(cq);
+            }
+            else{
+                QuestHandler.openContractQuests.add(oq);
+                QuestHandler.playerQuestData.get(cq.requestor).createdQuests.add(cq);
+            }
         });
         QuestCreationBlockEntity be = (QuestCreationBlockEntity)context.getSender().level.getBlockEntity(pos);
         be.clearRewardSlots();

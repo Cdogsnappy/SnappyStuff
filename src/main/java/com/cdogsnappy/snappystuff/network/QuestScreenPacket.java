@@ -48,11 +48,11 @@ public class QuestScreenPacket {
             tag.putInt("type",2);
         }
         else if(q instanceof OpenContractQuest){
-            tag.put("quest",OpenContractQuest.save(new CompoundTag(),(OpenContractQuest)q));
+            tag.put("quest",((OpenContractQuest)q).save(new CompoundTag()));
             tag.putInt("type",1);
         }
         else{
-            tag.put("quest",ClosedContractQuest.save(new CompoundTag(), (ClosedContractQuest) q));
+            tag.put("quest",((ClosedContractQuest)q).save(new CompoundTag()));
             tag.putInt("type",0);
         }
         tag.putInt("unaccepted",unaccepted);

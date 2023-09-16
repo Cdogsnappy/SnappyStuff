@@ -30,10 +30,10 @@ public class QuestData {
             r.add(reward.save(new CompoundTag()));
         });
         acceptedQuests.forEach((accepted) -> {
-            aq.add(ClosedContractQuest.save(new CompoundTag(),accepted));
+            aq.add(accepted.save(new CompoundTag()));
         });
         createdQuests.forEach((created) -> {
-            cq.add(ClosedContractQuest.save(new CompoundTag(),created));
+            cq.add(created.save(new CompoundTag()));
         });
         tag.put("rewards",r);
         tag.put("accepted",aq);

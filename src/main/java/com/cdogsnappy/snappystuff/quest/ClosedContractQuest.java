@@ -57,31 +57,31 @@ public class ClosedContractQuest extends Quest{
      * @param q the quest to save
      * @return the tag with the quest saved to it
      */
-    public static CompoundTag save(CompoundTag tag, ClosedContractQuest q){
+    public CompoundTag save(CompoundTag tag){
 
         ListTag missions = new ListTag();
         ListTag rewards = new ListTag();
-        for(int j = 0; j<q.missions.size(); ++j){
-            missions.add(q.missions.get(j).save(new CompoundTag()));
+        for(int j = 0; j<this.missions.size(); ++j){
+            missions.add(this.missions.get(j).save(new CompoundTag()));
         }
-        for(int k = 0; k<q.rewards.size(); ++k){
-            rewards.add(q.rewards.get(k).save(new CompoundTag()));
+        for(int k = 0; k<this.rewards.size(); ++k){
+            rewards.add(this.rewards.get(k).save(new CompoundTag()));
         }
-        if(q.questor != null) {
-            tag.putUUID("questor", q.questor);
+        if(this.questor != null) {
+            tag.putUUID("questor", this.questor);
             tag.putBoolean("accepted",true);
         }
         else{tag.putBoolean("accepted",false);}
-        if(q.type == QuestType.PLAYER) {
+        if(this.type == QuestType.PLAYER) {
             tag.putInt("type", 0);
         }
         else{
             tag.putInt("type", 1);
         }
-            tag.putUUID("requestor", q.requestor);
+            tag.putUUID("requestor", this.requestor);
             tag.put("missions", missions);
             tag.put("rewards", rewards);
-            tag.putUUID("id",q.questID);
+            tag.putUUID("id",this.questID);
             return tag;
     }
 

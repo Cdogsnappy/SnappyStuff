@@ -41,6 +41,7 @@ public class Tab extends AbstractButton {
 
     @Override
     public void onPress() {
+        if(this.parent.currTab == this.id){return;}
         this.parent.tabChanged(this.id);
         this.parent.currTab = this.id;
     }

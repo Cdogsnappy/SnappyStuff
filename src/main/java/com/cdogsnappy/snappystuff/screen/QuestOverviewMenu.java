@@ -1,8 +1,6 @@
 package com.cdogsnappy.snappystuff.screen;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -24,20 +22,7 @@ public class QuestOverviewMenu extends AbstractContainerMenu {
         super(ModMenus.QUEST_ACCEPT_MENU.get(), id);
         addPlayerHotbar(inv);
         addPlayerInventory(inv);
-        addSlots();
-    }
-
-    private void addSlots(){
-        for(int j = 0; j < 6; ++j){
-            for(int i = 0; i < 10; ++i){
-                rewardSlots.add((RewardSlot) this.addSlot(new RewardSlot(itemHandler,i,39 + i*18, 19 + j*18)));
-            }
-        }
-        this.addSlot(new DisplaySlot(itemHandler, 60, 210, 29));
-        this.addSlot(new DisplaySlot(itemHandler,61,210,47));
-        this.addSlot(new DisplaySlot(itemHandler,62,210,65));
-        this.addSlot(new DisplaySlot(itemHandler,63,210,83));
-        this.addSlot(new DisplaySlot(itemHandler,64,210,101));
+        addDisplaySlots();
     }
 
     private static final int HOTBAR_SLOT_COUNT = 9;
@@ -103,12 +88,38 @@ public class QuestOverviewMenu extends AbstractContainerMenu {
         }
     }
     private void updateRewardRegistry(ItemStack stack, int slot){
-
     }
-    protected void changeRewardVisibility(boolean vis){
-        if(rewardSlots.get(0).isActive() != vis){return;}//rewards slots are binary, all will be either on or off
-        rewardSlots.forEach((s) -> {
-            s.setActive(vis);
-        });
+    protected void removeRewardSlots(){
+        for(int i = 0; i < 60; ++i){
+            this.slots.remove(36);
+        }
+    }
+    protected void removeDisplaySlots(){
+        for(int j = 0; j < 5; ++j){
+            this.slots.remove(36);
+        }
+    }
+    protected void checkOrAddRewardSlots(){
+        if(!(this.slots.get(36) instanceof RewardSlot)){
+            removeDisplaySlots();
+            for(int j = 0; j < 6; ++j){
+                for(int i = 0; i < 10; ++i){
+                    this.addSlot(new RewardSlot(itemHandler,i,39 + i*18, 19 + j*18));
+                }
+            }
+        }
+    }
+    protected void checkOrAddDisplaySlots(){
+        if(!(this.slots.get(36) instanceof DisplaySlot)){
+            removeRewardSlots();
+            addDisplaySlots();
+        }
+    }
+    protected void addDisplaySlots(){
+        this.addSlot(new DisplaySlot(itemHandler, 60, 210, 29));
+        this.addSlot(new DisplaySlot(itemHandler,61,210,47));
+        this.addSlot(new DisplaySlot(itemHandler,62,210,65));
+        this.addSlot(new DisplaySlot(itemHandler,63,210,83));
+        this.addSlot(new DisplaySlot(itemHandler,64,210,101));
     }
 }

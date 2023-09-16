@@ -4,6 +4,7 @@ import com.cdogsnappy.snappystuff.court.CitizenData;
 import com.cdogsnappy.snappystuff.court.ClientCitizenData;
 import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
 import com.cdogsnappy.snappystuff.quest.Quest;
+import com.cdogsnappy.snappystuff.quest.QuestData;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.SearchRegistry;
@@ -36,9 +37,8 @@ public class QuestScreensData {
     public static List<ClientCitizenData> playerSearchTokens = CitizenData.citizenNames;
     public static List<Item> itemSearchTokens = Lists.newArrayList();
     public static Quest questScreenDisplay = null;
-    public static List<ClosedContractQuest> playerQuests = Lists.newArrayList();//Player instanced quests, sent all in one packet so as not to require a packet every time the player move to the next quest.
+    public static QuestData questData = null;
     public static boolean playerQuestsStale = true;//If the player has accepted or completed quests at any point, the client will mark this true so that it knows to request the player quests again.
-    public static List<ItemStack> playerRewards = Lists.newArrayList();
     public static List<ClosedContractQuest> playerCreatedQuests = Lists.newArrayList();
     public static int numClosedQuests = 0;
     public static int numOpenQuests = 0;

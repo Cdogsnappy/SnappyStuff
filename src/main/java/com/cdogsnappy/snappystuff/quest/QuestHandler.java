@@ -37,10 +37,10 @@ public class QuestHandler{
         ListTag openContractQuestsTag = new ListTag();
         ListTag questDataTag = new ListTag();
         unacceptedQuests.forEach((q) -> {
-            unacceptedQuestsTag.add(ClosedContractQuest.save(new CompoundTag(), q));
+            unacceptedQuestsTag.add(q.save(new CompoundTag()));
         });
         openContractQuests.forEach((q) -> {
-            openContractQuestsTag.add(OpenContractQuest.save(new CompoundTag(),q));
+            openContractQuestsTag.add(q.save(new CompoundTag()));
         });
         playerQuestData.forEach((k,v) -> {
             CompoundTag pData = new CompoundTag();

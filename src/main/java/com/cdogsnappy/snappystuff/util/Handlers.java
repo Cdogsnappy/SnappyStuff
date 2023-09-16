@@ -7,6 +7,7 @@ import com.cdogsnappy.snappystuff.karma.Karma;
 import com.cdogsnappy.snappystuff.karma.KarmaLog;
 import com.cdogsnappy.snappystuff.karma.SmiteHandler;
 import com.cdogsnappy.snappystuff.network.AvailablePlayersPacket;
+import com.cdogsnappy.snappystuff.network.PlayerQuestDataPacket;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import com.cdogsnappy.snappystuff.quest.QuestData;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
@@ -50,14 +51,16 @@ public class Handlers {
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
         if(event.getEntity().level.isClientSide){return;}
-        CitizenData.onPlayerJoin(event.getEntity());
+        Player p = event.getEntity();
+        CitizenData.onPlayerJoin(p);
         Karma.playerCheck(event);
-        KarmaLog.onPlayerJoin(event.getEntity());
-        DivineFruitItem.addTag(event.getEntity());
-        DivineFruitItem.updateDivineHealth(event.getEntity());
-        SnappyNetwork.sendToPlayer(new AvailablePlayersPacket(CitizenData.citizenNames),(ServerPlayer)event.getEntity());
+        KarmaLog.onPlayerJoin(p);
+        DivineFruitItem.addTag(p);
+        DivineFruitItem.updateDivineHealth(p);
+        SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(p.getUUID()),(ServerPlayer)p);
         RadioHandler.onPlayerLogIn(event);
-        QuestHandler.playerQuestData.computeIfAbsent(event.getEntity().getUUID(), k -> new QuestData());
+        QuestHandler.playerQuestData.computeIfAbsent(p.getUUID(), k -> new QuestData());
+        SnappyNetwork.sendToPlayer(new AvailablePlayersPacket(CitizenData.citizenNames),(ServerPlayer)p);
     }
 
     /**

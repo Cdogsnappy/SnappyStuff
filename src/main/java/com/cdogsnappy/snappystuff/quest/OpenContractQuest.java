@@ -28,28 +28,26 @@ public class OpenContractQuest extends Quest{
         this.type = type;
         this.questID = id;
     }
-
-    public static CompoundTag save(CompoundTag tag, OpenContractQuest q){
+    public CompoundTag save(CompoundTag tag){
         ListTag rewards = new ListTag();
-        for(int k = 0; k<q.rewards.size(); ++k){
-            rewards.add(q.rewards.get(k).save(new CompoundTag()));
+        for(int k = 0; k<this.rewards.size(); ++k){
+            rewards.add(this.rewards.get(k).save(new CompoundTag()));
         }
-        tag.putUUID("requestor", q.requestor);
-        if(q.type == QuestType.PLAYER) {
+        tag.putUUID("requestor", this.requestor);
+        if(this.type == QuestType.PLAYER) {
             tag.putInt("type", 0);
         }
         else{
             tag.putInt("type", 1);
         }
-        tag.put("mission", q.mission.save(new CompoundTag()));
+        tag.put("mission", this.mission.save(new CompoundTag()));
         tag.put("rewards", rewards);
-        tag.putUUID("id", q.questID);
+        tag.putUUID("id", this.questID);
         return tag;
     }
     public static OpenContractQuest load(CompoundTag tag) {
-        UUID requestor = tag.getUUID("requestor");
         List<ItemStack> rewards = new ArrayList<>();
-        PlayerKillMission mission = (PlayerKillMission)PlayerKillMission.load(tag);
+        PlayerKillMission mission = PlayerKillMission.load(tag);
         QuestType type = switch(tag.getInt("type")){
             case 0 -> QuestType.PLAYER;
             case 1 -> QuestType.DAILY;
@@ -59,9 +57,7 @@ public class OpenContractQuest extends Quest{
         for(int j = 0; j<rewardsTag.size(); ++j){
             rewards.add(ItemStack.of(rewardsTag.getCompound(j)));
         }
-
         return new OpenContractQuest(mission, rewards,tag.getUUID("requestor"), type, tag.getUUID("id"));
-
     }
 
     public void distributeRewards(Player murderer) {
