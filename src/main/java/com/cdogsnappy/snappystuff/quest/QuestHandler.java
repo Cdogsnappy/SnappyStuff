@@ -5,6 +5,8 @@ import com.cdogsnappy.snappystuff.network.PlayerQuestDataPacket;
 import com.cdogsnappy.snappystuff.network.QuestRequestPacket;
 import com.cdogsnappy.snappystuff.network.QuestScreenPacket;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;
+import com.cdogsnappy.snappystuff.quest.mission.CollectMission;
+import com.cdogsnappy.snappystuff.quest.mission.Mission;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -109,6 +111,7 @@ public class QuestHandler{
                 }
                 q.questor = player.getUUID();
                 playerQuestData.get(player.getUUID()).acceptedQuests.add(q);
+                MissionHandler.loadMissions(q.missions,player.getUUID());
             }
         }
     }
@@ -125,5 +128,33 @@ public class QuestHandler{
             SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(cq.requestor),sp);
         }
     }
+    public static void attemptCompleteQuest(ClosedContractQuest q, ServerPlayer player){
+        for(Mission m : q.missions){//Annoying, we have to run through all of the collection quests before we check for completion, otherwise it will only update the first collect mission's completion.
+            if(m.missionType == Mission.Type.COLLECT){
+                ((CollectMission)m).attemptComplete(player);
+            }
+        }
+        for(Mission m : q.missions){
+            if(m.isComplete()){continue;}
+            else{
+                SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(q.questor),player);//Update the collection count on collect missions
+                ServerPlayer p;
+                if((p = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(q.requestor)) != null){
+                    SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(q.requestor),p);//This covers the rare case where the quest GIVER is online and looking at their questbook
+                }
+                return;
+            }
+            }//Cases above are the only ones that could lead to a quest completion, anything else is an incomplete quest
+
+        QuestHandler.playerQuestData.get(q.questor).acceptedQuests.remove(q);
+        QuestHandler.playerQuestData.get(q.requestor).createdQuests.remove(q);
+        q.distributeRewards();
+        SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(q.questor),player);//Update the collection count on collect missions
+        ServerPlayer p;
+        if((p = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(q.requestor)) != null){
+            SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(q.requestor),p);//This covers the rare case where the quest GIVER is online and looking at their questbook
+        }
+        }
+
 
 }

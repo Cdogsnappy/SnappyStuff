@@ -12,7 +12,7 @@ import java.util.UUID;
 public class BlockMission extends Mission implements Serializable {
     public Block toBreak;
     public int numToBreak;
-    protected int numBroken = 0;
+    public int numBroken = 0;
     protected boolean complete;
 
 

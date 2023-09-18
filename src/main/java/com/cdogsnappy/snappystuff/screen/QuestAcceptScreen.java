@@ -167,10 +167,10 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
                 case 0:
                     this.font.draw(pPoseStack, "Requestor:", this.leftPos + 192, this.topPos + 140, 0);
                     this.font.draw(pPoseStack, CitizenData.getPlayerName(QuestScreensData.questScreenDisplay.requestor), this.leftPos + 192, this.topPos + 146,0);
-                    for(int j = 0; j < ((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.size(); ++j){renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),110,21,((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.get(j));}
+                    for(int j = 0; j < ((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.size(); ++j){renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),((ClosedContractQuest)QuestScreensData.questScreenDisplay).missions.get(j));}
                     break;
                 case 1:
-                    renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43,110,21,((OpenContractQuest)QuestScreensData.questScreenDisplay).mission);
+                    renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43,((OpenContractQuest)QuestScreensData.questScreenDisplay).mission);
                     break;
             }
             renderRewards();
@@ -186,17 +186,6 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     }
     private void clearRewards(){for(int j = 0; j < 5; ++j){this.menu.slots.get(j+36).set(ItemStack.EMPTY);}}
 
-    private static int colorTranslate (Color color) {
-        int alpha = color.getAlpha();
-        int red = color.getRed();
-        int green = color.getGreen();
-        int blue = color.getBlue();
-        int rgb = (alpha << 24);
-        rgb = rgb | (red << 16);
-        rgb = rgb | (green << 8);
-        rgb = rgb | (blue);
-        return rgb;
-    }
     protected void createPageControlButtons() {
         this.nextButton = this.addRenderableWidget(new PageButton(this.leftPos + 214, this.topPos + 154, true, (p_98297_) -> {
             this.pageForward();
@@ -226,11 +215,12 @@ public class QuestAcceptScreen extends QuestScreen<QuestAcceptMenu> {
     protected void updateButtonVisibility() {
         this.nextButton.visible = this.currentPage < this.getNumPages() - 1;
         this.prevButton.visible = this.currentPage > 0;
-
+        /**
         if(QuestScreensData.questScreenDisplay == null || QuestScreensData.questScreenDisplay.requestor.equals(minecraft.player.getUUID())){
             this.confirmButton.visible = false;
         }
         else{this.confirmButton.visible = true;}
+         **/
 
 
     }

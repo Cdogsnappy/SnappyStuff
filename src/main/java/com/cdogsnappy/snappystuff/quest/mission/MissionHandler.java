@@ -3,6 +3,7 @@ package com.cdogsnappy.snappystuff.quest.mission;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -32,8 +33,8 @@ public class MissionHandler {
         if(playerKillMissionList.containsKey(murderer.getUUID())){
             List<PlayerKillMission> missions = playerKillMissionList.get(murderer.getUUID());
             for(PlayerKillMission mission : missions){
-                if(mission.toKill == murdered.getUUID()){
-                    mission.completeMission();
+                if(mission.toKill.equals(murdered.getUUID())){
+                    mission.complete = true;
                     missions.remove(mission);
                     if(missions.isEmpty()){
                         playerKillMissionList.remove(murderer.getUUID());
@@ -60,7 +61,7 @@ public class MissionHandler {
         }
         List<KillMission> killMissions = killMissionList.get(killer.getUUID());
         for(KillMission k : killMissions){
-            if(k.toKill == killed.getType()){
+            if(k.toKill.equals(killed.getType())){
                 k.numKills++;
                 if(k.attemptComplete()){
                     killMissions.remove(k);
@@ -78,11 +79,11 @@ public class MissionHandler {
      * @param event
      */
     @SubscribeEvent
-    public static void onBreak(PlayerEvent.BreakSpeed event){
-        if(event.getEntity().level.isClientSide){
+    public static void onBreak(BlockEvent.BreakEvent event){
+        if(event.getLevel().isClientSide()){
             return;
         }
-        Player player = event.getEntity();
+        Player player = event.getPlayer();
         if(blockMissionList.containsKey(player.getUUID())){
             List<BlockMission> missions = blockMissionList.get(player.getUUID());
             for(BlockMission mission : missions){
@@ -118,16 +119,19 @@ public class MissionHandler {
                         if(killMissions == null){killMissions = new ArrayList<>();}
                         killMissions.add((KillMission)m);
                         killMissionList.put(player, killMissions);
+                        break;
                     case KILL_PLAYER:
                         List<PlayerKillMission> playerKillMissions = playerKillMissionList.get(player);
                         if(playerKillMissions == null){playerKillMissions = new ArrayList<>();}
                         playerKillMissions.add((PlayerKillMission)m);
                         playerKillMissionList.put(player, playerKillMissions);
+                        break;
                     case BLOCK:
                         List<BlockMission> blockMissions = blockMissionList.get(player);
                         if(blockMissions == null){blockMissions = new ArrayList<>();}
                         blockMissions.add((BlockMission)m);
                         blockMissionList.put(player, blockMissions);
+                        break;
                     default:
                         break;
                 }

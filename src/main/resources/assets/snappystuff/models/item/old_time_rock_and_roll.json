@@ -1,0 +1,6 @@
+{
+"parent": "item/generated",
+"textures": {
+"layer0": "snappystuff:item/old_time_rock_and_roll"
+}
+}

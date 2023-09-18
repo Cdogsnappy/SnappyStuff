@@ -19,8 +19,8 @@ public class PlayerKillMission extends Mission {
         this.player = name;
         this.complete = complete;
     }
-    public boolean completeMission(){return complete = true;}
     public boolean isComplete(){return complete;}
+    public boolean attemptComplete(){return complete;}//Nothing to attempt here, these missions automatically complete.
     public UUID getTarget(){return toKill;}
     @Override
     public CompoundTag save(CompoundTag tag){

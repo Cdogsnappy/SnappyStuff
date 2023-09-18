@@ -14,7 +14,7 @@ public class SnappyStuffTabs {
     public static final CreativeModeTab SNAPPY_MUSIC_TAB = new CreativeModeTab("snappymusic") {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(ModItems.DREAM_SWEET.get());
+            return new ItemStack(ModItems.DREAM_SWEET_IN_SEA_MAJOR.get());
         }
     };
 }

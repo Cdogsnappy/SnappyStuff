@@ -154,7 +154,7 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
         }
         else{
             for(int j = 0; j < 3; ++j){
-                renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),110,21,missions[j]);
+                renderMission(pPoseStack,this.leftPos + 56,this.topPos + 43+(40*j),missions[j]);
             }
         }
     }

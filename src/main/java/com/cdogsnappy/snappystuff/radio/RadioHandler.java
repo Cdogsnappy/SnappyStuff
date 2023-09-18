@@ -9,8 +9,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -29,8 +31,8 @@ import java.util.*;
 public class RadioHandler{
     public static List<Entity> listeners = Lists.newArrayList();
     public static List<Entity> standbyListeners = Lists.newArrayList();
-    public static List<CustomSoundEvent> uploadableMusic = Lists.newArrayList();
-    public static List<CustomSoundEvent> music = Lists.newArrayList();
+    public static List<RecordItem> uploadableMusic = Lists.newArrayList();
+    public static List<ItemStack> music = Lists.newArrayList();
     public static List<CustomSoundEvent> casts = Lists.newArrayList();
     static Random rand = new Random();
     static int currentAudioTime = 0;
@@ -84,7 +86,7 @@ public class RadioHandler{
     public static void init(){
         ForgeRegistries.ITEMS.getValues().forEach((i) -> {
             if(i instanceof RecordItem){
-                uploadableMusic.add(new CustomSoundEvent(((RecordItem) i).getSound(),((RecordItem) i).getLengthInTicks()));
+                uploadableMusic.add((RecordItem)i);
             }
         });
     }
@@ -96,28 +98,28 @@ public class RadioHandler{
         standbyListeners.clear();
     }
     public static void playSomething(){
-        CustomSoundEvent e;
+        SoundEvent e;
+        int tickLength = 0;
         if(justPlayedMusic){
-            e = casts.get(rand.nextInt(casts.size()));
+            int ind = rand.nextInt(casts.size());
+            e = casts.get(ind).sound;
+            tickLength = casts.get(ind).tickLength;
         }
         else{
-            e = music.get(rand.nextInt(music.size()));
+            e = ((RecordItem)music.get(rand.nextInt(music.size())).getItem()).getSound();
+            tickLength = ((RecordItem)music.get(rand.nextInt(music.size())).getItem()).getLengthInTicks();
         }
         justPlayedMusic = !justPlayedMusic;
-        audioLength = e.tickLength;
         listeners.forEach((en) -> {
-            SnappyNetwork.sendToNearbyPlayers(new SoundStartPacketS2C(en.getUUID(),e.sound,en.getId()),en.position(),en.level.dimension());
+            SnappyNetwork.sendToNearbyPlayers(new SoundStartPacketS2C(en.getUUID(),e,en.getId()),en.position(),en.level.dimension());
         });
-
+        audioLength = tickLength;
     }
 
     public static CompoundTag save(CompoundTag p_77763_) {
         ListTag tag = new ListTag();
         music.forEach((m) -> {
-            CompoundTag cTag = new CompoundTag();
-            cTag.putString("re",m.sound.getLocation().toString());
-            cTag.putInt("ticks",m.tickLength);
-            tag.add(cTag);
+            tag.add(m.save(new CompoundTag()));
         });
         p_77763_.put("music",tag);
 
@@ -126,9 +128,9 @@ public class RadioHandler{
     public static void load(CompoundTag tag) {
         ListTag lTag = (ListTag)tag.get("music");
         for(int j = 0; j<lTag.size(); ++j){
-            CompoundTag cTag = (CompoundTag)lTag.get(j);
-            music.add(new CustomSoundEvent(ForgeRegistries.SOUND_EVENTS.getValue(ResourceLocation.tryParse(cTag.getString("re"))),cTag.getInt("ticks")));
+            music.add(ItemStack.of(lTag.getCompound(j)));
         }
     }
+
 }
 

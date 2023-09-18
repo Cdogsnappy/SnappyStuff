@@ -1,0 +1,514 @@
+{
+"africa": {
+ "sounds": [
+ {
+"name": "snappystuff:africa",
+"stream": true
+}
+]
+},
+"blackbird": {
+ "sounds": [
+ {
+"name": "snappystuff:blackbird",
+"stream": true
+}
+]
+},
+"brandy_youre_a_fine_girl": {
+ "sounds": [
+ {
+"name": "snappystuff:brandy_youre_a_fine_girl",
+"stream": true
+}
+]
+},
+"brown_eyed_girl": {
+ "sounds": [
+ {
+"name": "snappystuff:brown_eyed_girl",
+"stream": true
+}
+]
+},
+"carry_on_my_wayward_son": {
+ "sounds": [
+ {
+"name": "snappystuff:carry_on_my_wayward_son",
+"stream": true
+}
+]
+},
+"dancing_in_the_dark": {
+ "sounds": [
+ {
+"name": "snappystuff:dancing_in_the_dark",
+"stream": true
+}
+]
+},
+"dancing_in_the_moonlight": {
+ "sounds": [
+ {
+"name": "snappystuff:dancing_in_the_moonlight",
+"stream": true
+}
+]
+},
+"dont_fear_the_reaper": {
+ "sounds": [
+ {
+"name": "snappystuff:dont_fear_the_reaper",
+"stream": true
+}
+]
+},
+"dream_sweet_in_sea_major": {
+ "sounds": [
+ {
+"name": "snappystuff:dream_sweet_in_sea_major",
+"stream": true
+}
+]
+},
+"dust_in_the_wind": {
+ "sounds": [
+ {
+"name": "snappystuff:dust_in_the_wind",
+"stream": true
+}
+]
+},
+"eagle": {
+ "sounds": [
+ {
+"name": "snappystuff:eagle",
+"stream": true
+}
+]
+},
+"feels_like_the_first_time": {
+ "sounds": [
+ {
+"name": "snappystuff:feels_like_the_first_time",
+"stream": true
+}
+]
+},
+"free_fallin": {
+ "sounds": [
+ {
+"name": "snappystuff:free_fallin",
+"stream": true
+}
+]
+},
+"have_you_ever_seen_the_rain": {
+ "sounds": [
+ {
+"name": "snappystuff:have_you_ever_seen_the_rain",
+"stream": true
+}
+]
+},
+"here_i_go_again": {
+ "sounds": [
+ {
+"name": "snappystuff:here_i_go_again",
+"stream": true
+}
+]
+},
+"hot_blooded": {
+ "sounds": [
+ {
+"name": "snappystuff:hot_blooded",
+"stream": true
+}
+]
+},
+"hotel_california": {
+ "sounds": [
+ {
+"name": "snappystuff:hotel_california",
+"stream": true
+}
+]
+},
+"house_of_the_rising_sun": {
+ "sounds": [
+ {
+"name": "snappystuff:house_of_the_rising_sun",
+"stream": true
+}
+]
+},
+"hungry_like_the_wolf": {
+ "sounds": [
+ {
+"name": "snappystuff:hungry_like_the_wolf",
+"stream": true
+}
+]
+},
+"i_want_to_know_what_love_is": {
+ "sounds": [
+ {
+"name": "snappystuff:i_want_to_know_what_love_is",
+"stream": true
+}
+]
+},
+"listen_to_the_music": {
+ "sounds": [
+ {
+"name": "snappystuff:listen_to_the_music",
+"stream": true
+}
+]
+},
+"lonely_is_the_night": {
+ "sounds": [
+ {
+"name": "snappystuff:lonely_is_the_night",
+"stream": true
+}
+]
+},
+"maneater": {
+ "sounds": [
+ {
+"name": "snappystuff:maneater",
+"stream": true
+}
+]
+},
+"margaritaville": {
+ "sounds": [
+ {
+"name": "snappystuff:margaritaville",
+"stream": true
+}
+]
+},
+"maybe_im_amazed": {
+ "sounds": [
+ {
+"name": "snappystuff:maybe_im_amazed",
+"stream": true
+}
+]
+},
+"old_time_rock_and_roll": {
+ "sounds": [
+ {
+"name": "snappystuff:old_time_rock_and_roll",
+"stream": true
+}
+]
+},
+"private_eyes": {
+ "sounds": [
+ {
+"name": "snappystuff:private_eyes",
+"stream": true
+}
+]
+},
+"ramblin_man": {
+ "sounds": [
+ {
+"name": "snappystuff:ramblin_man",
+"stream": true
+}
+]
+},
+"resonance": {
+ "sounds": [
+ {
+"name": "snappystuff:resonance",
+"stream": true
+}
+]
+},
+"rich_girl": {
+ "sounds": [
+ {
+"name": "snappystuff:rich_girl",
+"stream": true
+}
+]
+},
+"rock_you_like_a_hurricane": {
+ "sounds": [
+ {
+"name": "snappystuff:rock_you_like_a_hurricane",
+"stream": true
+}
+]
+},
+"sicko_mode": {
+ "sounds": [
+ {
+"name": "snappystuff:sicko_mode",
+"stream": true
+}
+]
+},
+"stand_by_me": {
+ "sounds": [
+ {
+"name": "snappystuff:stand_by_me",
+"stream": true
+}
+]
+},
+"stuck_in_the_middle_with_you": {
+ "sounds": [
+ {
+"name": "snappystuff:stuck_in_the_middle_with_you",
+"stream": true
+}
+]
+},
+"sweet_home_alabama": {
+ "sounds": [
+ {
+"name": "snappystuff:sweet_home_alabama",
+"stream": true
+}
+]
+},
+"take_me_home_tonight": {
+ "sounds": [
+ {
+"name": "snappystuff:take_me_home_tonight",
+"stream": true
+}
+]
+},
+"the_chain": {
+ "sounds": [
+ {
+"name": "snappystuff:the_chain",
+"stream": true
+}
+]
+},
+"the_joker": {
+ "sounds": [
+ {
+"name": "snappystuff:the_joker",
+"stream": true
+}
+]
+},
+"union_dixie": {
+ "sounds": [
+ {
+"name": "snappystuff:union_dixie",
+"stream": true
+}
+]
+},
+"we_built_this_city": {
+ "sounds": [
+ {
+"name": "snappystuff:we_built_this_city",
+"stream": true
+}
+]
+},
+"were_finally_landing": {
+ "sounds": [
+ {
+"name": "snappystuff:were_finally_landing",
+"stream": true
+}
+]
+},
+"wheel_in_the_sky": {
+ "sounds": [
+ {
+"name": "snappystuff:wheel_in_the_sky",
+"stream": true
+}
+]
+},
+"woman": {
+ "sounds": [
+ {
+"name": "snappystuff:woman",
+"stream": true
+}
+]
+},
+"you_really_got_me": {
+ "sounds": [
+ {
+"name": "snappystuff:you_really_got_me",
+"stream": true
+}
+]
+},
+"your_song": {
+ "sounds": [
+ {
+"name": "snappystuff:your_song",
+"stream": true
+}
+]
+},
+"metamodernity": {
+ "sounds": [
+ {
+"name": "snappystuff:metamodernity",
+"stream": true
+}
+]
+},
+"aquarium": {
+ "sounds": [
+ {
+"name": "snappystuff:aquarium",
+"stream": true
+}
+]
+},
+"eye_of_the_tiger": {
+ "sounds": [
+ {
+"name": "snappystuff:eye_of_the_tiger",
+"stream": true
+}
+]
+},
+"godzilla": {
+ "sounds": [
+ {
+"name": "snappystuff:godzilla",
+"stream": true
+}
+]
+},
+"heart_attack": {
+ "sounds": [
+ {
+"name": "snappystuff:heart_attack",
+"stream": true
+}
+]
+},
+"hot_stuff": {
+ "sounds": [
+ {
+"name": "snappystuff:hot_stuff",
+"stream": true
+}
+]
+},
+"let_it_please_be_you": {
+ "sounds": [
+ {
+"name": "snappystuff:let_it_please_be_you",
+"stream": true
+}
+]
+},
+"my_heart_is_sad": {
+ "sounds": [
+ {
+"name": "snappystuff:my_heart_is_sad",
+"stream": true
+}
+]
+},
+"one_summer_night": {
+ "sounds": [
+ {
+"name": "snappystuff:one_summer_night",
+"stream": true
+}
+]
+},
+"silhouettes": {
+ "sounds": [
+ {
+"name": "snappystuff:silhouettes",
+"stream": true
+}
+]
+},
+"sundown": {
+ "sounds": [
+ {
+"name": "snappystuff:sundown",
+"stream": true
+}
+]
+},
+"someone_you_loved": {
+ "sounds": [
+ {
+"name": "snappystuff:someone_you_loved",
+"stream": true
+}
+]
+},
+"thats_my_desire": {
+ "sounds": [
+ {
+"name": "snappystuff:thats_my_desire",
+"stream": true
+}
+]
+},
+"thriller": {
+ "sounds": [
+ {
+"name": "snappystuff:thriller",
+"stream": true
+}
+]
+},
+"thug_shake": {
+ "sounds": [
+ {
+"name": "snappystuff:thug_shake",
+"stream": true
+}
+]
+},
+"coral": {
+ "sounds": [
+ {
+"name": "snappystuff:coral",
+"stream": true
+}
+]
+},
+"donna_the_prima_donna": {
+ "sounds": [
+ {
+"name": "snappystuff:donna_the_prima_donna",
+"stream": true
+}
+]
+},
+"cant_we_be_sweethearts": {
+ "sounds": [
+ {
+"name": "snappystuff:cant_we_be_sweethearts",
+"stream": true
+}
+]
+},
+"ive_lied": {
+ "sounds": [
+ {
+"name": "snappystuff:ive_lied",
+"stream": true
+}
+]
+}
+}

@@ -80,9 +80,17 @@ public class CollectMission extends Mission {
                 numRemaining[0]-=takeAway;
             }
         });
-        List<ItemStack> currRewards = QuestHandler.playerQuestData.get(requestor).rewards;
-        currRewards.add(new ItemStack(toCollect.getItem(),(numToCollect - numCollected - numRemaining[0])));
+        int numDeserved = numToCollect - numCollected - numRemaining[0];
+        List<ItemStack> rewards = QuestHandler.playerQuestData.get(requestor).rewards;
+        while(numDeserved > 0){
+            ItemStack stack = new ItemStack(toCollect.getItem(),Math.min(toCollect.getItem().getMaxStackSize(),numDeserved));
+            numDeserved-=Math.min(toCollect.getItem().getMaxStackSize(),numDeserved);
+            rewards.add(stack);
+        }
+        numCollected = numToCollect - numRemaining[0];
         if(numRemaining[0] == 0){return complete=true;}
         return false;
     }
+
+
 }

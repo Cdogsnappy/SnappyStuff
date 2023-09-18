@@ -68,8 +68,10 @@ public class QuestData {
     public void addReward(ItemStack stack) {
         for (ItemStack i : rewards) {
             if (i.sameItem(stack)) {
-                i.grow(stack.getCount());
-                return;
+                int count = i.getCount();
+                i.grow(Math.min(i.getMaxStackSize() - count, count+stack.getCount()));
+                stack.shrink(Math.min(i.getMaxStackSize() - count, count+stack.getCount()));
+                if(stack.isEmpty()){return;}
             }
         }
         rewards.add(stack);
@@ -84,8 +86,8 @@ public class QuestData {
             for (ItemStack i : rewards) {
                 if (i.sameItem(j)) {
                     int count = i.getCount();
-                    i.grow(Math.min(i.getMaxStackSize(),count+j.getCount()));
-                    j.setCount(Math.min(j.getCount(),i.getMaxStackSize()-count));
+                    i.grow(Math.min(i.getMaxStackSize() - count,count+j.getCount()));
+                    j.shrink(Math.min(j.getCount(),i.getMaxStackSize()-count));
                     break;
                 }
             }

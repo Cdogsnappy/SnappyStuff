@@ -36,11 +36,5 @@ public class ClientEvents {
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
             event.register(KeyBinding.QUEST_KEY);
         }
-
-        @SubscribeEvent
-        public void stitch(TextureStitchEvent.Pre event) {
-            event.addSprite(new ResourceLocation("snappystuff:curios/radio_slot"));
-            //event.addSprite(new ResourceLocation("snappystuff:textures/gui/button_texture"));
-        }
     }
 }

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -106,13 +107,15 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         lazyItemHandler.invalidate();
     }
     public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, MusicUploadBlockEntity e) {
+        if(level.isClientSide){return;}
         if(e.itemHandler.getStackInSlot(0).getItem() instanceof RecordItem){
             e.isProcessing = true;
         }
         else{
+            e.isProcessing = false;
             return;
         }
-        if(level.isClientSide || !e.isProcessing){
+        if(!e.isProcessing){
             return;
         }
         e.progress++;
@@ -130,17 +133,11 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         Containers.dropContents(this.level, this.worldPosition, inv);
     }
     private static void uploadSong(RecordItem song){
-        for(CustomSoundEvent s : RadioHandler.music){
-            if(s.getSound().equals(song.getSound())){
+        for(ItemStack s : RadioHandler.music){
+            if(s.is(song)){
                 return;
             }
         }
-        List<RegistryObject<SoundEvent>> sounds = SSSoundRegistry.SOUNDS.getEntries().stream().toList();
-        for(int i = 0; i<sounds.size(); i++){
-            if(sounds.get(i).get() == song.getSound()){
-                RadioHandler.music.add(new CustomSoundEvent(song.getSound(), song.getLengthInTicks()));
-                break;
-            }
-        }
+        RadioHandler.music.add(new ItemStack(song));
      }
 }

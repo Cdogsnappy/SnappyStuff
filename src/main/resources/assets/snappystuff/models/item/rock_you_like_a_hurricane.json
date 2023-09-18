@@ -1,0 +1,6 @@
+{
+"parent": "item/generated",
+"textures": {
+"layer0": "snappystuff:item/rock_you_like_a_hurricane"
+}
+}

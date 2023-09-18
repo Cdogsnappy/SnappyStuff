@@ -56,6 +56,7 @@ public class SnappyStuff
          */
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::imcSend);
+        if(FMLEnvironment.dist == Dist.CLIENT){modEventBus.addListener(this::stitch);}
         // Register the Deferred Register to the mod event bus so blocks get registered
 
         // Register ourselves for server and other game events we are interested in
@@ -112,6 +113,11 @@ public class SnappyStuff
     @SubscribeEvent
     public void cmds(RegisterCommandsEvent e){
         CommandRegistration.registerCommands(e);
+    }
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public void stitch(TextureStitchEvent.Pre event){
+        event.addSprite(new ResourceLocation("snappystuff:curios/radio_slot"));
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent

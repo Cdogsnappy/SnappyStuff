@@ -1,6 +1,5 @@
 package com.cdogsnappy.snappystuff.screen;
 
-import com.cdogsnappy.snappystuff.court.CitizenData;
 import com.cdogsnappy.snappystuff.quest.mission.*;
 import com.cdogsnappy.snappystuff.util.ClientEntityCache;
 import com.mojang.blaze3d.platform.Lighting;
@@ -17,9 +16,9 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+
+import java.awt.*;
 
 public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
     protected int currTab = 0;
@@ -32,7 +31,7 @@ public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContai
     protected void renderBg(PoseStack p_97787_, float p_97788_, int p_97789_, int p_97790_) {
 
     }
-    protected void renderMission(PoseStack pPoseStack, int x, int y, float width, float height, Mission m){
+    protected void renderMission(PoseStack pPoseStack, int x, int y, Mission m){
         if(m == null){return;}
         String msg = "";
         switch(m.missionType){
@@ -43,7 +42,7 @@ public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContai
                 break;
             case BLOCK:
                 BlockMission bm = (BlockMission)m;
-                msg = msg + "Break " + bm.numToBreak;
+                msg = msg + "Break " + (bm.numToBreak-bm.numBroken);
                 drawItem(x+8 + this.font.width(msg), y - 18,new ItemStack(bm.toBreak.asItem()));
                 break;
             case KILL:
@@ -56,7 +55,9 @@ public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContai
                 msg = msg + "Kill " + pkm.player;
                 break;
         }
-        this.font.draw(pPoseStack, msg, x+4,y-16,0);
+
+        if(m.isComplete()){this.font.draw(pPoseStack, msg, x+4,y-16, colorTranslate(Color.GREEN));}
+        else{this.font.draw(pPoseStack, msg, x+4,y-16, 0);}
     }
     public void drawItem(int x, int y, ItemStack is) {
         this.itemRenderer.blitOffset = 100.0F;
@@ -114,5 +115,18 @@ public class QuestScreen<T extends AbstractContainerMenu> extends AbstractContai
     }
 
     public void tabChanged(int id){}
+
+
+    protected static int colorTranslate (Color color) {
+        int alpha = color.getAlpha();
+        int red = color.getRed();
+        int green = color.getGreen();
+        int blue = color.getBlue();
+        int rgb = (alpha << 24);
+        rgb = rgb | (red << 16);
+        rgb = rgb | (green << 8);
+        rgb = rgb | (blue);
+        return rgb;
+    }
 
 }

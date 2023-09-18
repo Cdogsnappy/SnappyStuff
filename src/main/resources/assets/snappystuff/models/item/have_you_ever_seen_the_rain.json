@@ -1,0 +1,6 @@
+{
+"parent": "item/generated",
+"textures": {
+"layer0": "snappystuff:item/have_you_ever_seen_the_rain"
+}
+}

@@ -115,14 +115,6 @@ public class ClosedContractQuest extends Quest{
             return new ClosedContractQuest(missions, rewards, requestor, type, tag.getUUID("id"));
         }
     }
-
-    public void attemptFinishQuest(){
-        if(!(this.isComplete()) || this.questor == null){//Should never be called on a quest that is unaccepted, but you never know.
-            return;
-        }
-        QuestHandler.playerQuestData.get(this.questor).acceptedQuests.remove(this);
-        distributeRewards();
-    }
     public void distributeRewards(){
         QuestHandler.playerQuestData.get(this.questor).addAllRewards(rewards);
     }

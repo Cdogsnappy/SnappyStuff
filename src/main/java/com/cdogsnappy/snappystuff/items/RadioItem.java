@@ -1,21 +1,25 @@
 package com.cdogsnappy.snappystuff.items;
 
+import com.cdogsnappy.snappystuff.blocks.ModBlocks;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import com.cdogsnappy.snappystuff.network.SoundStopPacketS2C;
 import com.cdogsnappy.snappystuff.network.StandbyResetPacket;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class RadioItem extends Item implements ICurioItem {
 
-    public RadioItem(Properties p_41383_) {
-        super(p_41383_);
+    public RadioItem(Properties properties) {
+        super(properties);
     }
 
     /**
@@ -44,4 +48,6 @@ public class RadioItem extends Item implements ICurioItem {
         SnappyNetwork.sendToPlayer(new StandbyResetPacket(),(ServerPlayer) p);
         SnappyNetwork.sendToNearbyPlayers(new SoundStopPacketS2C(p.getUUID()),p.position(),p.level.dimension());
     }
+
+
 }

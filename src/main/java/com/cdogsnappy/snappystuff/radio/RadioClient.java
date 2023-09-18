@@ -66,6 +66,7 @@ public class RadioClient {
         CustomSoundEvent ramb = ramblings.get(rand.nextInt(ramblings.size()));
         audioLength = ramb.tickLength;
         SnappyNetwork.sendToServer(new SoundStartPacketC2S(id,ramb.sound,Minecraft.getInstance().player.level.dimension()));
+        currentAudioTime = 0;
 
     }
 
