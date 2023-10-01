@@ -76,6 +76,7 @@ public class SSSoundRegistry {
     public static final RegistryObject<SoundEvent> DONNA_THE_PRIMA_DONNA = createSoundEvent("donna_the_prima_donna");
     public static final RegistryObject<SoundEvent> CANT_WE_BE_SWEETHEARTS = createSoundEvent("cant_we_be_sweethearts");
     public static final RegistryObject<SoundEvent> IVE_LIED = createSoundEvent("ive_lied");
+    public static final RegistryObject<SoundEvent> STATIC = createSoundEvent("radio_static");
 
     private static RegistryObject<SoundEvent> createSoundEvent(final String soundName) {
         SoundEvent sound = new SoundEvent(new ResourceLocation(SnappyStuff.MODID,soundName));

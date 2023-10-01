@@ -5,6 +5,7 @@ import com.cdogsnappy.snappystuff.radio.CustomSoundEvent;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.MusicUploadMenu;
 import com.cdogsnappy.snappystuff.sounds.SSSoundRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -54,21 +55,31 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         data = new ContainerData(){
             @Override
             public int get(int num) {
-                return switch(num){
-                    case 0 -> MusicUploadBlockEntity.this.progress;
+                switch(num){
+                    case 0:
+                        return MusicUploadBlockEntity.this.progress;
 
-                    case 1 -> MusicUploadBlockEntity.this.completionProgress;
-                    default -> 0;
-
-                };
+                    case 1:
+                        return MusicUploadBlockEntity.this.completionProgress;
+                    case 2:
+                        if(isProcessing){return 1;}
+                        else{return 0;}
+                }
+                return 0;
             }
             @Override
             public void set(int index, int val) {
-                MusicUploadBlockEntity.this.progress = val;
+                switch(index){
+                    case 0:
+                        MusicUploadBlockEntity.this.progress = val;
+                    case 2:
+                        if(val == 0){MusicUploadBlockEntity.this.isProcessing = false;}
+                        else{MusicUploadBlockEntity.this.isProcessing = true;}
+                }
             }
             @Override
             public int getCount() {
-                return 2;
+                return 3;
             }
         };
 
@@ -107,22 +118,6 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         lazyItemHandler.invalidate();
     }
     public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, MusicUploadBlockEntity e) {
-        if(level.isClientSide){return;}
-        if(e.itemHandler.getStackInSlot(0).getItem() instanceof RecordItem){
-            e.isProcessing = true;
-        }
-        else{
-            e.isProcessing = false;
-            return;
-        }
-        if(!e.isProcessing){
-            return;
-        }
-        e.progress++;
-        if(e.progress >= completionProgress){
-            uploadSong((RecordItem) e.itemHandler.getStackInSlot(0).getItem());
-        }
-
     }
 
     public void drops() {
@@ -132,12 +127,4 @@ public class MusicUploadBlockEntity extends BlockEntity implements MenuProvider 
         }
         Containers.dropContents(this.level, this.worldPosition, inv);
     }
-    private static void uploadSong(RecordItem song){
-        for(ItemStack s : RadioHandler.music){
-            if(s.is(song)){
-                return;
-            }
-        }
-        RadioHandler.music.add(new ItemStack(song));
-     }
 }

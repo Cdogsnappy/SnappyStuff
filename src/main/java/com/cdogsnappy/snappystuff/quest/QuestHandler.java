@@ -111,7 +111,18 @@ public class QuestHandler{
                 }
                 q.questor = player.getUUID();
                 playerQuestData.get(player.getUUID()).acceptedQuests.add(q);
+                List<ClosedContractQuest> requestorQuests = playerQuestData.get(q.requestor).createdQuests;
+                for(ClosedContractQuest j : requestorQuests){
+                    if(q.questID.equals(j.questID)){
+                        requestorQuests.remove(j);
+                        requestorQuests.add(q);
+                        break;
+                    }
+                }
                 MissionHandler.loadMissions(q.missions,player.getUUID());
+                ServerPlayer p = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(q.requestor);
+                if(!p.equals(null)){SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(q.questor),p);}
+                return;
             }
         }
     }
@@ -135,8 +146,7 @@ public class QuestHandler{
             }
         }
         for(Mission m : q.missions){
-            if(m.isComplete()){continue;}
-            else{
+            if(!m.isComplete()){
                 SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(q.questor),player);//Update the collection count on collect missions
                 ServerPlayer p;
                 if((p = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(q.requestor)) != null){

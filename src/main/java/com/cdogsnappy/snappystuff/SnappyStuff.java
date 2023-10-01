@@ -6,6 +6,7 @@ import com.cdogsnappy.snappystuff.data.SnappyData;
 import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import com.cdogsnappy.snappystuff.quest.mission.MissionHandler;
 import com.cdogsnappy.snappystuff.quest.mission.MissionJSONHandler;
+import com.cdogsnappy.snappystuff.radio.RadioClient;
 import com.cdogsnappy.snappystuff.radio.RadioHandler;
 import com.cdogsnappy.snappystuff.screen.*;
 import com.cdogsnappy.snappystuff.util.Registration;
@@ -135,6 +136,7 @@ public class SnappyStuff
             MenuScreens.register(ModMenus.QUEST_ACCEPT_MENU.get(), QuestAcceptScreen::new);
             MenuScreens.register(ModMenus.QUEST_CREATE_MENU.get(), QuestCreateScreen::new);
             MenuScreens.register(ModMenus.QUEST_OVERVIEW_MENU.get(),QuestOverviewScreen::new);
+            RadioClient.init();
 
         }
     }

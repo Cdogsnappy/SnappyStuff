@@ -20,7 +20,7 @@ public class MusicWarningPacket {
         context.enqueueWork(() -> {
             // HERE WE ARE ON THE CLIENT!
             RadioClient.stopSound(id);
-            if(Minecraft.getInstance().player.getUUID() == id) {
+            if(Minecraft.getInstance().player.getUUID().equals(id)) {
                 RadioClient.isInStandby = false;
             }
             RadioClient.playStatic(id);

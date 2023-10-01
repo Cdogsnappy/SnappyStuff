@@ -27,10 +27,7 @@ public class QuestOverviewMenu extends AbstractContainerMenu {
         addDisplaySlots();
     }
     public QuestOverviewMenu(int id, Inventory inv) {
-        super(ModMenus.QUEST_ACCEPT_MENU.get(), id);
-        addPlayerHotbar(inv);
-        addPlayerInventory(inv);
-        addDisplaySlots();
+        this(id,inv,null);
     }
 
 
@@ -71,6 +68,10 @@ public class QuestOverviewMenu extends AbstractContainerMenu {
 
         public RewardSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
             super(itemHandler, index, xPosition, yPosition);
+        }
+        @Override
+        public boolean mayPlace(ItemStack pStack) {
+            return false;
         }
     }
 

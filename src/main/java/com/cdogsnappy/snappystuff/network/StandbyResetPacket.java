@@ -7,15 +7,22 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class StandbyResetPacket {
-    public StandbyResetPacket(FriendlyByteBuf buf){}
-    public StandbyResetPacket(){}
-    public void toBytes(FriendlyByteBuf buf){}
+    private boolean side;
+    public StandbyResetPacket(FriendlyByteBuf buf){
+        side = buf.readBoolean();
+    }
+    public StandbyResetPacket(boolean side){
+        this.side = side;
+    }
+    public void toBytes(FriendlyByteBuf buf){
+        buf.writeBoolean(side);
+    }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             // HERE WE ARE ON THE CLIENT!
-            RadioClient.isInStandby = true;
+            RadioClient.isInStandby = side;
         });
         return true;
     }

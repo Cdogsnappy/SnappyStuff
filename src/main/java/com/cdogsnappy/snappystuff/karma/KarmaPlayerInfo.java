@@ -17,7 +17,7 @@ public class KarmaPlayerInfo implements Serializable {
 
     public KarmaPlayerInfo(){
         this.score = 1.0f;
-        this.health = -2.0f;
+        this.health = 0.0f;
         this.numEndorsed = 0;
         this.numEndorsements = 0;
         playersEndorsed = new com.cdogsnappy.snappystuff.karma.EndorsementInfo[3];

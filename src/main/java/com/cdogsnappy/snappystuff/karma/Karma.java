@@ -72,7 +72,7 @@ public class Karma{
      * @param initKarma the amount of karma a near neutral player should get from this action
      * @return a nonnegative karma resisted value
      */
-    public static float adjustedKarmaValue(float karma, float initKarma){return Math.min(initKarma,(float) (initKarma/Math.pow(Math.abs(karma),(.9 + 1/(initKarma*2)))));}
+    public static float adjustedKarmaValue(float karma, float initKarma){return ((float) Math.max(0.01,Math.min(initKarma,-8.72018*Math.pow(10,-6)*Math.pow(karma,3) + 0.00192997*Math.pow(karma,2) - 0.187436*karma + 9.99491))*(initKarma/10));}
 
     public static void setHealth(UUID id, float newHealth){
         KarmaPlayerInfo info = karmaScores.get(id);

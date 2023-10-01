@@ -20,6 +20,7 @@ import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -41,8 +42,8 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
     private int editingMission = 0;
     private boolean isSearching = false;
     private List<ObjectSelectButton> searchButtons = Lists.newArrayList();
-    private List<ObjectSelectButton> playerSearchButtons = Lists.newArrayList();
-    private QuestScreensData.ButtonType currentSearchMenu = COLLECT;
+    private List<PlayerSelectButton> playerSearchButtons = Lists.newArrayList();
+    private QuestScreensData.ButtonType currentSearchMenu = BLOCK;
     private PageButton prevButton;
     private PageButton nextButton;
     private QuestCreateButton createQuestButton;
@@ -78,7 +79,7 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
         }
 
         for(int i = 0; i<8; ++i){
-            playerSearchButtons.add(this.addRenderableWidget(new ObjectSelectButton(this.leftPos + 20,this.topPos + 40 + (18*i),80,18,null,this)));
+            playerSearchButtons.add(this.addRenderableWidget(new PlayerSelectButton(this.leftPos + 24 + (84*(i/4)),this.topPos + 40 + (18*i),80,18,null,this)));
             playerSearchButtons.get(i).visible = false;
         }
         this.nextButton = this.addRenderableWidget(new PageButton(this.leftPos + 219, this.topPos + 138, true, (p_98297_) -> {
@@ -93,9 +94,10 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
         missionTypeButtons.add(this.addRenderableWidget(new MissionTypeButton(this.leftPos + 187,this.topPos + 31 + 44,20,20, KILL)));
         missionTypeButtons.add(this.addRenderableWidget(new MissionTypeButton(this.leftPos + 187,this.topPos + 31 + 66,20,20,PLAYERKILL)));
         createQuestButton = this.addRenderableWidget(new QuestCreateButton(this.leftPos + 191, this.topPos + 200, 49, 18, Component.empty()));
-        backButton = this.addRenderableWidget(new PageButton(this.leftPos + 201, this.topPos + 215, false, (p) -> {
+        backButton = this.addRenderableWidget(new PageButton(this.leftPos + 15, this.topPos + 217, false, (p) -> {
             switchBackToMainMenu();
         },true));
+        backButton.visible = false;
         this.searchBox = new QuestSearchBox(this.font, this.leftPos + 30, this.topPos + 21, 80, 9, Component.literal("Search..."));
         this.searchBox.setMaxLength(50);
         this.searchBox.setBordered(true);
@@ -173,10 +175,10 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
             if(j+8*page >= QuestScreensData.filteredTokens.size()){
                 return;
             }
-            ObjectSelectButton b = playerSearchButtons.get(j);
+            PlayerSelectButton b = playerSearchButtons.get(j);
             b.visible = true;
-            b.target = QuestScreensData.filteredTokens.get(j + 8*page);
-            b.setMessage(Component.literal(((ClientCitizenData)b.target).name));
+            b.target = ((ClientCitizenData)QuestScreensData.filteredTokens.get(j + 8*page));
+            b.setMessage(Component.literal(b.target.name));
         }
 
     }
@@ -298,15 +300,13 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
             makeInvisible(editButtons);
             this.qcs.MAIN_TEXTURE = new ResourceLocation(SnappyStuff.MODID, "textures/gui/mission_create_gui.png");
             this.qcs.isSearching = true;
+            backButton.visible = true;
             editingMission = num;
             QuestScreensData.refreshList("", this.qcs.currentSearchMenu);
             refreshPageNum(this.qcs);
             updateButtonVisibility();
             makeInvisible(editButtons);
         }
-
-        public boolean isSelected() { return this.selected; }
-        public void setSelected(boolean selected) { this.selected = selected; }
 
         @Override
         public void updateNarration(NarrationElementOutput p_169152_) {
@@ -342,6 +342,33 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
         }
     }
 
+    public class PlayerSelectButton extends AbstractButton {
+        private ClientCitizenData target;
+        private QuestCreateScreen qcs;
+        public PlayerSelectButton(int p_93365_, int p_93366_, int p_93367_, int p_93368_, ClientCitizenData obj, QuestCreateScreen qcs) {
+            super(p_93365_, p_93366_, p_93367_, p_93368_, Component.empty());
+            this.target = obj;
+            this.qcs = qcs;
+        }
+        @Override
+        public void onPress() {
+            this.qcs.selectedObject = this.target;
+        }
+        @Override
+        public void updateNarration(NarrationElementOutput p_169152_) {}
+        @Override
+        public void render(PoseStack pPoseStack, int pX, int pY, float delta){
+            if(!this.visible){return;}
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0,GUITEXTURE);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableDepthTest();
+            this.blit(pPoseStack,this.x,this.y,18,132,80,18);
+            int j = getFGColor();
+            drawCenteredString(pPoseStack, font, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
+        }
+    }
     public class ObjectSelectButton extends AbstractButton {
         private Object target;
         private QuestCreateScreen qcs;
@@ -458,6 +485,7 @@ public class QuestCreateScreen extends QuestScreen<QuestCreateMenu> {
         makeInvisible(playerSearchButtons);
         makeInvisible(missionTypeButtons);
         makeVisible(editButtons);
+        backButton.visible = false;
         selectedObject = null;
         numberBox.setValue("");
         isSearching = false;

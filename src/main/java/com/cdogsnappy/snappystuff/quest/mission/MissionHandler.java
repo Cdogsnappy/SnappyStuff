@@ -87,7 +87,7 @@ public class MissionHandler {
         if(blockMissionList.containsKey(player.getUUID())){
             List<BlockMission> missions = blockMissionList.get(player.getUUID());
             for(BlockMission mission : missions){
-                if(event.getState().getBlock() == mission.toBreak){
+                if(event.getState().getBlock().equals(mission.toBreak)){
                     mission.numBroken++;
                     if(mission.attemptComplete()){
                         missions.remove(mission);

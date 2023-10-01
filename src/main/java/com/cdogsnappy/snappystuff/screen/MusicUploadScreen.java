@@ -2,15 +2,24 @@ package com.cdogsnappy.snappystuff.screen;
 
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
+import com.cdogsnappy.snappystuff.network.SnappyNetwork;
+import com.cdogsnappy.snappystuff.network.UploadPacket;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.RecordItem;
 
 public class MusicUploadScreen extends AbstractContainerScreen<MusicUploadMenu> {
+    private UploadButton button;
+    private int progress = 0;
+    private int completionProgress = 80;
+    private boolean isProcessing = false;
         private static final ResourceLocation TEXTURE =
                 new ResourceLocation(SnappyStuff.MODID,"textures/gui/music_upload_gui.png");
 
@@ -21,6 +30,7 @@ public class MusicUploadScreen extends AbstractContainerScreen<MusicUploadMenu> 
         @Override
         protected void init() {
             super.init();
+            button = this.addRenderableWidget(new UploadButton(this.leftPos + 128,this.topPos + 64,38,12,Component.literal("UPLOAD")));
         }
 
 
@@ -34,12 +44,12 @@ public class MusicUploadScreen extends AbstractContainerScreen<MusicUploadMenu> 
 
             blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
 
-            renderProgressArrow(pPoseStack, x, y);
+            renderProgressArrow(pPoseStack);
         }
 
-        private void renderProgressArrow(PoseStack pPoseStack, int x, int y) {
-            if(menu.isUploading()) {
-                blit(pPoseStack, x + 104, y + 53, 176, 28, 12, -menu.getScaledProgress());
+        private void renderProgressArrow(PoseStack pPoseStack) {
+            if(isProcessing) {
+                blit(pPoseStack, this.leftPos + 104, this.topPos + 53-getScaledProgress(), 176, 28 - getScaledProgress(), 12, getScaledProgress());
             }
         }
 
@@ -49,5 +59,39 @@ public class MusicUploadScreen extends AbstractContainerScreen<MusicUploadMenu> 
             super.render(pPoseStack, mouseX, mouseY, delta);
             renderTooltip(pPoseStack, mouseX, mouseY);
         }
+
+        public class UploadButton extends AbstractButton {
+
+            public UploadButton(int pX, int pY, int pWidth, int pHeight, Component pMessage) {
+                super(pX, pY, pWidth, pHeight, pMessage);
+            }
+
+            @Override
+            public void onPress() {
+                if(menu.slots.get(36).getItem().getItem() instanceof RecordItem){isProcessing = true;}
+                else{minecraft.player.sendSystemMessage(Component.literal(menu.slots.get(36).getItem().toString()));}
+            }
+
+            @Override
+            public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
+
+            }
+        }
+        @Override
+    public void containerTick(){
+            if(isProcessing){
+                ++progress;
+                if(progress >= completionProgress){
+                    SnappyNetwork.sendToServer(new UploadPacket((menu.getSlot(36).getItem())));
+                    isProcessing = false;
+                    progress = 0;
+                }
+            }
+        }
+    public int getScaledProgress() {// Max Progress
+        int progressArrowSize = 28; // This is the height in pixels of your arrow
+
+        return completionProgress != 0 && progress != 0 ? progress * progressArrowSize / completionProgress : 0;
     }
+}
 

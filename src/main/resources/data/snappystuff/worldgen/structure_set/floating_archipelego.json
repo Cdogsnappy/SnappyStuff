@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure" : "snappystuff:floating_archipelego",
+      "weight" : 1
+    }
+  ],
+  "placement": {
+    "salt": 1937134697,
+    "spacing": 100,
+    "separation": 40,
+    "type": "minecraft:random_spread"
+  }
+}

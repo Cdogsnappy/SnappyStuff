@@ -30,7 +30,8 @@ public class RadioItem extends Item implements ICurioItem {
      */
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        RadioHandler.standbyListeners.add((Player) slotContext.getWearer());
+        RadioHandler.standbyListeners.add(slotContext.getWearer());
+        SnappyNetwork.sendToPlayer(new StandbyResetPacket(true),(ServerPlayer)slotContext.getWearer());
 
     }
 
@@ -45,7 +46,7 @@ public class RadioItem extends Item implements ICurioItem {
         Player p = (Player) slotContext.getWearer();
         RadioHandler.standbyListeners.remove(p);
         RadioHandler.listeners.remove(p);
-        SnappyNetwork.sendToPlayer(new StandbyResetPacket(),(ServerPlayer) p);
+        SnappyNetwork.sendToPlayer(new StandbyResetPacket(false), (ServerPlayer)p);
         SnappyNetwork.sendToNearbyPlayers(new SoundStopPacketS2C(p.getUUID()),p.position(),p.level.dimension());
     }
 

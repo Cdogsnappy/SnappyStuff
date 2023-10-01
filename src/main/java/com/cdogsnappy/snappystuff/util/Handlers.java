@@ -21,8 +21,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import static net.minecraftforge.event.TickEvent.Phase.END;
+import static net.minecraftforge.event.TickEvent.Phase.START;
 
 @Mod.EventBusSubscriber
 public class Handlers {
@@ -34,14 +37,18 @@ public class Handlers {
      */
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
-        ticker++;
-        if(ticker > 36000){
-            SmiteHandler.judge(event.getServer());
-            DailyQuestHandler.checkRefresh();
-            EndorsementHandler.updateCooldowns(event.getServer());
-            ticker = 0;
+        if(event.phase == END) {
+            ticker++;
+            if (ticker > 36000) {
+                SmiteHandler.judge(event.getServer());
+                DailyQuestHandler.checkRefresh();
+                EndorsementHandler.updateCooldowns(event.getServer());
+                ticker = 0;
+            }
         }
-        //RadioHandler.onTick(event);
+        if(event.phase == START) {
+            RadioHandler.onTick(event);
+        }
     }
 
     /**
@@ -53,14 +60,13 @@ public class Handlers {
         if(event.getEntity().level.isClientSide){return;}
         Player p = event.getEntity();
         CitizenData.onPlayerJoin(p);
-        Karma.playerCheck(event);
-        KarmaLog.onPlayerJoin(p);
         DivineFruitItem.addTag(p);
-        DivineFruitItem.updateDivineHealth(p);
-        RadioHandler.onPlayerLogIn(event);
         QuestHandler.playerQuestData.computeIfAbsent(p.getUUID(), k -> new QuestData());
         SnappyNetwork.sendToPlayer(new PlayerQuestDataPacket(p.getUUID()),(ServerPlayer)p);
         SnappyNetwork.sendToPlayer(new AvailablePlayersPacket(CitizenData.citizenNames),(ServerPlayer)p);
+        Karma.playerCheck(event);
+        KarmaLog.onPlayerJoin(p);
+        DivineFruitItem.updateDivineHealth(p);
     }
 
     /**
@@ -85,12 +91,12 @@ public class Handlers {
         if(event.getEntity().level.isClientSide){
             return;
         }
-        if(event.getEntity().getKillCredit() instanceof Player){
-            Player murderer = (Player)event.getEntity().getKillCredit();
+        if(event.getSource().getEntity() instanceof Player){
+            Player murderer = (Player)event.getSource().getEntity();
             if(event.getEntity() instanceof Player){//All murder related events
                 QuestHandler.onMurder((Player)event.getEntity(), murderer);
                 MissionHandler.onPlayerMurder((Player)event.getEntity(),murderer);
-                Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - Karma.adjustedKarmaValue(Karma.getScore(murderer.getUUID()),10));
+                Karma.setScore(murderer,Karma.getScore(murderer.getUUID()) - Karma.adjustedKarmaValue(Math.abs(Karma.getScore(murderer.getUUID())),10));
             }
             else{
                 MissionHandler.onEntityKill(event.getEntity(),murderer);

@@ -510,5 +510,13 @@
 "stream": true
 }
 ]
-}
+},
+ "radio_static": {
+  "sounds": [
+   {
+    "name": "snappystuff:radio_static",
+    "stream": true
+   }
+  ]
+ }
 }

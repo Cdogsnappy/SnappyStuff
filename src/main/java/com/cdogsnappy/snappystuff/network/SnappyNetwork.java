@@ -122,6 +122,16 @@ public class SnappyNetwork {
                 .encoder(AttemptCompleteQuestPacket::toBytes)
                 .consumerMainThread(AttemptCompleteQuestPacket::handle)
                 .add();
+        INSTANCE.messageBuilder(OpenScreenPacket.class, ++id, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(OpenScreenPacket::new)
+                .encoder(OpenScreenPacket::toBytes)
+                .consumerMainThread(OpenScreenPacket::handle)
+                .add();
+        INSTANCE.messageBuilder(UploadPacket.class, ++id, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(UploadPacket::new)
+                .encoder(UploadPacket::toBytes)
+                .consumerMainThread(UploadPacket::handle)
+                .add();
     }
     public static <MSG> void sendToServer(MSG message) {
         INSTANCE.sendToServer(message);

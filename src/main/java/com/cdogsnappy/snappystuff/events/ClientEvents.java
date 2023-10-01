@@ -1,6 +1,8 @@
 package com.cdogsnappy.snappystuff.events;
 
 import com.cdogsnappy.snappystuff.SnappyStuff;
+import com.cdogsnappy.snappystuff.network.OpenScreenPacket;
+import com.cdogsnappy.snappystuff.network.SnappyNetwork;
 import com.cdogsnappy.snappystuff.screen.QuestOverviewMenu;
 import com.cdogsnappy.snappystuff.screen.QuestOverviewScreen;
 import com.cdogsnappy.snappystuff.util.KeyBinding;
@@ -23,8 +25,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             if(KeyBinding.QUEST_KEY.consumeClick()) {
-                Minecraft minecraft = Minecraft.getInstance();
-                minecraft.setScreen(new QuestOverviewScreen(new QuestOverviewMenu(1,minecraft.player.getInventory()),minecraft.player.getInventory(), Component.literal("Questbook")));
+                SnappyNetwork.sendToServer(new OpenScreenPacket());
             }
         }
     }

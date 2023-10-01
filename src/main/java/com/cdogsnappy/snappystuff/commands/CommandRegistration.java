@@ -14,6 +14,7 @@ public class CommandRegistration {
         GetKarmaCommand.register(builder);
         GiveRewardCommand.register(builder, e.getBuildContext());
         PrintRewardsCommand.register(builder);
+        ViewRadioSongsCommand.register(builder);
         e.getDispatcher().register(builder);
     }
 }

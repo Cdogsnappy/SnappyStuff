@@ -4,6 +4,7 @@ import com.cdogsnappy.snappystuff.SnappyStuff;
 import com.cdogsnappy.snappystuff.court.CitizenData;
 import com.cdogsnappy.snappystuff.network.*;
 import com.cdogsnappy.snappystuff.quest.ClosedContractQuest;
+import com.cdogsnappy.snappystuff.quest.Quest;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -72,6 +73,7 @@ public class QuestOverviewScreen extends QuestScreen<QuestOverviewMenu> {
             case 0:
                 if(QuestScreensData.questData.acceptedQuests.isEmpty()){
                     this.font.draw(pPoseStack, "No Quests!", x + 80 - (float) (this.font.width("No Quests!") / 2), y + 40, 0);
+                    cancelButton.visible = false;
                     break;
                 }
                 ClosedContractQuest cq = QuestScreensData.questData.acceptedQuests.get(currentPage);
@@ -80,10 +82,12 @@ public class QuestOverviewScreen extends QuestScreen<QuestOverviewMenu> {
                 }
                 this.font.draw(pPoseStack, "Requestor:", this.leftPos + 192, this.topPos + 140, 0);
                 this.font.draw(pPoseStack, CitizenData.getPlayerName(cq.requestor), this.leftPos + 192, this.topPos + 146,0);
+                showQuestRewards(cq);
                 break;
             case 1:
                 if(QuestScreensData.questData.createdQuests.isEmpty()){
                     this.font.draw(pPoseStack, "No Quests!", x + 80 - (float) (this.font.width("No Quests!") / 2), y + 40, 0);
+                    cancelButton.visible = false;
                     break;
                 }
                 ClosedContractQuest crq = QuestScreensData.questData.createdQuests.get(currentPage);
@@ -99,6 +103,7 @@ public class QuestOverviewScreen extends QuestScreen<QuestOverviewMenu> {
                     this.font.draw(pPoseStack, CitizenData.getPlayerName(crq.questor), this.leftPos + 192, this.topPos + 146,0);
                     cancelButton.visible = false;
                 }
+                showQuestRewards(crq);
                 break;
             case 2:
                 fillRewards();
@@ -139,6 +144,7 @@ public class QuestOverviewScreen extends QuestScreen<QuestOverviewMenu> {
 
         }
         currTab = id;
+        clearQuestRewards();
     }
 
     public int getNumPages() {
@@ -165,6 +171,17 @@ public class QuestOverviewScreen extends QuestScreen<QuestOverviewMenu> {
             this.menu.slots.get(36+i).set(rewards.get(currentPage*60 + i));
         }
     }
+    public void showQuestRewards(Quest q){
+        for(int i = 0; i < 5; ++i){
+            if(i >= q.rewards.size()){return;}
+            this.menu.slots.get(36+i).set(q.rewards.get(i));
+        }
+    }
+    public void clearQuestRewards(){
+        for(int i = 0; i < 5; ++i){
+            this.menu.slots.get(36+i).set(ItemStack.EMPTY);
+        }
+    }
 
     public class CancelButton extends AbstractButton {
 
@@ -179,6 +196,8 @@ public class QuestOverviewScreen extends QuestScreen<QuestOverviewMenu> {
             minecraft.player.sendSystemMessage(Component.literal("check1"));
             SnappyNetwork.sendToServer(new QuestCancelPacket(cq));
             if(currentPage >= getNumPages()-1 && currentPage != 0){--currentPage;}
+            clearQuestRewards();
+
         }
         @Override
         public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
@@ -231,6 +250,7 @@ public class QuestOverviewScreen extends QuestScreen<QuestOverviewMenu> {
             SnappyNetwork.sendToServer(new AttemptCompleteQuestPacket(QuestScreensData.questData.acceptedQuests.get(currentPage)));
             completeCooldown = 60;
             if(currentPage >= getNumPages()-1 && currentPage != 0){--currentPage;}
+            clearQuestRewards();
         }
         @Override
         public void updateNarration(NarrationElementOutput pNarrationElementOutput) {
